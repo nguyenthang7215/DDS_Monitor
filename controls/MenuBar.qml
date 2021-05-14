@@ -63,7 +63,7 @@ T.MenuBar {
         color: control.Universal.chromeMediumColor
 
         Rectangle {
-            color: Theme.grey
+            color: control.Universal.baseMediumColor
             width: parent.width
             height: 2
             anchors.bottom: parent.bottom
