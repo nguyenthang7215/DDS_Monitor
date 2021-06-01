@@ -57,6 +57,16 @@ T.TabButton {
     icon.color: Color.transparent(control.hovered ? control.Universal.baseMediumHighColor : control.Universal.foreground,
                                                     control.checked || control.down || control.hovered ? 1.0 : 0.2)
 
+    background: Rectangle {
+        Rectangle {
+            visible: control.checked || control.down
+            color: Theme.eProsimaLightBlue
+            width: parent.width
+            height: 2
+            anchors.bottom: parent.bottom
+        }
+    }
+
     contentItem: IconLabel {
         spacing: control.spacing
         mirrored: control.mirrored
