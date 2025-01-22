@@ -5,7 +5,7 @@
         {
             "cmake-args":
             [
-                "-DFASTDDS_STATISTICS=ON",
+                "-DTHIRDPARTY=ON",
             ]
         },
         "fastdds_monitor":
