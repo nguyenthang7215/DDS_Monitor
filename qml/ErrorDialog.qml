@@ -25,12 +25,16 @@ MessageDialog {
     icon: StandardIcon.Warning
     text: "Error message has not been set"
     standardButtons: StandardButton.Cancel | StandardButton.Retry
+
     property int errorType // Dependeing on this value it would behave differently in Accept
+
     onAccepted: {
         if (errorType == 1) {           // INIT_MONITOR
             dialogInitMonitor.open()
         } else if (errorType == 2) {    // INIT_DS_MONITOR
             dialogDSInitMonitor.open()
+        } else if (errorType == 3) {    // INIT_MONITOR_WITH_PROFILE
+            initMonitorWithProfileDialog.open()
         }
     }
 }
