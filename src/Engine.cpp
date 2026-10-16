@@ -2032,6 +2032,13 @@ void Engine::update_dynamic_chartbox(
 
         eprosima::statistics_backend::Timestamp time_from_ =
                 backend::Timestamp(std::chrono::milliseconds(parameters.time_from));
+        if (statistics_kind_ == backend::StatisticKind::NONE)
+        {
+            // Re-read the visible raw window: a sample can arrive after its timestamp was polled.
+            // DynamicDataChartBox replaces this snapshot instead of appending overlapping results.
+            const auto from = time_to > parameters.window_size ? time_to - parameters.window_size : 0;
+            time_from_ = backend::Timestamp(std::chrono::milliseconds(from));
+        }
 
         // If statistics_kind is NONE, then the number of bins is 0 to retrieve all the data available
         // Otherwise the bins is 1 so only one data is updated

@@ -1,0 +1,10 @@
+#!/bin/sh
+exec /usr/bin/gdb --batch --quiet --return-child-result \
+    -ex 'set pagination off' \
+    -ex 'set print thread-events off' \
+    -ex 'handle SIGTERM nostop noprint pass' \
+    -ex 'start' \
+    -ex 'python open(os.environ["P0_INFERIOR_PID_FILE"], "w").write(str(gdb.selected_inferior().pid))' \
+    -ex continue \
+    -ex 'thread apply all bt full' \
+    --args "$@"

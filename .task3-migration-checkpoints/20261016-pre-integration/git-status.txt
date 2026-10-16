@@ -1,0 +1,21 @@
+1 .M N... 100644 100644 100644 c5a70a2e16ead0f5677e4e12c5eba3831ea7d3ca c5a70a2e16ead0f5677e4e12c5eba3831ea7d3ca qml/DynamicStatisticsChartView.qml
+1 .M N... 100644 100644 100644 8092fc8c7e66d0c415f28be815684d93ec965b99 8092fc8c7e66d0c415f28be815684d93ec965b99 src/backend/SyncBackendConnection.cpp
+? .task3-migration-checkpoints/20261016-pre-integration/git-status.txt
+? docs/task3/ARCHITECTURE.md
+? docs/task3/BUILD_AND_RUN.md
+? docs/task3/COMMUNICATION.md
+? docs/task3/CONFIGURATION.md
+? docs/task3/CONTINUATION_CHECKPOINT.md
+? docs/task3/CRASH_ROOT_CAUSE_ANALYSIS.md
+? docs/task3/DATA_MODEL.md
+? docs/task3/DELIVERY_REPORT.md
+? docs/task3/IMPLEMENTATION_PLAN.md
+? docs/task3/IMPLEMENTATION_STATUS.md
+? docs/task3/KNOWN_ISSUES.md
+? docs/task3/POC_BASELINE.patch
+? docs/task3/PRE_TEST_READINESS.md
+? docs/task3/STATISTICS_UNITS.md
+? docs/task3/TASK3_REQUIREMENTS.md
+? docs/task3/TEST_PLAN.md
+? docs/task3/TEST_RESULTS.md
+? docs/task3/TIME_SYNC_SETUP.md

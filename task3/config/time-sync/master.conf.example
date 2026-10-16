@@ -1,0 +1,4 @@
+# Merge only after administrator review. Replace the documentation subnet.
+# Keep the deployment's existing trusted upstream server/pool configuration.
+allow 192.0.2.0/24
+# No automatic local-stratum or makestep policy is imposed here.

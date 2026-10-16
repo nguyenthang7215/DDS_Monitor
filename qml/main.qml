@@ -34,23 +34,32 @@ ApplicationWindow {
 
     // This property holds the current number of initialized monitors
     property int monitors: 0
+    property bool task3Ready: false
+    property bool task3Page: true
+    property bool legacyStarted: false
+    property int task3UiSteps: 0
+    function task3Exercise(step) {
+        task3UiSteps = step
+        task3Page = step % 5 !== 4
+        if (task3Loader.item) task3Loader.item.testTab = step % 4
+        width = step % 2 === 0 ? 1280 : 900
+        height = step % 2 === 0 ? 820 : 650
+    }
 
     onStartMonitoring: {
-        mainStartView.visible = false
-        monitorMenuBar.visible = true
+        legacyStarted = true
         toolBar.isVisible = true
-        panels.visible = true
         dialogInitMonitor.open()
     }
 
     MainStartView {
         id: mainStartView
-        visible: true
+        visible: !mainApplicationView.task3Page && !mainApplicationView.legacyStarted
     }
 
     menuBar: MonitorMenuBar {
         id: monitorMenuBar
-        visible: false
+        visible: !mainApplicationView.task3Page && mainApplicationView.legacyStarted
         onToolBarHidden: toolBar.isVisible = !toolBar.isVisible
         onDispDataButtonHidden: toolBar.isVisibleDispData = !toolBar.isVisibleDispData
         onDispDynDataButtonHidden: toolBar.isVisibleDispDynData = !toolBar.isVisibleDispDynData
@@ -75,12 +84,13 @@ ApplicationWindow {
 
     header: MonitorToolBar {
         id: toolBar
+        visible: !mainApplicationView.task3Page && isVisible
         onChangeChartboxLayout: function(chartsPerRow) { monitorMenuBar.changeChartboxLayoutViewMenu(chartsPerRow) }
     }
 
     Panels {
         id: panels
-        visible: false
+        visible: !mainApplicationView.task3Page && mainApplicationView.legacyStarted
         onExplorerDDSEntitiesChanged: function(status) { monitorMenuBar.changeExplorerDDSEntities(status) }
         onExplorerPhysicalChanged: function(status) { monitorMenuBar.changeExplorerPhysical(status) }
         onExplorerLogicalChanged: function(status) { monitorMenuBar.changeExplorerLogical(status) }
@@ -89,6 +99,19 @@ ApplicationWindow {
 
     InitMonitorDialog {
         id: dialogInitMonitor
+    }
+
+    Loader {
+        id: task3Loader
+        anchors.fill: parent
+        active: mainApplicationView.task3Ready
+        visible: mainApplicationView.task3Page
+        source: "qrc:/task3/Dashboard.qml"
+    }
+    footer: TabBar {
+        currentIndex: mainApplicationView.task3Page ? 0 : 1
+        TabButton { text: "Task 3 · Máy / Ứng dụng / DDS"; onClicked: mainApplicationView.task3Page = true }
+        TabButton { text: "DDS nâng cao · Topology / Statistics"; onClicked: mainApplicationView.task3Page = false }
     }
 
     InitDSMonitorDialog {
@@ -174,6 +197,8 @@ ApplicationWindow {
         target: controller
         function onMonitorInitialized() {
             monitors++
+            mainApplicationView.legacyStarted = true
+            toolBar.isVisible = true
         }
     }
 }

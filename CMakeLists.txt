@@ -346,6 +346,12 @@ else()
 endif()
 
 # Install config.h header
+option(TASK3_BUILD_TESTS "Build Task 3 unit tests and owned DDS fixture" ON)
+if(TASK3_BUILD_TESTS)
+    enable_testing()
+endif()
+add_subdirectory(task3)
+
 install(FILES ${PROJECT_BINARY_DIR}/include/${PROJECT_NAME}/config.h
 DESTINATION ${INCLUDE_INSTALL_DIR}/${PROJECT_NAME}
 COMPONENT headers

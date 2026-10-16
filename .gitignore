@@ -2,6 +2,7 @@
 ### C++ ###
 # Prerequisites
 *.d
+__pycache__/
 
 # Compiled Object files
 *.slo
@@ -61,6 +62,7 @@ qrc_*.cpp
 ui_*.h
 Makefile*
 *build-*
+!task3/scripts/build-windows.ps1
 
 # QtCreator
 
@@ -99,6 +101,8 @@ tags
 build/
 install/
 log/
+/.task3-deps/
+/.task3-runtime/
 
 ### Visual Studio ###
 .vs

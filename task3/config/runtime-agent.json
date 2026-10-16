@@ -1,0 +1,11 @@
+{
+  "host_id": "instrumented-linux",
+  "telemetry_domain": 42,
+  "interval_ms": 500,
+  "identity_directory": "runtime/identities",
+  "disk_paths": ["/"],
+  "applications": [
+    {"application_id": "pub", "process_name": "task3_probe", "argument_token": "pub", "identity_required": true},
+    {"application_id": "sub", "process_name": "task3_probe", "argument_token": "sub", "identity_required": true}
+  ]
+}

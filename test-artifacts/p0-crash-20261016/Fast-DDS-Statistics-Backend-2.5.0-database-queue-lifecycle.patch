@@ -1,0 +1,34 @@
+diff --git a/src/cpp/database/database_queue.hpp b/src/cpp/database/database_queue.hpp
+--- a/src/cpp/database/database_queue.hpp
++++ b/src/cpp/database/database_queue.hpp
+@@ -160,6 +160,11 @@
+         // so after setting consuming_ to false, the thread still exists but it is not destroyed, and the internal
+         // object thread has been reset so it could be set again from start_consumer
+         std::unique_ptr<std::thread> tmp_thread_;
++        // Serialize the complete stop/join transition against restart. Without
++        // this lock, start_consumer() can launch another worker after the old
++        // thread has been moved out but before its join completes. Both workers
++        // would then mutate the same foreground queue.
++        std::unique_lock<std::mutex> lifecycle_guard(lifecycle_mutex_);
+ 
+         {
+             std::unique_lock<std::mutex> guard(cv_mutex_);
+@@ -191,6 +196,9 @@
+      */
+     bool start_consumer() noexcept
+     {
++        // Keep restart from overlapping a stop_consumer() that is joining the
++        // previous worker outside cv_mutex_.
++        std::unique_lock<std::mutex> lifecycle_guard(lifecycle_mutex_);
+         std::unique_lock<std::mutex> guard(cv_mutex_);
+         if (!consuming_ && !consumer_thread_)
+         {
+@@ -348,6 +356,8 @@
+ 
+     // Consumer
+     std::unique_ptr<std::thread> consumer_thread_;
++    // Serializes lifecycle operations until a stopped consumer has joined.
++    std::mutex lifecycle_mutex_;
+     std::condition_variable cv_;
+     std::mutex cv_mutex_;
+ 

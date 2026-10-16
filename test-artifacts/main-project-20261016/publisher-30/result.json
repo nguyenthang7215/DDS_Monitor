@@ -1,0 +1,163 @@
+{
+  "requested_cycles": 30,
+  "completed_cycles": 30,
+  "cycles": [
+    {
+      "cycle": 1,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 2,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 3,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 4,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 5,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 6,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 7,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 8,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 9,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 10,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 11,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 12,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 13,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 14,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 15,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 16,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 17,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 18,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 19,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 20,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 21,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 22,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 23,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 24,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 25,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 26,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 27,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 28,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 29,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 30,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    }
+  ],
+  "runtime_backend_map": {
+    "pid": 175157,
+    "library": "/home/dev/DDS-Monitor/.task3-deps/fastdds-statistics-backend-2.5.0-patched/lib/libfastdds_statistics_backend.so.2.5.0",
+    "verified": true
+  },
+  "status": "PASS",
+  "master_gdb_exit": 0
+}
