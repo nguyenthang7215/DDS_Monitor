@@ -18,7 +18,7 @@ writer_counts là object GUID Writer → chuỗi bộ đếm lần ghi thành c�
 
 ## Snapshot schema 1
 
-Các trường chính: schema_version, type, host_id, hostname, os, dds_host_identifier, session_id, sequence, timestamp_ms, metrics, applications, time_sync và collector_health. Các trường instance/runtime mới là mở rộng tùy chọn; envelope và HMAC không đổi.
+Các trường chính: schema_version, type, host_id, hostname, os, dds_host_identifier, session_id, sequence, timestamp_ms, metrics, applications, time_sync và collector_health. Các trường instance/runtime mới là mở rộng tùy chọn. JSON được truyền trực tiếp trong mẫu telemetry CDR.
 
 CPU tính từ chênh lệch giữa hai lần đọc, mẫu đầu là null. RAM và dung lượng ổ đĩa dùng byte. Tốc độ mạng là byte/giây theo từng interface; rate_valid=false khi chưa có khoảng so sánh hoặc bộ đếm bị đặt lại. collector_health phân biệt nguồn không khả dụng với phép đo bằng 0.
 

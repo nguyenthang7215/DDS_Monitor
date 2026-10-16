@@ -4,14 +4,6 @@
 #include <QJsonArray>
 #include <QDateTime>
 namespace task3 {
-void Registry::restoreReplay(const QJsonObject& state) {
-    for (auto i = state.begin(); i != state.end() && replay_.size() < 512; ++i) {
-        const auto row = i.value().toObject();
-        bool valid = false; row["sequence"].toString().toULongLong(&valid);
-        if (valid && i.key().size() <= 128 && row["session_id"].toString().size() <= 128 &&
-            row["retired"].toArray().size() <= 128) replay_[i.key()] = row;
-    }
-}
 void Registry::expect(const QStringList& hostIds) {
     for (const auto& id : hostIds) {
         if (id.isEmpty() || id.size() > 128 || hosts_.contains(id) || hosts_.size() >= 512) continue;
@@ -26,42 +18,20 @@ bool Registry::ingest(const QJsonObject& s, const QString& address, qint64 mono,
     if (!validate(s, error)) return false;
     const auto id = s["host_id"].toString(), session = s["session_id"].toString();
     const quint64 seq = s["sequence"].toString().toULongLong();
-    if (!replay_.contains(id) && replay_.size() >= 512) { error = "replay host capacity reached"; return false; }
-    if (replay_.contains(id) && (!hosts_.contains(id) || !hosts_[id].sequence)) {
-        const auto previous = replay_[id].toObject();
-        if (previous["retired"].toArray().contains(session) ||
-            (previous["session_id"] == session && seq <= previous["sequence"].toString().toULongLong()) ||
-            (previous["session_id"] != session && s["timestamp_ms"].toDouble() <= previous["timestamp_ms"].toDouble())) {
-            error = "persisted replay checkpoint"; return false;
-        }
-    }
     if (!hosts_.contains(id) && hosts_.size() >= 512) { error = "host capacity reached"; return false; }
     auto it = hosts_.find(id);
     if (it != hosts_.end()) {
-        const auto current = it->snapshot["session_id"].toString();
-        if (it->retiredSessions.contains(session)) { error = "retired session"; return false; }
-        if (session == current && seq <= it->sequence) { error = "duplicate/out-of-order"; return false; }
-        if (session != current) {
-            if (!current.isEmpty() && s["timestamp_ms"].toDouble() <= it->maximumTimestamp) {
+        if (session == it->sessionId && seq <= it->sequence) { error = "duplicate/out-of-order"; return false; }
+        if (session != it->sessionId) {
+            if (!it->sessionId.isEmpty() && s["timestamp_ms"].toDouble() <= it->maximumTimestamp) {
                 error = "older session"; return false;
             }
-            if (it->retiredSessions.size() >= 128) it->retiredSessions.erase(it->retiredSessions.begin());
-            if (!current.isEmpty()) it->retiredSessions.insert(current);
         }
     }
     auto& h = hosts_[id];
-    if (!h.sequence && replay_.contains(id)) {
-        const auto saved = replay_[id].toObject();
-        h.maximumTimestamp = qint64(saved["timestamp_ms"].toDouble());
-        for (const auto& retired : saved["retired"].toArray()) h.retiredSessions.insert(retired.toString());
-        if (saved["session_id"] != session) h.retiredSessions.insert(saved["session_id"].toString());
-    }
-    h.snapshot = s; h.address = address; h.seenMono = mono; h.seenWall = wall; h.sequence = seq; h.online = true;
+    h.snapshot = s; h.address = address; h.seenMono = mono; h.seenWall = wall;
+    h.sessionId = session; h.sequence = seq; h.online = true;
     h.maximumTimestamp = qMax(h.maximumTimestamp, qint64(s["timestamp_ms"].toDouble()));
-    while (h.retiredSessions.size() > 128) h.retiredSessions.erase(h.retiredSessions.begin());
-    QJsonArray retired; for (const auto& value : h.retiredSessions) retired.append(value);
-    replay_[id] = QJsonObject{{"session_id", session}, {"sequence", s["sequence"]},
-        {"timestamp_ms", double(h.maximumTimestamp)}, {"retired", retired}};
     return true;
 }
 void Registry::expire(qint64 now, qint64 timeout) {

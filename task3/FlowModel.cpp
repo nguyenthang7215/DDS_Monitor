@@ -35,6 +35,7 @@ QVariantList topology(const QVariantList& entities, qint64 now) {
                 {"match_state", match}, {"confirmed", match == "Matched"},
                 {"source_alive", w["alive"]}, {"target_alive", r["alive"]},
                 {"flow_state", w["data_state"]}, {"throughput_bps", w["throughput_bps"]},
+                {"throughput_timestamp_ms", w["metric_timestamp_ms"]},
                 {"latency_us", link["latency_us"]}, {"latency_timestamp_ms", link["latency_timestamp_ms"]}});
         }
     }

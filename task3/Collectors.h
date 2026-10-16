@@ -5,10 +5,13 @@
 #include <QElapsedTimer>
 #include <QStringList>
 #include <QMap>
+#include <QFuture>
+#include <functional>
 namespace task3 {
 class Collectors {
 public:
-    explicit Collectors(QJsonObject config);
+    using TimeStatusProvider = std::function<QJsonObject()>;
+    explicit Collectors(QJsonObject config, TimeStatusProvider timeStatusProvider = {}, qint64 timeRefreshMs = 10000);
     QJsonObject collect();
     static QJsonObject timeStatus();
     static QJsonObject parseChrony(const QString& csv, qint64 checkedMs);
@@ -21,8 +24,12 @@ private:
     QElapsedTimer elapsed_;
     qint64 previousMs_ = 0;
     QJsonObject timeCache_;
-    qint64 timeCheckedMs_ = -10000;
+    TimeStatusProvider timeStatusProvider_;
+    QFuture<QJsonObject> timeStatusFuture_;
+    qint64 timeCheckedMs_ = -1, timeRefreshMs_ = 10000;
+    bool timeStatusInFlight_ = false;
     QMap<QString, QPair<quint64, quint64>> previousInterfaces_;
+    void startTimeStatusQuery();
     QJsonArray applications();
 };
 }

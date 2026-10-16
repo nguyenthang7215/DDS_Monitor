@@ -3,7 +3,6 @@
 #include <QJsonDocument>
 #include <QJsonArray>
 #include <QSet>
-#include <QMessageAuthenticationCode>
 #include <QRegularExpression>
 #include <cmath>
 namespace task3 {
@@ -81,28 +80,14 @@ bool validate(const QJsonObject& s, QString& error) {
         return fail("invalid time state");
     return true;
 }
-QByteArray encode(const QJsonObject& snapshot, const QByteArray& key) {
-    const auto payload = QJsonDocument(snapshot).toJson(QJsonDocument::Compact);
-    const auto mac = QMessageAuthenticationCode::hash(payload, key, QCryptographicHash::Sha256).toHex();
-    return QJsonDocument(QJsonObject{{"payload", QString::fromLatin1(payload.toBase64())},
-                                    {"hmac_sha256", QString::fromLatin1(mac)}}).toJson(QJsonDocument::Compact);
+QByteArray encode(const QJsonObject& snapshot) {
+    return QJsonDocument(snapshot).toJson(QJsonDocument::Compact);
 }
-bool decode(const QByteArray& packet, const QByteArray& key, QJsonObject& out, QString& error) {
-    if (key.size() < 16) { error = "key must contain at least 16 bytes"; return false; }
+bool decode(const QByteArray& packet, QJsonObject& out, QString& error) {
     if (packet.size() > MaxPacket || packet.isEmpty()) { error = "packet size"; return false; }
     QJsonParseError parse;
-    const auto wrapper = QJsonDocument::fromJson(packet, &parse);
-    if (parse.error != QJsonParseError::NoError || !wrapper.isObject()) { error = "malformed envelope"; return false; }
-    const auto payload = QByteArray::fromBase64(wrapper.object()["payload"].toString().toLatin1(),
-                                              QByteArray::AbortOnBase64DecodingErrors);
-    const auto expected = QMessageAuthenticationCode::hash(payload, key, QCryptographicHash::Sha256).toHex();
-    const auto actual = wrapper.object()["hmac_sha256"].toString().toLatin1();
-    unsigned diff = expected.size() ^ actual.size();
-    for (int i = 0; i < expected.size(); ++i)
-        diff |= static_cast<unsigned char>(expected[i]) ^ static_cast<unsigned char>(i < actual.size() ? actual[i] : 0);
-    if (diff) { error = "authentication failed"; return false; }
-    const auto document = QJsonDocument::fromJson(payload, &parse);
-    if (parse.error != QJsonParseError::NoError || !document.isObject()) { error = "malformed payload"; return false; }
+    const auto document = QJsonDocument::fromJson(packet, &parse);
+    if (parse.error != QJsonParseError::NoError || !document.isObject()) { error = "malformed telemetry JSON"; return false; }
     out = document.object();
     return validate(out, error);
 }

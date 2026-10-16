@@ -14,4 +14,4 @@ if ($LASTEXITCODE -ne 0) { throw 'CMake configuration failed' }
 & cmake --build $BuildDirectory --config $Configuration --parallel 4
 if ($LASTEXITCODE -ne 0) { throw 'Agent build failed' }
 Write-Host 'Agent built. Add Qt/Fast DDS/Fast CDR DLL directories to PATH before running.'
-Write-Host 'Set TASK3_KEY and use --config task3/config/windows-agent.json. Build/runtime still require validation on this Windows host.'
+Write-Host 'Use --config task3/config/windows-agent.json. Build/runtime still require validation on this Windows host.'

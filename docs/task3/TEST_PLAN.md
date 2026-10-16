@@ -13,7 +13,7 @@ Giữ nguyên 15 kịch bản chính đã có. Bộ Qt Test hiện gồm các ca
 | TEST-10/11 | Discovery, matching không suy đoán | DDS thật; noDataIsNotStatisticsStale |
 | TEST-12/13/14 | Throughput/Latency/units/mẫu muộn | Hello World, units, lateSamplesRollingWindow |
 | TEST-15/16 | No Data, khôi phục/lưu lịch sử | Core và tích hợp Agent/Publisher restart |
-| TEST-17/18 | Run identity, bản tin không hợp lệ | explicitPerRunMapping, authenticatedProtocol |
+| TEST-17/18 | Run identity, schema và kích thước bản tin không hợp lệ | explicitPerRunMapping, protocolSchemaAndSizeValidation |
 | TEST-19/20 | Giao diện, nhiều host | Export/capture; 80 host tổng hợp |
 | TEST-21 | Chrony | CSV fixture và nguồn không khả dụng |
 | TEST-22/23 | Windows/Linux–Windows | PENDING_EXTERNAL_TEST |

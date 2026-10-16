@@ -15,6 +15,7 @@
 #include <QRegularExpression>
 #include <QCoreApplication>
 #include <QProcessEnvironment>
+#include <QtConcurrent/QtConcurrentRun>
 #include <cmath>
 #include <algorithm>
 #ifdef Q_OS_WIN
@@ -41,8 +42,36 @@ static QJsonObject command(const QString& exe, const QStringList& args, int time
             {"output", QString::fromUtf8(p.readAllStandardOutput()).trimmed()},
             {"detail", QString::fromUtf8(p.readAllStandardError()).trimmed()}};
 }
-Collectors::Collectors(QJsonObject config) : config_(std::move(config)),
-    session_(QUuid::createUuid().toString(QUuid::WithoutBraces)) { elapsed_.start(); }
+static QJsonObject unknownTimeStatus(qint64 checkedMs, const QString& detail) {
+    return {{"state", "unknown"}, {"source", ""}, {"service_running", QJsonValue(QJsonValue::Null)},
+            {"clock_synced", QJsonValue(QJsonValue::Null)}, {"source_valid", QJsonValue(QJsonValue::Null)},
+            {"source_reachable", QJsonValue(QJsonValue::Null)}, {"master_source_verified", QJsonValue(QJsonValue::Null)},
+            {"offset_seconds", QJsonValue(QJsonValue::Null)}, {"system_time_seconds", QJsonValue(QJsonValue::Null)},
+            {"checked_ms", checkedMs}, {"detail", detail}};
+}
+Collectors::Collectors(QJsonObject config, TimeStatusProvider timeStatusProvider, qint64 timeRefreshMs)
+    : config_(std::move(config)), session_(QUuid::createUuid().toString(QUuid::WithoutBraces)),
+      timeStatusProvider_(timeStatusProvider ? std::move(timeStatusProvider) : TimeStatusProvider(&Collectors::timeStatus)),
+      timeRefreshMs_(qMax<qint64>(1000, timeRefreshMs)) {
+    elapsed_.start();
+    timeCache_ = unknownTimeStatus(QDateTime::currentMSecsSinceEpoch(), "Time status query pending");
+    startTimeStatusQuery();
+}
+void Collectors::startTimeStatusQuery() {
+    const auto provider = timeStatusProvider_;
+    timeStatusFuture_ = QtConcurrent::run([provider] {
+        try {
+            const auto result = provider();
+            const auto state = result.value("state").toString();
+            if (state == "synced" || state == "unhealthy" || state == "unknown") return result;
+            return unknownTimeStatus(QDateTime::currentMSecsSinceEpoch(), "Invalid time status result");
+        } catch (...) {
+            return unknownTimeStatus(QDateTime::currentMSecsSinceEpoch(), "Time status query failed");
+        }
+    });
+    timeStatusInFlight_ = true;
+    timeCheckedMs_ = elapsed_.elapsed();
+}
 QJsonObject Collectors::timeStatus() {
     const auto now = QDateTime::currentMSecsSinceEpoch();
 #ifdef Q_OS_WIN
@@ -65,18 +94,22 @@ QJsonObject Collectors::timeStatus() {
 }
 QJsonObject Collectors::parseChrony(const QString& csv, qint64 now) {
     const auto fields = csv.split(',');
-    bool valid = false;
-    const double offset = fields.value(3).toDouble(&valid);
+    bool systemTimeValid = false, lastOffsetValid = false;
+    const double systemTime = fields.value(3).toDouble(&systemTimeValid);
+    const double lastOffset = fields.value(4).toDouble(&lastOffsetValid);
     bool stratumValid = false; const int stratum = fields.value(1).toInt(&stratumValid);
-    if (fields.size() < 13 || !valid || !std::isfinite(offset) || !stratumValid || stratum < 0 || stratum > 16)
-        return {{"state", "unknown"}, {"source", ""}, {"offset_seconds", QJsonValue::Null},
-            {"clock_synced", QJsonValue::Null}, {"checked_ms", now}, {"detail", "unrecognized chronyc CSV"}};
+    if (fields.size() < 13 || !systemTimeValid || !std::isfinite(systemTime) || !lastOffsetValid ||
+        !std::isfinite(lastOffset) || !stratumValid || stratum < 0 || stratum > 16)
+        return unknownTimeStatus(now, "unrecognized chronyc CSV");
     const bool sourceValid = stratum > 0 && stratum < 16 && !fields.value(0).trimmed().isEmpty() && fields.value(0) != "00000000";
     const bool synced = sourceValid && fields.last().trimmed() == "Normal";
     return {{"state", synced ? "synced" : "unhealthy"}, {"source", fields.value(0)},
             {"service_running", true}, {"source_reachable", QJsonValue::Null}, {"clock_synced", synced},
-            {"source_valid", sourceValid}, {"stratum", stratum},
-            {"offset_seconds", synced ? QJsonValue(offset) : QJsonValue(QJsonValue::Null)}, {"checked_ms", now}, {"detail", fields.last().trimmed()}};
+            {"source_valid", sourceValid}, {"master_source_verified", QJsonValue(QJsonValue::Null)}, {"stratum", stratum},
+            {"offset_seconds", synced ? QJsonValue(lastOffset) : QJsonValue(QJsonValue::Null)},
+            {"offset_kind", "chrony_last_offset"},
+            {"system_time_seconds", synced ? QJsonValue(systemTime) : QJsonValue(QJsonValue::Null)},
+            {"checked_ms", now}, {"detail", synced ? "Chrony synchronized to its selected source; Master identity not verified" : fields.last().trimmed()}};
 }
 QJsonObject Collectors::parseWindowsTime(const QJsonObject& evidence, qint64 now) {
     const auto service = evidence["service_running"];
@@ -86,7 +119,7 @@ QJsonObject Collectors::parseWindowsTime(const QJsonObject& evidence, qint64 now
     return {{"state", service.isBool() && !service.toBool() ? "unhealthy" : "unknown"},
         {"service_running", service.isBool() ? service : QJsonValue(QJsonValue::Null)},
         {"source", evidence["source"].toString()}, {"source_valid", QJsonValue::Null},
-        {"source_reachable", QJsonValue::Null}, {"clock_synced", QJsonValue::Null},
+        {"source_reachable", QJsonValue::Null}, {"master_source_verified", QJsonValue::Null}, {"clock_synced", QJsonValue::Null},
         {"offset_seconds", available ? QJsonValue(offset.toDouble() / 1000000.0) : QJsonValue(QJsonValue::Null)},
         {"checked_ms", now}, {"offset_kind", "absolute_w32time_estimate"}, {"detail", "Structured service/source/performance evidence; clock synchronization not independently established"}};
 }
@@ -218,6 +251,12 @@ QString Collectors::parseService(const QString& output, bool success) {
 }
 QJsonObject Collectors::collect() {
     const qint64 nowMono = elapsed_.elapsed();
+    if (timeStatusInFlight_ && timeStatusFuture_.isFinished()) {
+        try { timeCache_ = timeStatusFuture_.result(); }
+        catch (...) { timeCache_ = unknownTimeStatus(QDateTime::currentMSecsSinceEpoch(), "Time status query failed"); }
+        timeStatusInFlight_ = false;
+    }
+    if (!timeStatusInFlight_ && nowMono - timeCheckedMs_ >= timeRefreshMs_) startTimeStatusQuery();
     QJsonObject metrics{{"ram_total", 0.0}, {"ram_available", 0.0}, {"ram_used", 0.0}};
     quint64 idle = 0, total = 0, rx = 0, tx = 0;
     QMap<QString, QPair<quint64, quint64>> interfaces;
@@ -303,7 +342,6 @@ QJsonObject Collectors::collect() {
     metrics["network_tx_bps"] = txRate;
     metrics["network_scope"] = "aggregate non-loopback interfaces";
     rx_ = rx; tx_ = tx; previousMs_ = nowMono;
-    if (nowMono - timeCheckedMs_ >= 10000) { timeCache_ = timeStatus(); timeCheckedMs_ = nowMono; }
     return {{"schema_version", 1}, {"type", "telemetry"}, {"host_id", config_["host_id"]},
         {"hostname", QHostInfo::localHostName()}, {"os", QSysInfo::prettyProductName()},
         {"dds_host_identifier", config_["dds_host_identifier"].toString(QString::fromLatin1(QSysInfo::machineUniqueId()))},

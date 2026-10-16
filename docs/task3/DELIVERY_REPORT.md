@@ -88,7 +88,7 @@ Chọn Slave để xem CPU/RAM, disk/network, ứng dụng và trạng thái th�
 
 Publisher/Subscriber DDS và kiểm tra Alerts/SQLite có lệnh đầy đủ ở [BUILD_AND_RUN.md](BUILD_AND_RUN.md). Cần bật Statistics trong ứng dụng DDS trước khi kỳ vọng Throughput/Latency. Trạng thái Time Sync Unknown hoặc Matching Unknown phản ánh thiếu bằng chứng, không được thay bằng trạng thái thành công.
 
-Windows chạy build-windows.ps1 với QtPrefix và DdsPrefix thực tế, sau đó cấu hình DLL PATH/TASK3_KEY. Không có đường dẫn MSVC/Qt cố định được giả định là đúng cho máy người dùng.
+Windows chạy build-windows.ps1 với QtPrefix và DdsPrefix thực tế, sau đó cấu hình DLL PATH. Không có đường dẫn MSVC/Qt cố định được giả định là đúng cho máy người dùng.
 
 ## E. Phần chưa hoàn tất hoặc chưa xác minh
 
@@ -96,7 +96,7 @@ Windows chạy build-windows.ps1 với QtPrefix và DdsPrefix thực tế, sau �
 2. Windows build/runtime và nguồn trạng thái đồng hồ synchronized đáng tin cậy; cần Windows/MSVC/Qt/Fast DDS thật. Hiện chỉ JSON parser được test trên Linux.
 3. Master–Slave vật lý, NTP/Chrony/Windows Time, offset/hội tụ và NIC/firewall; cần môi trường cùng phê duyệt thao tác quản trị. Không thay cấu hình hệ thống trong phiên.
 4. Mật độ DDS cao, migration database rất lớn, UX cửa sổ thật, dịch vụ thật trong môi trường được phép và chạy dài theo tiêu chí thống nhất. Không có kết quả 24 giờ.
-5. Crash/mất điện vẫn có khoảng checkpoint chưa commit; shared HMAC chưa mã hóa hoặc phân quyền theo host. DDS Security là bước triển khai riêng.
+5. Session/sequence chỉ được theo dõi trong bộ nhớ Master; sau khi Master khởi động lại, bản tin cũ có thể được nhận lại. Telemetry không xác thực nguồn gửi hoặc mã hóa; DDS Security là bước triển khai riêng nếu phạm vi triển khai yêu cầu.
 6. App bên thứ ba không instrument vẫn cần GUID cấu hình; không có mapping hoặc No Data giả từ tên/PID/Statistics thiếu.
 
 [CONTINUATION_CHECKPOINT.md](CONTINUATION_CHECKPOINT.md) ghi source root, binary, checkpoint, lệnh và điểm cần tiếp tục; [KNOWN_ISSUES.md](KNOWN_ISSUES.md) ghi chi tiết các giới hạn vận hành.

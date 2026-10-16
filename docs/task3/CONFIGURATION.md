@@ -12,7 +12,7 @@ Mỗi applications[] có application_id, process_name khớp chính xác, servic
 - argument_token ở cấp ứng dụng: trên Linux, yêu cầu một phần tử cmdline khớp chính xác. Windows chưa hỗ trợ bộ lọc này và giữ Unknown khi được yêu cầu; dùng instrumentation để nhận diện instance.
 - dds_host_identifier ở cấp Agent: ghi đè định danh Physical Data nếu cấu hình middleware khác mặc định.
 
-Nhiều tiến trình khớp được giữ trong instances[], không chọn một PID để suy đoán ánh xạ. Khóa TASK3_KEY được truyền riêng qua môi trường.
+Nhiều tiến trình khớp được giữ trong instances[], không chọn một PID để suy đoán ánh xạ.
 
 ## Master
 

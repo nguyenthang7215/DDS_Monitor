@@ -18,11 +18,16 @@
 #include <QSqlDatabase>
 #include <QSqlQuery>
 #include <QSysInfo>
+#include <QElapsedTimer>
+#include <QThread>
+#include <QFile>
+#include <QDir>
+#include <QTimer>
+#include <atomic>
 #include <dds_monitor/statistics/dynamic/DynamicDataChartBox.h>
 class CoreTests : public QObject {
     Q_OBJECT
 private:
-    const QByteArray key = QByteArray(32, 't');
     QJsonObject sample(QString host = "test-host") {
         task3::Collectors c({{"host_id", host}, {"applications", QJsonArray{}}});
         return c.collect();
@@ -89,13 +94,16 @@ private slots:
     void topologyEvidence() {
         const qint64 now = 20000;
         QVariantMap writer{{"kind", "Writer"}, {"id", "w"}, {"guid", "wg"}, {"topic", "same"}, {"alive", true},
-            {"host_id", "host-a"}, {"application_id", "app-a"}, {"links", QVariantList{QVariantMap{{"reader_id", "r"}}}}};
+            {"host_id", "host-a"}, {"application_id", "app-a"}, {"metric_timestamp_ms", 19000},
+            {"links", QVariantList{QVariantMap{{"reader_id", "r"}, {"latency_us", 42.0}, {"latency_timestamp_ms", 19500}}}}};
         QVariantMap reader{{"kind", "Reader"}, {"id", "r"}, {"guid", "rg"}, {"alive", true},
             {"host_id", "host-b"}, {"application_id", "app-b"}, {"topic", "same"}};
         QCOMPARE(task3::topology({writer, reader}, now)[0].toMap()["match_state"].toString(), QString("Unknown"));
         writer["connection_status_timestamp_ms"] = now; writer["connection_guids"] = QStringList{"rg"};
         auto flow = task3::topology({writer, reader}, now)[0].toMap();
         QVERIFY(flow["confirmed"].toBool()); QCOMPARE(flow["target_host"].toString(), QString("host-b"));
+        QCOMPARE(flow["throughput_timestamp_ms"].toLongLong(), qint64(19000));
+        QCOMPARE(flow["latency_timestamp_ms"].toLongLong(), qint64(19500));
         writer["connection_guids"] = QStringList{};
         QCOMPARE(task3::topology({writer, reader}, now)[0].toMap()["match_state"].toString(), QString("Unmatched"));
         QCOMPARE(task3::topology({writer, reader}, now+15000)[0].toMap()["match_state"].toString(), QString("Unknown"));
@@ -111,6 +119,43 @@ private slots:
         QCOMPARE(time["state"].toString(), QString("unknown")); QVERIFY(time["clock_synced"].isNull());
         time = task3::Collectors::parseWindowsTime({}, 99); QVERIFY(time["offset_seconds"].isNull());
         QCOMPARE(task3::Collectors::parseWindowsTime({{"service_running", false}}, 99)["state"].toString(), QString("unhealthy"));
+    }
+    void asynchronousTimeStatusCacheDoesNotBlockCollection() {
+        std::atomic_int calls{0};
+        task3::Collectors collector({{"host_id", "async-time"}, {"applications", QJsonArray{}}}, [&] {
+            ++calls;
+            QThread::msleep(250);
+            return QJsonObject{{"state", "unknown"}, {"detail", "fixture query failure"}};
+        }, 1000);
+        QElapsedTimer elapsed; elapsed.start();
+        auto first = collector.collect();
+        QVERIFY(elapsed.elapsed() < 150);
+        QCOMPARE(first["time_sync"].toObject()["state"].toString(), QString("unknown"));
+        QCOMPARE(first["time_sync"].toObject()["offset_seconds"].isNull(), true);
+        int timerTicks = 0; QTimer timer; connect(&timer, &QTimer::timeout, [&] { ++timerTicks; }); timer.start(10);
+        QTRY_COMPARE_WITH_TIMEOUT(calls.load(), 1, 2000);
+        QTRY_VERIFY_WITH_TIMEOUT(collector.collect()["time_sync"].toObject()["detail"].toString() == "fixture query failure", 2000);
+        timer.stop(); QVERIFY(timerTicks >= 10);
+        for (int i = 0; i < 5; ++i) collector.collect();
+        QCOMPARE(calls.load(), 1); // The cached result is reused until the refresh interval.
+    }
+    void chronyCommandTimeoutIsBounded() {
+#ifndef Q_OS_WIN
+        QTemporaryDir dir; QVERIFY(dir.isValid());
+        const auto executable = dir.filePath("chronyc");
+        QFile script(executable); QVERIFY(script.open(QIODevice::WriteOnly));
+        script.write("#!/bin/sh\nexec sleep 5\n"); script.close();
+        QVERIFY(script.setPermissions(QFileDevice::ReadOwner | QFileDevice::WriteOwner | QFileDevice::ExeOwner));
+        const auto oldPath = qgetenv("PATH"); qputenv("PATH", dir.path().toUtf8() + ":" + oldPath);
+        task3::Collectors collector({{"host_id", "slow-chrony"}, {"applications", QJsonArray{}}});
+        int heartbeats = 0; QTimer heartbeat; connect(&heartbeat, &QTimer::timeout, [&] { ++heartbeats; collector.collect(); });
+        heartbeat.start(50); QTest::qWait(1200); heartbeat.stop();
+        const auto status = collector.collect()["time_sync"].toObject();
+        qputenv("PATH", oldPath);
+        QVERIFY(heartbeats >= 15); // The agent's periodic collection remains responsive during the 700 ms command timeout.
+        QCOMPARE(status["state"].toString(), QString("unknown"));
+        QVERIFY(status["detail"].toString().contains("timed out"));
+#endif
     }
     void periodicRuntimeCounterAndEventIdle() {
         QTemporaryDir dir;
@@ -132,8 +177,8 @@ private slots:
         QVariantMap participant{{"kind", "Participant"}, {"id", "p"}, {"guid", "participant-guid"},
             {"hostname", s["hostname"].toString()}, {"pid", "123"}, {"alive", true}};
         {
-            task3::MonitoringCore core(dir.filePath("periodic.sqlite"), key);
-            QVERIFY(core.ingest(task3::encode(s, key), "test"));
+            task3::MonitoringCore core(dir.filePath("periodic.sqlite"));
+            QVERIFY(core.ingest(task3::encode(s), "test"));
             core.updateDds({writer, participant}); // Deliberately endpoint before parent.
             QCOMPARE(core.entities()[0].toMap()["application_id"].toString(), QString("app"));
             QTest::qWait(150); core.tick();
@@ -144,13 +189,13 @@ private slots:
             instance["writer_counts"] = QJsonObject{{"writer-guid", "2"}};
             auto app = s["applications"].toArray()[0].toObject(); app["instances"] = QJsonArray{instance};
             s["applications"] = QJsonArray{app}; s["sequence"] = "2";
-            QVERIFY(core.ingest(task3::encode(s, key), "test"));
+            QVERIFY(core.ingest(task3::encode(s), "test"));
             QCOMPARE(core.events()[0].toMap()["state"].toString(), QString("Recovered"));
         }
         QVERIFY(rules("event"));
         {
-            task3::MonitoringCore core(dir.filePath("event.sqlite"), key);
-            QVERIFY(core.ingest(task3::encode(s, key), "test")); core.updateDds({writer, participant});
+            task3::MonitoringCore core(dir.filePath("event.sqlite"));
+            QVERIFY(core.ingest(task3::encode(s), "test")); core.updateDds({writer, participant});
             QTest::qWait(150); core.tick();
             QCOMPARE(core.entities()[0].toMap()["data_state"].toString(), QString("Event idle (allowed)"));
             for (const auto& row : core.events()) QVERIFY(row.toMap()["kind"] != "dds_no_data");
@@ -158,17 +203,17 @@ private slots:
         qunsetenv("TASK3_FLOW_RULES");
     }
     void serviceTransitionsRemainIndependent() {
-        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"), key);
+        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"));
         auto s = sample();
         QJsonObject app{{"application_id", "svc"}, {"pid", 0}, {"instance_id", ""}, {"state", "stopped"}, {"service_state", "running"}};
         auto send = [&](int sequence) {
             s["applications"] = QJsonArray{app}; s["sequence"] = QString::number(sequence);
-            return core.ingest(task3::encode(s, key), "test");
+            return core.ingest(task3::encode(s), "test");
         };
         QVERIFY(send(1)); QCOMPARE(core.events().size(), 1); // Process absent; service is independently running.
         app["service_state"] = "failed"; QVERIFY(send(2)); QCOMPARE(core.events().size(), 2);
         app["service_state"] = "unknown"; QVERIFY(send(3)); QCOMPARE(core.events().size(), 2);
-        app["service_state"] = "running"; QVERIFY(send(4)); QCOMPARE(core.events().size(), 3);
+        app["service_state"] = "running"; QVERIFY(send(4)); QCOMPARE(core.events().size(), 2);
         QCOMPARE(core.events()[0].toMap()["kind"].toString(), QString("service_stopped"));
         QCOMPARE(core.events()[0].toMap()["state"].toString(), QString("Recovered"));
     }
@@ -190,9 +235,9 @@ private slots:
         auto condition = [&](bool failed, qint64 mono) { store.condition("rule", failed, "test", "host", "test", 10000+mono, mono); };
         condition(true, 0); condition(true, 99); QCOMPARE(store.rows().size(), 0);
         condition(false, 99); condition(true, 100); condition(true, 200); QCOMPARE(store.rows().size(), 1);
-        condition(false, 201); condition(false, 301); QCOMPARE(store.rows().size(), 2);
-        condition(true, 302); condition(true, 500); QCOMPARE(store.rows().size(), 2);
-        condition(true, 601); QCOMPARE(store.rows().size(), 3);
+        condition(false, 201); condition(false, 301); QCOMPARE(store.rows().size(), 1);
+        condition(true, 302); condition(true, 500); QCOMPARE(store.rows().size(), 1);
+        condition(true, 601); QCOMPARE(store.rows().size(), 2);
     }
     void unknownEvidenceResetsPendingDebounce() {
         QTemporaryDir dir; task3::AlertStore store(dir.filePath("events.sqlite")); store.policy(100,0,0);
@@ -209,21 +254,22 @@ private slots:
         store.condition("r",true,"test","h","test",1000); QCOMPARE(store.rows().size(),1);
         QTest::ignoreMessage(QtCriticalMsg, QRegularExpression("Event persistence incomplete at shutdown:.*"));
     }
-    void corruptReplayDatabaseFailsClosed() {
+    void corruptEventDatabaseDoesNotBlockTelemetry() {
         QTemporaryDir dir; auto s = sample(); const auto path = dir.filePath("broken.sqlite");
         QSaveFile file(path); QVERIFY(file.open(QIODevice::WriteOnly)); file.write("broken database"); QVERIFY(file.commit());
-        task3::MonitoringCore core(path,key);
-        QVERIFY(!core.ingest(task3::encode(s,key),"test"));
-        QVERIFY(core.hosts().isEmpty()); QVERIFY(core.status().contains("Event database"));
+        task3::MonitoringCore core(path);
+        QVERIFY(core.ingest(task3::encode(s),"test"));
+        QCOMPARE(core.hosts().size(), 1); QVERIFY(core.hosts()[0].toMap()["online"].toBool());
+        QVERIFY(core.status().contains("Event database"));
     }
     void throughputHysteresis() {
         qputenv("TASK3_THROUGHPUT_MIN","10"); qputenv("TASK3_THROUGHPUT_HYSTERESIS","2");
-        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"),key);
+        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"));
         QVariantMap writer{{"kind","Writer"},{"id","threshold"},{"alive",true},{"metric_fresh",true},
             {"metric_timestamp_ms",QDateTime::currentMSecsSinceEpoch()},{"throughput_bps",9.0}};
         core.updateDds({writer}); QCOMPARE(core.events().size(),1);
         writer["throughput_bps"]=10.5; core.updateDds({writer}); QCOMPARE(core.events().size(),1);
-        writer["throughput_bps"]=12.0; core.updateDds({writer}); QCOMPARE(core.events().size(),2);
+        writer["throughput_bps"]=12.0; core.updateDds({writer}); QCOMPARE(core.events().size(),1);
         QCOMPARE(core.events()[0].toMap()["state"].toString(),QString("Recovered"));
         qunsetenv("TASK3_THROUGHPUT_MIN"); qunsetenv("TASK3_THROUGHPUT_HYSTERESIS");
     }
@@ -235,12 +281,38 @@ private slots:
             { QSqlQuery lock(db); QVERIFY(lock.exec("BEGIN IMMEDIATE")); }
             int ticks = 0; QTimer timer; connect(&timer, &QTimer::timeout, [&] { ++ticks; }); timer.start(5);
             for (int i = 0; i < 3000; ++i) store.condition(QString::number(i), true, "test", "host", "lock-test", 1000+i);
-            QTest::qWait(180); QVERIFY(ticks >= 10); QCOMPARE(store.rows().size(), 500);
+            QTest::qWait(180); QVERIFY(ticks >= 10); QCOMPARE(store.rows().size(), 3000);
             { QSqlQuery unlock(db); QVERIFY(unlock.exec("COMMIT")); }
             db.close(); db = QSqlDatabase(); QSqlDatabase::removeDatabase("lock-test");
         }
         task3::AlertStore reopened(path); QVERIFY2(reopened.error().isEmpty(), qPrintable(reopened.error()));
-        QCOMPARE(reopened.rows().size(), 500); QVERIFY(reopened.isActive("0")); QVERIFY(reopened.isActive("2999"));
+        QCOMPARE(reopened.rows().size(), 500); QVERIFY(reopened.hasMoreRows());
+        QVERIFY(reopened.isActive("0")); QVERIFY(reopened.isActive("2999"));
+        reopened.loadOlderRows(); QCOMPARE(reopened.rows().size(), 1000); QVERIFY(reopened.hasMoreRows());
+        while (reopened.hasMoreRows()) reopened.loadOlderRows();
+        QCOMPARE(reopened.rows().size(), 3000);
+    }
+    void pagedHistoryIncludesRecoveryForOlderAlert() {
+        QTemporaryDir dir; const auto path = dir.filePath("paged-history.sqlite");
+        {
+            task3::AlertStore store(path);
+            for (int i = 0; i < 501; ++i)
+                store.condition(QString::number(i), true, "test", "host", "condition", 1000 + i);
+            store.condition("0", false, "test", "host", "condition", 2000);
+            store.flush();
+        }
+        task3::AlertStore reopened(path);
+        QCOMPARE(reopened.rows().size(), 500); QVERIFY(reopened.hasMoreRows());
+        reopened.loadOlderRows();
+        QCOMPARE(reopened.rows().size(), 501); QVERIFY(!reopened.hasMoreRows());
+        bool foundRecovered = false;
+        for (const auto& value : reopened.rows()) {
+            const auto row = value.toMap();
+            if (row["rule_id"] == "0") {
+                foundRecovered = row["state"] == "Recovered" && !row["recovered_ms"].isNull();
+            }
+        }
+        QVERIFY(foundRecovered);
     }
     void legacySqliteUpgradePreservesHistory() {
         QTemporaryDir dir; const auto path = dir.filePath("legacy.sqlite");
@@ -257,16 +329,21 @@ private slots:
             task3::AlertStore store(path); QVERIFY2(store.error().isEmpty(),qPrintable(store.error()));
             QCOMPARE(store.rows().size(),1); QVERIFY(store.isActive("legacy"));
             store.condition("legacy",true,"test","host","original event",1100); QCOMPARE(store.rows().size(),1);
-            store.condition("legacy",false,"test","host","original event",1200); QCOMPARE(store.rows().size(),2);
+            store.condition("legacy",false,"test","host","original event",1200); QCOMPARE(store.rows().size(),1);
         }
-        task3::AlertStore reopened(path); QCOMPARE(reopened.rows().size(),2); QVERIFY(!reopened.isActive("legacy"));
+        task3::AlertStore reopened(path); QCOMPARE(reopened.rows().size(),1); QVERIFY(!reopened.isActive("legacy"));
     }
-    void masterRestartReplay() {
+    void masterRestartAcceptsTelemetryWithoutPersistentReplayState() {
         QTemporaryDir dir; const auto path = dir.filePath("events.sqlite"); auto s = sample();
-        { task3::MonitoringCore core(path, key); QVERIFY(core.ingest(task3::encode(s, key), "test")); }
-        { task3::MonitoringCore core(path, key);
-          QVERIFY(!core.ingest(task3::encode(s, key), "replay"));
-          s["sequence"] = "2"; QVERIFY(core.ingest(task3::encode(s, key), "fresh")); }
+        { task3::MonitoringCore core(path); QVERIFY(core.ingest(task3::encode(s), "test")); }
+        {
+            auto db = QSqlDatabase::addDatabase("QSQLITE", "replay-check-test"); db.setDatabaseName(path); QVERIFY(db.open());
+            QSqlQuery query(db); QVERIFY(query.exec("SELECT COUNT(*) FROM metadata WHERE key='replay'"));
+            QVERIFY(query.next()); QCOMPARE(query.value(0).toInt(), 0);
+            db.close(); db = QSqlDatabase(); QSqlDatabase::removeDatabase("replay-check-test");
+        }
+        { task3::MonitoringCore core(path);
+          QVERIFY(core.ingest(task3::encode(s), "after-master-restart")); }
     }
     void repeatedAgentRestartsStayBounded() {
         task3::Registry registry; auto s = sample(); QString error;
@@ -278,7 +355,7 @@ private slots:
         }
         first["sequence"] = "999999";
         QVERIFY(!registry.ingest(first, "replay", 201, 201, error));
-        QVERIFY(registry.hosts().first().retiredSessions.size() <= 128);
+        QCOMPARE(registry.hosts().first().sessionId, s["session_id"].toString());
     }
     void retentionOptInPreservesActiveAndMigration() {
         QTemporaryDir dir; const auto path = dir.filePath("events.sqlite");
@@ -288,7 +365,7 @@ private slots:
             store.condition("old", false, "test", "h", "old", 1001);
             store.condition("active", true, "test", "h", "active", 1000);
         }
-        { task3::AlertStore store(path); store.applyRetention(); QCoreApplication::processEvents(); QCOMPARE(store.rows().size(), 3); }
+        { task3::AlertStore store(path); store.applyRetention(); QCoreApplication::processEvents(); QCOMPARE(store.rows().size(), 2); }
         qputenv("TASK3_EVENT_RETENTION_DAYS", "1");
         {
             task3::AlertStore store(path); store.applyRetention(); QCoreApplication::processEvents();
@@ -306,12 +383,12 @@ private slots:
         QElapsedTimer timer; timer.start();
         for (int round = 1; round <= 8; ++round) for (int host = 0; host < 128; ++host) {
             s["host_id"] = "load-"+QString::number(host); s["sequence"] = QString::number(round);
-            QVERIFY(task3::decode(task3::encode(s,key),key,decoded,error));
+            QVERIFY(task3::decode(task3::encode(s),decoded,error));
             QVERIFY(registry.ingest(decoded, "test", round, round, error));
         }
         QCOMPARE(registry.rows().size(), 128);
-        for (int i = 0; i < 1000; ++i) QVERIFY(!task3::decode("bad-data",key,decoded,error));
-        qInfo() << "Load sample: 1024 signed snapshots, 128 synthetic hosts x32 applications; ms=" << timer.elapsed();
+        for (int i = 0; i < 1000; ++i) QVERIFY(!task3::decode("bad-data",decoded,error));
+        qInfo() << "Load sample: 1024 telemetry snapshots, 128 synthetic hosts x32 applications; ms=" << timer.elapsed();
     }
     void boundedDdsDispatch() {
         const auto topic = QString("Task3/Test/Queue/%1").arg(QCoreApplication::applicationPid());
@@ -336,11 +413,11 @@ private slots:
     }
     void cpuSnapshotLifetimeRegression() {
         QTemporaryDir dir;
-        task3::MonitoringCore core(dir.filePath("events.sqlite"), key);
+        task3::MonitoringCore core(dir.filePath("events.sqlite"));
         task3::Collectors collector({{"host_id", "cpu-regression"}, {"applications", QJsonArray{}}});
-        QVERIFY(core.ingest(task3::encode(collector.collect(), key), "local"));
+        QVERIFY(core.ingest(task3::encode(collector.collect()), "local"));
         QTest::qWait(20);
-        QVERIFY(core.ingest(task3::encode(collector.collect(), key), "local"));
+        QVERIFY(core.ingest(task3::encode(collector.collect()), "local"));
         QCOMPARE(core.hosts()[0].toMap()["cpu_history"].toList().size(), 1);
     }
     void lateSamplesRollingWindow() {
@@ -358,7 +435,10 @@ private slots:
     void chronyParsing() {
         auto synced = task3::Collectors::parseChrony("C0A80101,2,12345,0.00001,0.00002,0.00003,1,0,0.1,0.01,0.02,64,Normal", 123);
         QCOMPARE(synced["state"].toString(), QString("synced"));
-        QCOMPARE(synced["offset_seconds"].toDouble(), 0.00001);
+        QCOMPARE(synced["system_time_seconds"].toDouble(), 0.00001);
+        QCOMPARE(synced["offset_seconds"].toDouble(), 0.00002);
+        QCOMPARE(synced["offset_kind"].toString(), QString("chrony_last_offset"));
+        QVERIFY(synced["master_source_verified"].isNull());
         QCOMPARE(task3::Collectors::parseChrony("invalid", 0)["state"].toString(), QString("unknown"));
         QCOMPARE(task3::Collectors::parseChrony("00000000,0,0,0,0,0,0,0,0,0,0,0,Not synchronised", 0)["state"].toString(), QString("unhealthy"));
     }
@@ -370,7 +450,7 @@ private slots:
     }
     void noDataIsNotStatisticsStale() {
         QTemporaryDir dir;
-        task3::MonitoringCore core(dir.filePath("events.sqlite"), key);
+        task3::MonitoringCore core(dir.filePath("events.sqlite"));
         qputenv("TASK3_EXPECTED_TOPICS", "test-periodic");
         qputenv("TASK3_DDS_TIMEOUT_MS", "1000");
         QVariantMap writer{{"kind", "Writer"}, {"id", "1"}, {"alive", true}, {"topic", "test-periodic"},
@@ -398,14 +478,14 @@ private slots:
     }
     void localDdsTelemetryTimeoutAndRecovery() {
         QTemporaryDir dir;
-        task3::MonitoringCore core(dir.filePath("events.sqlite"), key, 200);
+        task3::MonitoringCore core(dir.filePath("events.sqlite"), 200);
         const auto topic = QString("Task3/Test/Telemetry/%1").arg(QCoreApplication::applicationPid());
         QVERIFY(core.startTelemetry(97, topic));
         task3::DdsTransport writer(true, 97, topic);
         QVERIFY2(writer.valid(), qPrintable(writer.error()));
         task3::Collectors c({{"host_id", "dds-local-test"}, {"applications", QJsonArray{}}});
         QTimer publisher;
-        connect(&publisher, &QTimer::timeout, this, [&] { QVERIFY(writer.send(task3::encode(c.collect(), key))); });
+        connect(&publisher, &QTimer::timeout, this, [&] { QVERIFY(writer.send(task3::encode(c.collect()))); });
         publisher.start(100);
         QTRY_COMPARE_WITH_TIMEOUT(core.hosts().size(), 1, 12000);
         QVERIFY(core.hosts()[0].toMap()["online"].toBool());
@@ -419,6 +499,40 @@ private slots:
             recovered |= event.toMap()["kind"] == "agent_timeout" && event.toMap()["state"] == "Recovered";
         QVERIFY(recovered);
     }
+    void activeProcessAndServiceAlertsAreUnverifiedWhileAgentOffline() {
+        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"), 120);
+        auto s = sample("offline-alert-host");
+        QJsonObject app{{"application_id", "app"}, {"pid", 0}, {"state", "stopped"},
+            {"service_state", "failed"}, {"service", "example.service"}};
+        s["applications"] = QJsonArray{app};
+        QVERIFY(core.ingest(task3::encode(s), "test"));
+        auto alert = [&](const QString& kind) {
+            for (const auto& value : core.events())
+                if (value.toMap()["kind"] == kind && value.toMap()["state"] == "Active") return value.toMap();
+            return QVariantMap{};
+        };
+        QCOMPARE(alert("process_stopped")["verification"].toString(), QString("Verified by current Agent telemetry"));
+        QCOMPARE(alert("service_stopped")["verification"].toString(), QString("Verified by current Agent telemetry"));
+        QTest::qWait(160); core.tick();
+        for (const auto& kind : {QString("process_stopped"), QString("service_stopped")}) {
+            const auto row = alert(kind);
+            QCOMPARE(row["state"].toString(), QString("Active"));
+            QCOMPARE(row["verification"].toString(), QString("Not verified — Agent Offline"));
+            QVERIFY(row["recovered_ms"].isNull());
+        }
+        app["pid"] = 1; app["state"] = "running"; app["instance_id"] = "test-run";
+        app["service_state"] = "running"; s["applications"] = QJsonArray{app};
+        s["sequence"] = "2"; s["timestamp_ms"] = double(QDateTime::currentMSecsSinceEpoch());
+        QVERIFY(core.ingest(task3::encode(s), "test-recovery"));
+        for (const auto& kind : {QString("process_stopped"), QString("service_stopped")}) {
+            bool recovered = false;
+            for (const auto& value : core.events()) {
+                const auto row = value.toMap();
+                recovered |= row["kind"] == kind && row["state"] == "Recovered" && !row["recovered_ms"].isNull();
+            }
+            QVERIFY(recovered);
+        }
+    }
     void realCollectors() {
         task3::Collectors c({{"host_id", "local"}, {"applications", QJsonArray{}}});
         auto first = c.collect();
@@ -429,15 +543,14 @@ private slots:
         QVERIFY(second["metrics"].toObject()["cpu_percent"].isDouble());
         QVERIFY(second["metrics"].toObject()["disk_total"].toDouble() > 0);
     }
-    void authenticatedProtocol() {
+    void protocolSchemaAndSizeValidation() {
         auto s = sample(); QJsonObject out; QString e;
-        auto packet = task3::encode(s, key);
-        QVERIFY(task3::decode(packet, key, out, e)); QCOMPARE(out, s);
-        QVERIFY(!task3::decode(packet, QByteArray(32, 'z'), out, e));
-        QVERIFY(!task3::decode("{invalid", key, out, e));
-        QVERIFY(!task3::decode(QByteArray(task3::MaxPacket+1, 'x'), key, out, e));
+        auto packet = task3::encode(s);
+        QVERIFY(task3::decode(packet, out, e)); QCOMPARE(out, s);
+        QVERIFY(!task3::decode("{invalid", out, e));
+        QVERIFY(!task3::decode(QByteArray(task3::MaxPacket+1, 'x'), out, e));
         s["schema_version"] = 99;
-        QVERIFY(!task3::decode(task3::encode(s, key), key, out, e));
+        QVERIFY(!task3::decode(task3::encode(s), out, e));
     }
     void registryOrderingAndRestart() {
         task3::Registry registry; auto s = sample(); QString e;
@@ -498,8 +611,10 @@ private slots:
             store.condition("h/agent", true, "agent_timeout", "h", "timeout", 1002);
             QCOMPARE(store.rows().size(), 1);
             store.condition("h/agent", false, "agent_timeout", "h", "timeout", 1003);
-            QCOMPARE(store.rows().size(), 2);
+            QCOMPARE(store.rows().size(), 1);
             QCOMPARE(store.rows()[0].toMap()["state"].toString(), QString("Recovered"));
+            QVERIFY(!store.rows()[0].toMap()["recovered_ms"].isNull());
+            QVERIFY(store.rows()[0].toMap()["triggered_ms"].toLongLong() > 0);
         }
     }
     void processStopped() {

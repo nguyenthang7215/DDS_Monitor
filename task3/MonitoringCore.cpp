@@ -16,11 +16,32 @@ QVariantList MonitoringCore::hosts() const {
     }
     return rows;
 }
-MonitoringCore::MonitoringCore(const QString& db, QByteArray key, int timeoutMs, QObject* parent)
-    : QObject(parent), alerts_(db), key_(std::move(key)), timeout_(qMax(100, timeoutMs)) {
+QVariantList MonitoringCore::events() const {
+    auto rows = alerts_.rows();
+    for (auto& value : rows) {
+        auto row = value.toMap();
+        if (row["state"] == "Active" && alerts_.isActive(row["rule_id"].toString()) &&
+            (row["kind"] == "process_stopped" || row["kind"] == "service_stopped")) {
+            const auto hostId = row["rule_id"].toString().section('/', 0, 0);
+            const auto host = registry_.hosts().constFind(hostId);
+            if (host == registry_.hosts().cend() || !host->sequence)
+                row["verification"] = "Not verified — awaiting Agent telemetry";
+            else if (!host->online)
+                row["verification"] = "Not verified — Agent Offline";
+            else
+                row["verification"] = "Verified by current Agent telemetry";
+            value = row;
+        }
+    }
+    return rows;
+}
+void MonitoringCore::loadOlderEvents() {
+    alerts_.loadOlderRows();
+    emit changed();
+}
+MonitoringCore::MonitoringCore(const QString& db, int timeoutMs, QObject* parent)
+    : QObject(parent), alerts_(db), timeout_(qMax(100, timeoutMs)) {
     clock_.start(); timer_.setInterval(500);
-    replayReady_ = alerts_.error().isEmpty();
-    registry_.restoreReplay(alerts_.replayState());
     alerts_.policy(qEnvironmentVariableIntValue("TASK3_ALERT_TRIGGER_MS"),
         qEnvironmentVariableIntValue("TASK3_ALERT_RECOVERY_MS"), qEnvironmentVariableIntValue("TASK3_ALERT_COOLDOWN_MS"));
     registry_.expect(qEnvironmentVariable("TASK3_EXPECTED_HOSTS").split(',', Qt::SkipEmptyParts));
@@ -39,7 +60,6 @@ MonitoringCore::MonitoringCore(const QString& db, QByteArray key, int timeoutMs,
     connect(&timer_, &QTimer::timeout, this, &MonitoringCore::tick); timer_.start();
 }
 bool MonitoringCore::startTelemetry(int domain, const QString& topic) {
-    if (key_.size() < 16) { status_ = "Telemetry disabled: TASK3_KEY must contain at least 16 bytes"; emit changed(); return false; }
     transport_.reset(new DdsTransport(false, domain, topic));
     connect(transport_.get(), &DdsTransport::received, this, &MonitoringCore::ingest);
     const bool ok = transport_->valid();
@@ -48,9 +68,8 @@ bool MonitoringCore::startTelemetry(int domain, const QString& topic) {
 }
 void MonitoringCore::stop() { timer_.stop(); transport_.reset(); alerts_.flush(); }
 bool MonitoringCore::ingest(const QByteArray& packet, const QString& source) {
-    if (!replayReady_) { emit rejected("Replay checkpoint unavailable; repair database and restart Master"); return false; }
     QJsonObject snapshot; QString error;
-    if (!decode(packet, key_, snapshot, error) ||
+    if (!decode(packet, snapshot, error) ||
         !registry_.ingest(snapshot, source, clock_.elapsed(), QDateTime::currentMSecsSinceEpoch(), error)) {
         emit rejected(error); return false;
     }
@@ -60,7 +79,6 @@ bool MonitoringCore::ingest(const QByteArray& packet, const QString& source) {
         history.append(QVariantMap{{"timestamp_ms", QDateTime::currentMSecsSinceEpoch()}, {"value", cpu.toDouble()}});
         while (history.size() > 120) history.removeFirst();
     }
-    alerts_.saveReplay(registry_.replayState());
     tick(); return true;
 }
 void MonitoringCore::tick() {

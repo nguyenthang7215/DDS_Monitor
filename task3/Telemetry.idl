@@ -1,6 +1,6 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
-// CDR v1 wire contract implemented by TelemetryType. Payload is an authenticated
-// JSON envelope; the JSON schema_version is validated after HMAC verification.
+// CDR v1 wire contract implemented by TelemetryType. Payload is compact JSON;
+// the schema_version and all telemetry fields are validated by the receiver.
 module task3 {
     struct TelemetryEnvelopeV1 {
         string<48000> envelope;

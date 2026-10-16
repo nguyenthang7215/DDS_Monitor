@@ -13,7 +13,7 @@ Trạng thái tích hợp hiện tại: **MAIN_PROJECT_READY_FOR_MANUAL_LINUX_TE
 9. Retention mặc định tắt. Khi bật, cần SQLite JSON1; không có extension thì giữ dữ liệu và báo lỗi. Mỗi lượt xử lý tối đa 1000 alert ID đã khôi phục. Chưa đo nâng cấp database quy mô hàng triệu dòng.
 10. Checkpoint chống phát lại được gộp khoảng 100 ms, có flush khi thoát bình thường. Crash/mất điện có thể mất phần chưa commit. DB không đọc/khởi tạo được thì telemetry bị từ chối; cần sửa DB và restart Master.
 11. Session mới phải vượt timestamp cao nhất đã lưu. Agent restart sau khi đồng hồ bị lùi có thể bị từ chối đến khi thời gian bắt kịp. Trong cùng session, sequence vẫn cho phép đồng hồ lùi.
-12. HMAC dùng shared key, không mã hóa hoặc phân quyền riêng từng máy. Thành viên có khóa có thể giả danh nhau. Chưa triển khai DDS Security theo danh tính từng host.
+12. Telemetry hiện không xác thực nguồn gửi và không mã hóa. Chỉ sử dụng trên mạng DDS tin cậy; nếu cần triển khai trong môi trường không tin cậy, cần đánh giá DDS Security riêng.
 13. Giới hạn hiển thị mẫu không giới hạn cứng lượng dữ liệu Backend cấp phát trong get_data(raw). Cần đo và tối ưu dưới mật độ thống kê cao; chưa có bảo đảm tài nguyên cho mọi quy mô.
 14. Kiểm thử dài hơn đã chạy trong phạm vi cục bộ 120 mẫu trong khoảng 119,33 giây, cùng giai đoạn tạo/restart trước đó. Không phải kiểm thử 24 giờ hoặc nghiệm thu nhiều máy vật lý.
 15. Process/service truy vấn tuần tự trong Agent; nhiều service có thể kéo dài chu kỳ. Linux argument_token không có nhánh tương đương trên Windows. Các chuyển trạng thái dịch vụ được test bằng dữ liệu adapter; chưa tự stop/restart dịch vụ thật.

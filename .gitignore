@@ -104,6 +104,43 @@ log/
 /.task3-deps/
 /.task3-runtime/
 
+# SQLite databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Logs, PIDs and runtime artifacts
+*.log
+*.pid
+
+# Python bytecode
+*.py[cod]
+*$py.class
+
+# Test execution outputs and runtime state
+test-artifacts/ui-*/
+test-artifacts/**/state/
+test-artifacts/**/identities/
+test-artifacts/**/*.png
+test-artifacts/**/snapshot.json
+test-artifacts/**/flows.json
+test-artifacts/**/resource-usage.json
+test-artifacts/**/metrics_real.json
+test-artifacts/**/telemetry_real.json
+test-artifacts/**/process_stopped.json
+test-artifacts/**/stopped_run_unmapped.json
+test-artifacts/**/topology_application_routes.json
+test-artifacts/**/fresh_connection_list_matching.json
+test-artifacts/**/runtime_counter_recovery.json
+test-artifacts/**/restart_guid_remapping.json
+test-artifacts/**/runtime_mapping_multiple_participants.json
+test-artifacts/**/single_window_navigation_resize.json
+test-artifacts/**/agent*.json
+test-artifacts/**/alive_writer_no_data.json
+test-artifacts/**/dds_*.json
+test-artifacts/**/master_restart_live_agent.json
+test-artifacts/**/subscriber_*.json
+
 ### Visual Studio ###
 .vs
 

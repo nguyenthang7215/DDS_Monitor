@@ -2,7 +2,7 @@
 
 Agent dùng Fast DDS, Topic Task3/HostTelemetry/v1 trên Domain 42 mặc định, tách khỏi Domain thống kê ứng dụng (mặc định 0). Kiểu task3::TelemetryEnvelopeV1 là chuỗi CDR v1 có giới hạn theo task3/Telemetry.idl.
 
-Payload giữ nguyên JSON wrapper chứa byte JSON được mã hóa base64 và HMAC-SHA256. Khóa TASK3_KEY dài ít nhất 16 byte, truyền qua môi trường, không nhúng vào source/config. HMAC không mã hóa dữ liệu.
+Payload là JSON compact trực tiếp, được truyền trong mẫu CDR qua Topic DDS telemetry riêng. Schema và giới hạn kích thước được kiểm tra ở Master; cơ chế này không cung cấp xác thực nguồn gửi hay mã hóa.
 
 ## QoS và tiếp nhận
 
@@ -12,7 +12,7 @@ Callback DDS không trực tiếp cập nhật Registry hoặc QML. Hàng đợi
 
 ## Kiểm tra và chống phát lại
 
-Master kiểm tra HMAC, JSON/schema, kích thước, định danh, miền số, trạng thái, số instance/GUID/counter và sequence thập phân. Bản tin sai không cập nhật last_seen.
+Master kiểm tra JSON/schema, kích thước, định danh, miền số, trạng thái, số instance/GUID/counter và sequence thập phân. Session/sequence trong bộ nhớ loại bản tin trùng hoặc cũ trong khi Master đang chạy. Bản tin sai không cập nhật last_seen.
 
 Trong cùng session, sequence phải tăng. Session đã nghỉ bị từ chối. Session mới phải có timestamp lớn hơn timestamp cao nhất đã nhận của máy, kể cả sau timeout hoặc Master restart. Trong cùng session, đồng hồ có thể lùi nhưng sequence vẫn bảo vệ thứ tự. Nếu đồng hồ Agent bị lùi rồi Agent restart, session mới sẽ bị từ chối cho đến khi timestamp vượt checkpoint; cần xử lý nguồn thời gian và dữ liệu checkpoint có kiểm soát.
 

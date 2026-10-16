@@ -23,7 +23,7 @@ out.mkdir(parents=True, exist_ok=True)
 children, logs, results, usage = [], [], {}, []
 runtime_library_maps = []
 env = dict(os.environ, QT_QPA_PLATFORM='offscreen', QSG_RHI_BACKEND='software',
-           TASK3_KEY='runtime-integration-key-not-for-deployment', TASK3_DATA_DIR=str(out/'state'),
+           TASK3_DATA_DIR=str(out/'state'),
            TASK3_SNAPSHOT_PATH=str(out/'snapshot.json'), TASK3_SCREENSHOT_PATH=str(out/'dashboard.png'),
            TASK3_TELEMETRY_DOMAIN='95', TASK3_TIMEOUT_MS='2000', TASK3_UI_EXERCISE='1',
            TASK3_FLOW_RULES=str(out/'flows.json'), TASK3_EXIT_AFTER_MS='240000')
