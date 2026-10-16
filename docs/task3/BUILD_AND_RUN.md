@@ -43,7 +43,7 @@ cd /home/dev/DDS-Monitor
 bash task3/scripts/run_linux_agent_patched.sh
 ```
 
-Nhập lại chính xác cùng `TASK3_KEY`. Agent mặc định dùng `task3/config/linux-agent.json`; đổi config bằng biến `TASK3_AGENT_CONFIG` hoặc truyền đối số sau tên script. Agent không link Statistics Backend trực tiếp, vì vậy wrapper xác minh Fast DDS/Fast CDR của nó; Master mới là tiến trình phải map Statistics Backend đã vá.
+Không cần chia sẻ khóa giữa các terminal. Agent mặc định dùng `task3/config/linux-agent.json`; đổi config bằng biến `TASK3_AGENT_CONFIG` hoặc truyền đối số sau tên script. Agent không link Statistics Backend trực tiếp, vì vậy wrapper xác minh Fast DDS/Fast CDR của nó; Master mới là tiến trình phải map Statistics Backend đã vá.
 
 ## Kiểm tra Host, Offline và Recovery
 

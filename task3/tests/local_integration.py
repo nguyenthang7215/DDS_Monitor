@@ -71,7 +71,6 @@ def wait_for(name, predicate, timeout=15):
 
 env = os.environ.copy()
 env.update(QT_QPA_PLATFORM="offscreen", QSG_RHI_BACKEND="software",
-           TASK3_KEY="integration-test-key-not-for-deployment",
            TASK3_DATA_DIR=str(output / "state"),
            TASK3_SNAPSHOT_PATH=str(output / "snapshot.json"),
            TASK3_SCREENSHOT_PATH=str(output / "dashboard.png"),

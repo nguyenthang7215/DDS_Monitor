@@ -28,7 +28,6 @@ env = os.environ.copy()
 env.update({
     'QT_QPA_PLATFORM': 'offscreen',
     'QSG_RHI_BACKEND': 'software',
-    'TASK3_KEY': 'p0-isolation-key-not-for-deployment',
     'TASK3_DATA_DIR': str(out / 'state'),
     'TASK3_SNAPSHOT_PATH': str(out / 'snapshot.json'),
     'TASK3_SCREENSHOT_PATH': str(out / 'dashboard.png'),

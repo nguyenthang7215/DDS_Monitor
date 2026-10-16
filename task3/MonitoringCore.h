@@ -12,18 +12,21 @@ class MonitoringCore : public QObject {
     Q_OBJECT
     Q_PROPERTY(QVariantList hosts READ hosts NOTIFY changed)
     Q_PROPERTY(QVariantList events READ events NOTIFY changed)
+    Q_PROPERTY(bool hasMoreEvents READ hasMoreEvents NOTIFY changed)
     Q_PROPERTY(QVariantList entities READ entities NOTIFY changed)
     Q_PROPERTY(QString status READ status NOTIFY changed)
     Q_PROPERTY(QVariantList flows READ flows NOTIFY changed)
 public:
-    MonitoringCore(const QString& dbPath, QByteArray key, int timeoutMs = 5000, QObject* parent = nullptr);
+    MonitoringCore(const QString& dbPath, int timeoutMs = 5000, QObject* parent = nullptr);
     bool startTelemetry(int domain, const QString& topic);
     bool ingest(const QByteArray&, const QString& source);
     void tick();
     void stop();
     void updateDds(QVariantList rows);
     QVariantList hosts() const;
-    QVariantList events() const { return alerts_.rows(); }
+    QVariantList events() const;
+    bool hasMoreEvents() const { return alerts_.hasMoreRows(); }
+    Q_INVOKABLE void loadOlderEvents();
     QVariantList entities() const { return entities_; }
     QVariantList flows() const { return flows_; }
     QString status() const {
@@ -38,12 +41,10 @@ signals:
 private:
     Registry registry_;
     AlertStore alerts_;
-    QByteArray key_;
     std::unique_ptr<DdsTransport> transport_;
     QElapsedTimer clock_;
     QTimer timer_;
     int timeout_;
-    bool replayReady_ = false;
     QString status_;
     QVariantList entities_;
     QVariantList flows_;

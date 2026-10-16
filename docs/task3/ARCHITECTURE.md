@@ -7,7 +7,7 @@ Source phát triển hiện nằm trong `/home/dev/DDS-Monitor`, được mở r
 ## Thành phần và luồng dữ liệu
 
 1. Agent chạy trong tiến trình riêng, lấy tài nguyên và trạng thái tiến trình/dịch vụ của hệ điều hành.
-2. Agent gửi snapshot schema 1 có HMAC-SHA256 qua Topic DDS riêng; Domain mặc định là 42.
+2. Agent gửi snapshot JSON schema 1 qua Topic DDS riêng; Domain mặc định là 42.
 3. Callback DDS đưa bản tin vào hàng đợi có giới hạn. Một tác vụ Qt lấy tối đa 32 snapshot mỗi lượt và cập nhật Registry/MonitoringCore trên luồng giao diện.
 4. DdsBridge truy vấn Statistics Backend bằng QtConcurrent, tối đa một job đang chạy. Registry ánh xạ Participant trước rồi chuyển liên kết cho Writer/Reader.
 5. FlowModel dựng quan hệ máy/ứng dụng/Writer/Topic/Reader. Chỉ vẽ mũi tên khi có ConnectionList còn mới và GUID đối tác tương ứng.

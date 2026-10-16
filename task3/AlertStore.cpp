@@ -9,6 +9,7 @@
 #include <QMutexLocker>
 #include <QElapsedTimer>
 #include <QUuid>
+#include <QJsonObject>
 #include <QJsonDocument>
 #include <QDateTime>
 #include <QDebug>
@@ -24,8 +25,6 @@ struct AlertStore::Impl {
     QString connection = QUuid::createUuid().toString(), error;
     QMutex mutex;
     QList<QVariantMap> pending;
-    QJsonObject replay, loadedReplay;
-    bool replayDirty = false;
     int retentionDays = 0; // Explicit opt-in; preserve existing data by default.
     void fail(const QString& message) { QMutexLocker lock(&mutex); error = message; }
     void prune() {
@@ -49,9 +48,9 @@ struct AlertStore::Impl {
         QMetaObject::invokeMethod(frontend, [this, ids] { pruned(ids); }, Qt::QueuedConnection);
     }
     bool drain() {
-        QList<QVariantMap> batch; QJsonObject state; bool save;
-        { QMutexLocker lock(&mutex); batch = pending.mid(0, 256); state = replay; save = replayDirty; }
-        if (batch.isEmpty() && !save) return true;
+        QList<QVariantMap> batch;
+        { QMutexLocker lock(&mutex); batch = pending.mid(0, 256); }
+        if (batch.isEmpty()) return true;
         if (!db.isOpen() || !db.transaction()) { fail(db.lastError().text()); return false; }
         QSqlQuery q(db); bool ok = true;
         for (const auto& row : batch) {
@@ -62,16 +61,10 @@ struct AlertStore::Impl {
             q.addBindValue(row["rule_id"]); q.addBindValue(json);
             if (!(ok = q.exec())) break;
         }
-        if (ok && save) {
-            q.prepare("INSERT OR REPLACE INTO metadata(key,value) VALUES ('replay',?)");
-            q.addBindValue(QString::fromUtf8(QJsonDocument(state).toJson(QJsonDocument::Compact)));
-            ok = q.exec();
-        }
         if (!ok) { const auto e = q.lastError().text(); db.rollback(); fail(e); return false; }
         if (!db.commit()) { fail(db.lastError().text()); db.rollback(); return false; }
         { QMutexLocker lock(&mutex);
           pending.erase(pending.begin(), pending.begin() + batch.size());
-          if (replay == state) replayDirty = false;
           error.clear(); }
         return true;
     }
@@ -94,8 +87,6 @@ AlertStore::AlertStore(const QString& path) : impl_(new Impl) {
              "CREATE TABLE IF NOT EXISTS metadata (key TEXT PRIMARY KEY, value TEXT NOT NULL)"}) {
             if (!q.exec(sql)) { p->fail(q.lastError().text()); return; }
         }
-        if (q.exec("SELECT value FROM metadata WHERE key='replay'") && q.next())
-            p->loadedReplay = QJsonDocument::fromJson(q.value(0).toByteArray()).object();
         bool migrated = false;
         if (q.exec("SELECT value FROM metadata WHERE key='state_migrated'") && q.next()) migrated = true;
         if (!migrated) {
@@ -115,8 +106,19 @@ AlertStore::AlertStore(const QString& path) : impl_(new Impl) {
             const auto row = QJsonDocument::fromJson(q.value(0).toByteArray()).object().toVariantMap();
             if (row["state"] == "Active") active_[row["rule_id"].toString()] = row;
         }
-        if (q.exec("SELECT payload FROM events ORDER BY id DESC LIMIT 500")) while (q.next())
-            rows_.append(QJsonDocument::fromJson(q.value(0).toByteArray()).object().toVariantMap());
+        if (q.exec("SELECT grouped.first_id,e.payload FROM "
+                   "(SELECT COALESCE(json_extract(payload,'$.alert_id'),'legacy:'||id) AS alert_id, "
+                   "MIN(id) AS first_id, MAX(id) AS last_id "
+                   "FROM events GROUP BY alert_id) grouped "
+                   "JOIN events e ON e.id=grouped.last_id ORDER BY grouped.first_id DESC LIMIT 501")) {
+            int loaded = 0;
+            while (q.next()) {
+                if (loaded == 500) { hasMoreRows_ = true; break; }
+                oldestLoadedId_ = q.value(0).toLongLong();
+                rows_.append(QJsonDocument::fromJson(q.value(1).toByteArray()).object().toVariantMap());
+                ++loaded;
+            }
+        }
         p->retentionDays = qBound(0, qEnvironmentVariableIntValue("TASK3_EVENT_RETENTION_DAYS"), 36500);
         auto* timer = new QTimer(p->worker);
         QObject::connect(timer, &QTimer::timeout, p->worker, [p] { p->drain(); }); timer->start(100);
@@ -131,10 +133,10 @@ AlertStore::~AlertStore() {
     QMetaObject::invokeMethod(p->worker, [p] {
         QElapsedTimer deadline; deadline.start();
         while (deadline.elapsed() < 5000) {
-            bool empty; { QMutexLocker lock(&p->mutex); empty = p->pending.isEmpty() && !p->replayDirty; }
+            bool empty; { QMutexLocker lock(&p->mutex); empty = p->pending.isEmpty(); }
             if (empty || !p->drain()) break;
         }
-        { QMutexLocker lock(&p->mutex); if (!p->pending.isEmpty() || p->replayDirty)
+        { QMutexLocker lock(&p->mutex); if (!p->pending.isEmpty())
             qCritical() << "Event persistence incomplete at shutdown:" << p->error << "pending:" << p->pending.size(); }
         p->db.close(); p->db = QSqlDatabase(); QSqlDatabase::removeDatabase(p->connection);
     }, Qt::BlockingQueuedConnection);
@@ -144,13 +146,9 @@ AlertStore::~AlertStore() {
 }
 QString AlertStore::error() const { QMutexLocker lock(&impl_->mutex); return impl_->error; }
 void AlertStore::flush() { QMetaObject::invokeMethod(impl_->worker, [this] { while (impl_->drain()) {
-    QMutexLocker lock(&impl_->mutex); if (impl_->pending.isEmpty() && !impl_->replayDirty) break;
+    QMutexLocker lock(&impl_->mutex); if (impl_->pending.isEmpty()) break;
 } }, Qt::BlockingQueuedConnection); }
 void AlertStore::applyRetention() { QMetaObject::invokeMethod(impl_->worker, [this] { impl_->drain(); impl_->prune(); }, Qt::BlockingQueuedConnection); }
-QJsonObject AlertStore::replayState() const { return impl_->loadedReplay; }
-void AlertStore::saveReplay(const QJsonObject& state) {
-    QMutexLocker lock(&impl_->mutex); impl_->replay = state; impl_->replayDirty = true;
-}
 void AlertStore::policy(qint64 trigger, qint64 recovery, qint64 cooldown) {
     triggerMs_ = qMax<qint64>(0, trigger); recoveryMs_ = qMax<qint64>(0, recovery); cooldownMs_ = qMax<qint64>(0, cooldown);
 }
@@ -158,7 +156,41 @@ bool AlertStore::append(const QVariantMap& row) {
     { QMutexLocker lock(&impl_->mutex);
       if (impl_->pending.size() >= 4096) { impl_->error = "Event queue full; transition will retry on next evaluation"; return false; }
       impl_->pending.append(row); }
-    rows_.prepend(row); while (rows_.size() > 500) rows_.removeLast(); return true;
+    const auto alertId = row["alert_id"].toString();
+    if (!alertId.isEmpty()) {
+        for (auto it = rows_.begin(); it != rows_.end(); ++it) {
+            if (it->toMap()["alert_id"] == alertId) { rows_.erase(it); break; }
+        }
+    }
+    rows_.prepend(row); return true;
+}
+void AlertStore::loadOlderRows() {
+    if (!hasMoreRows_ || oldestLoadedId_ <= 0) return;
+    QList<QVariantMap> older;
+    qint64 nextCursor = oldestLoadedId_;
+    bool more = false;
+    auto* p = impl_.get();
+    QMetaObject::invokeMethod(p->worker, [p, this, &older, &nextCursor, &more] {
+        QSqlQuery q(p->db);
+        q.prepare("SELECT grouped.first_id,e.payload FROM "
+                  "(SELECT COALESCE(json_extract(payload,'$.alert_id'),'legacy:'||id) AS alert_id, "
+                  "MIN(id) AS first_id, MAX(id) AS last_id "
+                  "FROM events GROUP BY alert_id) grouped "
+                  "JOIN events e ON e.id=grouped.last_id WHERE grouped.first_id < ? "
+                  "ORDER BY grouped.first_id DESC LIMIT 501");
+        q.addBindValue(oldestLoadedId_);
+        if (!q.exec()) { p->fail(q.lastError().text()); return; }
+        int loaded = 0;
+        while (q.next()) {
+            if (loaded == 500) { more = true; break; }
+            nextCursor = q.value(0).toLongLong();
+            older.append(QJsonDocument::fromJson(q.value(1).toByteArray()).object().toVariantMap());
+            ++loaded;
+        }
+    }, Qt::BlockingQueuedConnection);
+    for (const auto& row : older) rows_.append(row);
+    if (older.isEmpty()) hasMoreRows_ = false;
+    else { oldestLoadedId_ = nextCursor; hasMoreRows_ = more; }
 }
 void AlertStore::condition(const QString& id, bool failed, const QString& kind, const QString& source,
                           const QString& message, qint64 now, qint64 mono) {

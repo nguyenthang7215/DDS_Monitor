@@ -2,271 +2,235 @@
 import QtQuick
 import QtQuick.Controls
 import QtQuick.Layouts
-import QtCharts
+import Theme 1.0
 
 Page {
     id: dashboard
     anchors.fill: parent
-    title: "Task 3 · DDS Master–Slave Monitor"
+    padding: 16
+    title: "DDS Monitor"
+    font.pixelSize: 14
+    background: Rectangle { color: Theme.whiteSmoke }
+    property bool eventsPage: false
+    readonly property var hosts: task3Core.hosts
     property string selectedHostId: ""
-    property var selectedHost: ({})
-    property string search: ""
-    property int testTab: 0
-    Component.onCompleted: testTab = task3StartupTab
     property string selectedApplicationId: ""
-    property var selectedParticipants: task3Core.entities.filter(e => e.kind === "Participant" && e.host_id === selectedHostId && e.application_id === selectedApplicationId)
-    onTestTabChanged: tabs.currentIndex = testTab
-    function number(v) { return v === undefined || v === null ? "—" : Number(v).toFixed(1) }
-    function mb(v) { return v === undefined || v === null ? "—" : (Number(v) / 1048576).toFixed(1) + " MiB" }
-    function offset(v) { return v === undefined || v === null ? "Unavailable" : Number(v).toExponential(3) + " s" }
-    function refreshSelection() {
-        selectedHost = ({})
-        if (selectedHostId === "" && task3Core.hosts.length > 0) selectedHostId = task3Core.hosts[0].host_id
-        for (let h of task3Core.hosts)
-            if (h.host_id === selectedHostId) {
-                selectedHost = h
-                if (!h.applications.some(a => a.application_id === selectedApplicationId))
-                    selectedApplicationId = h.applications.length ? h.applications[0].application_id : ""
-                return
-            }
+    property string selectedFlowKey: ""
+    property int detailTab: 0
+    property int resourceTab: 0
+    property string hostSearch: ""
+    readonly property var selectedHost: hosts.find(h => h.host_id === selectedHostId) || ({})
+    readonly property var selectedApplication: (selectedHost.applications || []).find(a => a.application_id === selectedApplicationId) || ({})
+    signal openDdsWorkspace(string entityId)
+    Component.onCompleted: detailTab = task3StartupTab
+
+    function chooseHost(id) {
+        if (id !== selectedHostId) { selectedApplicationId = ""; selectedFlowKey = "" }
+        selectedHostId = id
+        detailTab = 0
     }
-    Connections {
-        target: task3Core
-        function onChanged() { dashboard.refreshSelection() }
+    function chooseApplication(hostId, appId) {
+        if (hostId !== selectedHostId) selectedFlowKey = ""
+        selectedHostId = hostId
+        selectedApplicationId = appId
+        detailTab = 1
     }
-    header: ToolBar {
-        RowLayout {
-            anchors.fill: parent
-            Label { text: "DDS MASTER–SLAVE"; font.bold: true; leftPadding: 16 }
-            Label { text: task3Core.status; Layout.fillWidth: true; elide: Text.ElideRight }
-            Label { text: "Hosts: " + task3Core.hosts.length + "   ·   DDS: " + task3Core.entities.length; rightPadding: 16 }
-        }
-    }
-    ColumnLayout {
+    function fresh(h) { return h.online === true && h.metrics_state === "fresh" }
+    function number(v) { return v === undefined || v === null || !isFinite(Number(v)) ? "N/A" : Number(v).toFixed(1) }
+    function mb(v) { return v === undefined || v === null || !isFinite(Number(v)) ? "N/A" : (Number(v) / 1048576).toFixed(1) + " MiB" }
+    function metric(h, v, bytes) { return fresh(h) ? (bytes ? mb(v) : number(v)) : "N/A" }
+    function offset(v) { return v === undefined || v === null || !isFinite(Number(v)) ? "Unavailable" : Number(v).toExponential(3) + " s" }
+    function time(v) { return v === undefined || v === null || Number(v) <= 0 || !isFinite(Number(v)) ? "Unknown" : Qt.formatDateTime(new Date(Number(v)), "dd/MM/yyyy HH:mm:ss") }
+    function lastSeen(v) { const date = new Date(v); return !v || v === "never" || isNaN(date.getTime()) ? "Chưa có telemetry" : Qt.formatDateTime(date, "dd/MM/yyyy HH:mm:ss") }
+    function hostState(h) { return !h.metrics_state || h.metrics_state === "unknown" ? "Unknown" : h.online ? "Online" : "Offline" }
+    function stateColor(h) { return hostState(h) === "Unknown" ? Theme.grey : h.online ? "#237a45" : "#b33030" }
+    function freshness(h) { return h.metrics_state === "fresh" ? "Fresh" : h.metrics_state === "stale" ? "Stale" : "Unknown" }
+    function booleanText(v) { return typeof v === "boolean" ? (v ? "Có" : "Không") : "Unknown" }
+    function flowKey(f) { return String(f.writer_id || "") + "/" + String(f.reader_id || "") }
+
+    SplitView {
         anchors.fill: parent
-        anchors.margins: 12
-        TabBar {
-            id: tabs
-            Layout.fillWidth: true
-            TabButton { text: "Overview & host detail" }
-            TabButton { text: "DDS entities & data flow" }
-            TabButton { text: "Alerts & event history" }
-            TabButton { text: "Host / Application Topology" }
-        }
-        StackLayout {
-            currentIndex: tabs.currentIndex
-            Layout.fillWidth: true
-            Layout.fillHeight: true
-            SplitView {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                ListView {
-                    SplitView.preferredWidth: 390
-                    clip: true
-                    model: task3Core.hosts
-                    spacing: 6
-                    ScrollBar.vertical: ScrollBar {}
-                    delegate: ItemDelegate {
-                        required property var modelData
-                        width: ListView.view.width
-                        height: 110
-                        highlighted: dashboard.selectedHostId === modelData.host_id
-                        onClicked: { dashboard.selectedHostId = modelData.host_id; dashboard.refreshSelection() }
-                        contentItem: Column {
-                            spacing: 4
-                            Label { text: (modelData.online ? "● " : "○ ") + modelData.hostname + " · " + modelData.host_id; color: modelData.metrics_state === "unknown" ? "#697078" : (modelData.online ? "#22863a" : "#c0392b"); width: parent.width; elide: Text.ElideRight }
-                            Label { text: modelData.os; width: parent.width; elide: Text.ElideRight }
-                            Label { text: "CPU " + dashboard.number(modelData.metrics.cpu_percent) + "%  · RAM " + dashboard.mb(modelData.metrics.ram_used) }
-                            Label { text: "Apps " + modelData.applications.length + " · Alerts " + modelData.alert_count + " · " + modelData.metrics_state; font.pixelSize: 11 }
-                        }
-                    }
-                    Label { anchors.centerIn: parent; visible: task3Core.hosts.length === 0; text: "No telemetry received. Start a configured agent." }
-                }
-                ScrollView {
-                    SplitView.fillWidth: true
-                    clip: true
-                    ColumnLayout {
-                        width: parent.width
-                        spacing: 12
-                        Label { text: dashboard.selectedHost.hostname || "Select a Slave"; font.pixelSize: 24 }
-                        Label { text: dashboard.selectedHost.host_state || "Host physical state is not inferred from DDS"; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                        Label { text: "Address: " + (dashboard.selectedHost.address || "—") + "   OS: " + (dashboard.selectedHost.os || "—") }
-                        Label { text: "Last seen: " + (dashboard.selectedHost.last_seen || "—") + " · Metrics: " + (dashboard.selectedHost.metrics_state || "unknown") }
-                        ChartView {
-                            Layout.fillWidth: true
-                            Layout.preferredHeight: 170
-                            title: "CPU usage (%) · last 120 samples"
-                            legend.visible: false
-                            ValueAxis { id: cpuX; min: 0; max: 120; labelsVisible: false; titleVisible: false; tickCount: 5 }
-                            ValueAxis { id: cpuY; min: 0; max: 100; titleText: "%" }
-                            LineSeries { id: cpuSeries; axisX: cpuX; axisY: cpuY }
-                            Connections {
-                                target: dashboard
-                                function onSelectedHostChanged() {
-                                    cpuSeries.clear()
-                                    let points = dashboard.selectedHost.cpu_history || []
-                                    for (let i = 0; i < points.length; ++i) cpuSeries.append(i, points[i].value)
-                                }
-                            }
-                        }
-                        GroupBox {
-                            title: "Real host metrics"
-                            Layout.fillWidth: true
-                            ColumnLayout {
-                                anchors.fill: parent
-                                Label { text: "CPU: " + dashboard.number(dashboard.selectedHost.metrics?.cpu_percent) + "%" }
-                                Label { text: "RAM used / total: " + dashboard.mb(dashboard.selectedHost.metrics?.ram_used) + " / " + dashboard.mb(dashboard.selectedHost.metrics?.ram_total) }
-                                Label { text: "Disk used / total: " + dashboard.mb(dashboard.selectedHost.metrics?.disk_used) + " / " + dashboard.mb(dashboard.selectedHost.metrics?.disk_total) }
-                                Label { text: "Network RX / TX: " + dashboard.number(dashboard.selectedHost.metrics?.network_rx_bps) + " / " + dashboard.number(dashboard.selectedHost.metrics?.network_tx_bps) + " B/s (aggregate)" }
-                                Repeater {
-                                    model: dashboard.selectedHost.metrics?.interfaces || []
-                                    delegate: Label {
-                                        required property var modelData
-                                        text: modelData.name + " · RX " + dashboard.number(modelData.rx_bps) + " / TX " + dashboard.number(modelData.tx_bps) + " B/s" + (modelData.rate_valid ? "" : " · rate unavailable")
-                                    }
-                                }
-                                Repeater {
-                                    model: dashboard.selectedHost.metrics?.disks || []
-                                    delegate: Label {
-                                        required property var modelData
-                                        text: modelData.path + " · used " + dashboard.mb(modelData.used) + " / " + dashboard.mb(modelData.total) + (modelData.valid ? "" : " · unavailable")
-                                    }
-                                }
-                            }
-                        }
-                        GroupBox {
-                            title: "Time synchronization"
-                            Layout.fillWidth: true
-                            ColumnLayout {
-                                Label { text: "State: " + (dashboard.selectedHost.time_sync?.state || "unknown") + " · Source: " + (dashboard.selectedHost.time_sync?.source || "—") }
-                                Label { text: "Offset: " + dashboard.offset(dashboard.selectedHost.time_sync?.offset_seconds) }
-                                Label { text: "Service: " + (dashboard.selectedHost.time_sync?.service_running ?? "Unknown") + " · Clock synchronized: " + (dashboard.selectedHost.time_sync?.clock_synced ?? "Unknown"); wrapMode: Text.Wrap; Layout.fillWidth: true }
-                                Label { text: dashboard.selectedHost.time_sync?.detail || ""; wrapMode: Text.Wrap; Layout.maximumWidth: 650 }
-                            }
-                        }
-                        Label { text: "Applications / processes / services"; font.bold: true }
-                        Repeater {
-                            model: dashboard.selectedHost.applications || []
-                            delegate: Button {
-                                required property var modelData
-                                text: modelData.application_id + " · process " + modelData.state + " · instances " + (modelData.instances?.length || (modelData.pid ? 1 : 0)) + " · service " + modelData.service_state
-                                onClicked: dashboard.selectedApplicationId = modelData.application_id
-                                Layout.fillWidth: true
-                            }
-                        }
-                        Label { text: "Selected application: " + (dashboard.selectedApplicationId || "—"); font.bold: true }
-                        Repeater {
-                            model: (dashboard.selectedHost.applications || []).filter(a => a.application_id === dashboard.selectedApplicationId)
-                            delegate: ColumnLayout {
-                                required property var modelData
-                                Layout.fillWidth: true
-                                Label { text: "Process: " + modelData.state + " · Service: " + (modelData.service || "not configured") + " / " + modelData.service_state; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                                Repeater {
-                                    model: modelData.instances || []
-                                    delegate: Label {
-                                        required property var modelData
-                                        text: "PID " + modelData.pid + " · instance " + modelData.instance_id + " · " + (modelData.binding_source || "Unmapped")
-                                        wrapMode: Text.Wrap; Layout.fillWidth: true
-                                    }
-                                }
-                            }
-                        }
-                        Repeater {
-                            model: dashboard.selectedParticipants
-                            delegate: Label {
-                                required property var modelData
-                                text: "Participant " + modelData.guid + " · PID " + modelData.pid + " · instance " + (modelData.instance_id || "—")
-                                wrapMode: Text.Wrap; Layout.fillWidth: true
-                            }
-                        }
-                        Label { text: "Advanced DDS views, topology and historical/dynamic charts: choose DDS nâng cao in the bottom navigation."; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                    }
-                }
-            }
+        visible: !dashboard.eventsPage
+        handle: Rectangle { implicitWidth: 10; color: Theme.whiteSmoke }
+        Frame {
+            SplitView.preferredWidth: 260
+            SplitView.minimumWidth: 210
+            SplitView.maximumWidth: 380
+            padding: 12
+            background: Rectangle { color: "white"; border.color: Theme.lightGrey; radius: 4 }
             ColumnLayout {
-                TextField { Layout.fillWidth: true; placeholderText: "Filter entity name, topic, GUID or host"; onTextChanged: dashboard.search = text.toLowerCase() }
-                Label { text: "Live Statistics Backend · raw rolling window 120 s · matching is not inferred from a shared Topic"; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                anchors.fill: parent
+                spacing: 12
+                Label { text: "SLAVE & APPLICATION"; color: Theme.eProsimaDarkBlue; font.bold: true; font.pixelSize: 13 }
+                TextField { Layout.fillWidth: true; placeholderText: "Tìm tên máy / Host ID"; onTextChanged: dashboard.hostSearch = text.toLowerCase() }
+                Button {
+                    Layout.fillWidth: true
+                    text: "Tất cả Slave  ·  " + dashboard.hosts.length
+                    highlighted: dashboard.selectedHostId === ""
+                    onClicked: dashboard.chooseHost("")
+                }
                 ListView {
+                    id: hostList
                     Layout.fillWidth: true
                     Layout.fillHeight: true
-                    model: task3Core.entities
                     clip: true
-                    spacing: 6
+                    spacing: 8
+                    model: dashboard.hosts.filter(h => !dashboard.hostSearch || (h.host_id + " " + h.hostname).toLowerCase().includes(dashboard.hostSearch))
                     ScrollBar.vertical: ScrollBar {}
-                    delegate: Frame {
-                        id: ddsFrame
+                    delegate: Column {
+                        id: hostNode
                         required property var modelData
-                        property bool expanded: false
-                        width: ListView.view.width
-                        visible: dashboard.search === "" || JSON.stringify(modelData).toLowerCase().indexOf(dashboard.search) >= 0
-                        height: visible ? ddsColumn.implicitHeight + 24 : 0
-                        ColumnLayout {
-                            id: ddsColumn
+                        width: hostList.width
+                        spacing: 2
+                        ItemDelegate {
+                            id: hostButton
                             width: parent.width
-                            Label { text: modelData.kind + " #" + modelData.id + " · " + (modelData.name || modelData.topic || "") + " · " + (modelData.alive ? "active" : "inactive"); font.bold: true }
-                            Label { text: "GUID " + (modelData.guid || "—") + " · Host " + (modelData.hostname || "unknown") + " · PID " + (modelData.pid || "unknown"); wrapMode: Text.Wrap; Layout.fillWidth: true }
-                            Label { text: "Mapping: " + (modelData.mapping_state || "unknown") + " " + (modelData.application_id || "") + " · Matching: " + (modelData.match_state || "unknown"); wrapMode: Text.Wrap; Layout.fillWidth: true }
-                            Label { visible: modelData.kind === "Writer" || modelData.kind === "Reader"; text: "Throughput: " + dashboard.number(modelData.throughput_bps) + " B/s · " + (modelData.data_state || "no samples") + " · samples " + (modelData.samples?.length || 0) }
-                            Repeater {
-                                model: modelData.links || []
-                                delegate: Label {
-                                    required property var modelData
-                                    text: "→ Reader #" + modelData.reader_id + " · " + modelData.relation + " · latency " + dashboard.number(modelData.latency_us) + " µs"
-                                    wrapMode: Text.Wrap
-                                    Layout.fillWidth: true
+                            height: 88
+                            leftPadding: 12; rightPadding: 10
+                            highlighted: dashboard.selectedHostId === hostNode.modelData.host_id
+                            background: Rectangle {
+                                radius: 4
+                                color: hostButton.highlighted ? "#eaf2f9" : hostButton.hovered ? "#f3f6f9" : "white"
+                                border.color: hostButton.activeFocus ? Theme.eProsimaDarkBlue : "transparent"
+                                Rectangle { width: 3; height: parent.height - 16; y: 8; color: Theme.eProsimaDarkBlue; visible: hostButton.highlighted }
+                            }
+                            ToolTip.visible: hovered
+                            ToolTip.text: hostNode.modelData.host_id
+                            onClicked: dashboard.chooseHost(hostNode.modelData.host_id)
+                            contentItem: Column {
+                                spacing: 5
+                                Label { width: parent.width; text: hostNode.modelData.hostname || hostNode.modelData.host_id; font.bold: true; elide: Text.ElideRight }
+                                Label { width: parent.width; text: hostNode.modelData.host_id; color: Theme.midGrey; elide: Text.ElideRight; font.pixelSize: 12 }
+                                Label { width: parent.width; elide: Text.ElideRight; text: "● " + dashboard.hostState(hostNode.modelData) + " · " + (hostNode.modelData.applications || []).length + " ứng dụng"; color: dashboard.stateColor(hostNode.modelData); font.pixelSize: 13 }
+                            }
+                        }
+                        Repeater {
+                            model: dashboard.selectedHostId === hostNode.modelData.host_id ? (hostNode.modelData.applications || []) : []
+                            delegate: ItemDelegate {
+                                id: appButton
+                                required property var modelData
+                                width: hostNode.width
+                                leftPadding: 25
+                                height: 36
+                                text: modelData.application_id
+                                highlighted: dashboard.selectedApplicationId === modelData.application_id
+                                background: Rectangle { radius: 4; color: appButton.highlighted ? "#eaf2f9" : appButton.hovered ? "#f3f6f9" : "white"; border.color: appButton.activeFocus ? Theme.eProsimaDarkBlue : "transparent" }
+                                contentItem: Label { text: appButton.text; elide: Text.ElideRight; verticalAlignment: Text.AlignVCenter; color: appButton.highlighted ? Theme.eProsimaDarkBlue : "#263747"; font.bold: appButton.highlighted }
+                                ToolTip.visible: hovered
+                                ToolTip.text: text
+                                onClicked: dashboard.chooseApplication(hostNode.modelData.host_id, modelData.application_id)
+                            }
+                        }
+                    }
+                }
+                Label { text: "Trạng thái Slave dựa trên phản hồi Agent."; wrapMode: Text.Wrap; Layout.fillWidth: true; font.pixelSize: 12; color: Theme.midGrey }
+            }
+        }
+        Item {
+            SplitView.fillWidth: true
+            StackLayout {
+                anchors.fill: parent
+                currentIndex: dashboard.selectedHostId ? 1 : 0
+                ColumnLayout {
+                    spacing: 12
+                    RowLayout {
+                        Layout.fillWidth: true
+                        ColumnLayout {
+                            Layout.fillWidth: true
+                            Label { text: "Tổng quan hệ thống"; font.pixelSize: 24; font.bold: true; color: Theme.eProsimaDarkBlue }
+                            Label { text: "Chọn một Slave để xem tài nguyên, ứng dụng và các luồng DDS."; color: Theme.midGrey; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                        }
+                        Button { text: "Mở DDS chuyên sâu"; onClicked: dashboard.openDdsWorkspace("") }
+                    }
+                    RowLayout {
+                        Layout.fillWidth: true
+                        spacing: 12
+                        Repeater {
+                            model: [
+                                {label: "TỔNG SLAVE", count: dashboard.hosts.length, color: Theme.eProsimaDarkBlue},
+                                {label: "ONLINE", count: dashboard.hosts.filter(h => dashboard.hostState(h) === "Online").length, color: "#237a45"},
+                                {label: "OFFLINE", count: dashboard.hosts.filter(h => dashboard.hostState(h) === "Offline").length, color: "#b33030"},
+                                {label: "UNKNOWN", count: dashboard.hosts.filter(h => dashboard.hostState(h) === "Unknown").length, color: Theme.grey}
+                            ]
+                            delegate: Frame {
+                                required property var modelData
+                                Layout.fillWidth: true
+                                Layout.preferredWidth: 1
+                                Layout.minimumWidth: 0
+                                padding: 14
+                                background: Rectangle { color: "white"; radius: 4; border.color: Theme.lightGrey }
+                                ColumnLayout {
+                                    Label { text: modelData.label; font.pixelSize: 12; color: Theme.midGrey }
+                                    Label { text: modelData.count; font.pixelSize: 29; font.bold: true; color: modelData.color }
                                 }
                             }
-                            Button { text: ddsFrame.expanded ? "Hide details / QoS" : "Details / QoS"; onClicked: ddsFrame.expanded = !ddsFrame.expanded }
-                            Label { visible: ddsFrame.expanded; text: modelData.details || ""; font.family: "monospace"; wrapMode: Text.Wrap; Layout.fillWidth: true }
+                        }
+                    }
+                    Frame {
+                        Layout.fillWidth: true
+                        Layout.fillHeight: true
+                        padding: 0
+                        background: Rectangle { color: "white"; radius: 4; border.color: Theme.lightGrey }
+                        ListView {
+                            id: fleet
+                            anchors.fill: parent
+                            anchors.margins: 1
+                            clip: true
+                            model: dashboard.hosts
+                            contentWidth: Math.max(width, 880)
+                            readonly property real hostColumn: Math.max(200, (contentWidth - 80) * 0.25)
+                            readonly property int stateColumn: 140
+                            readonly property int cpuColumn: 72
+                            readonly property real ramColumn: Math.max(190, (contentWidth - 80) * 0.24)
+                            flickableDirection: Flickable.AutoFlickDirection
+                            ScrollBar.vertical: ScrollBar {}
+                            ScrollBar.horizontal: ScrollBar {}
+                            header: Rectangle {
+                                width: fleet.contentWidth; height: 40; color: Theme.eProsimaDarkBlue
+                                RowLayout {
+                                    anchors.fill: parent; anchors.leftMargin: 16; anchors.rightMargin: 16; spacing: 12
+                                    Label { text: "SLAVE / HOST ID"; color: "white"; Layout.minimumWidth: fleet.hostColumn; Layout.maximumWidth: fleet.hostColumn }
+                                    Label { text: "TRẠNG THÁI"; color: "white"; Layout.minimumWidth: fleet.stateColumn; Layout.maximumWidth: fleet.stateColumn }
+                                    Label { text: "CPU"; color: "white"; Layout.minimumWidth: fleet.cpuColumn; Layout.maximumWidth: fleet.cpuColumn }
+                                    Label { text: "RAM USED / TOTAL"; color: "white"; Layout.minimumWidth: fleet.ramColumn; Layout.maximumWidth: fleet.ramColumn }
+                                    Label { text: "LAST SEEN"; color: "white"; Layout.fillWidth: true }
+                                }
+                            }
+                            delegate: ItemDelegate {
+                                id: fleetRow
+                                required property int index
+                                required property var modelData
+                                width: fleet.contentWidth; height: 92
+                                leftPadding: 16; rightPadding: 16
+                                background: Rectangle { color: fleetRow.hovered ? "#eaf2f9" : fleetRow.index % 2 ? "#f7f9fb" : "white"; border.color: fleetRow.activeFocus ? Theme.eProsimaDarkBlue : "transparent" }
+                                ToolTip.visible: hovered
+                                ToolTip.text: modelData.host_id + "\n" + modelData.os
+                                onClicked: dashboard.chooseHost(modelData.host_id)
+                                contentItem: RowLayout {
+                                    spacing: 12
+                                    ColumnLayout {
+                                        Layout.minimumWidth: fleet.hostColumn; Layout.maximumWidth: fleet.hostColumn
+                                        Label { text: modelData.hostname; font.bold: true; Layout.fillWidth: true; elide: Text.ElideRight }
+                                        Label { text: modelData.host_id; color: Theme.midGrey; Layout.fillWidth: true; elide: Text.ElideRight; font.pixelSize: 12 }
+                                        Label { text: modelData.os; Layout.fillWidth: true; elide: Text.ElideRight; font.pixelSize: 12; color: Theme.midGrey }
+                                    }
+                                    ColumnLayout {
+                                        Layout.minimumWidth: fleet.stateColumn; Layout.maximumWidth: fleet.stateColumn
+                                        Label { text: "● " + dashboard.hostState(modelData); color: dashboard.stateColor(modelData); font.bold: true }
+                                        Label { text: dashboard.freshness(modelData) + " · " + (modelData.alert_count || 0) + " cảnh báo"; font.pixelSize: 12; Layout.fillWidth: true; elide: Text.ElideRight; color: Theme.midGrey }
+                                    }
+                                    Label { text: dashboard.metric(modelData, modelData.metrics?.cpu_percent, false) + " %"; Layout.minimumWidth: fleet.cpuColumn; Layout.maximumWidth: fleet.cpuColumn }
+                                    Label { text: dashboard.metric(modelData, modelData.metrics?.ram_used, true) + " / " + dashboard.metric(modelData, modelData.metrics?.ram_total, true); Layout.minimumWidth: fleet.ramColumn; Layout.maximumWidth: fleet.ramColumn; wrapMode: Text.Wrap }
+                                    Label { text: dashboard.lastSeen(modelData.last_seen); Layout.fillWidth: true; wrapMode: Text.Wrap; font.pixelSize: 13 }
+                                }
+                            }
+                            Label { anchors.centerIn: parent; width: parent.width - 40; horizontalAlignment: Text.AlignHCenter; wrapMode: Text.Wrap; visible: fleet.count === 0; text: "Chưa có Slave. Khởi chạy Agent với cấu hình giám sát để nhận dữ liệu."; color: Theme.midGrey }
                         }
                     }
                 }
-            }
-            ListView {
-                Layout.fillWidth: true
-                Layout.fillHeight: true
-                model: task3Core.events
-                clip: true
-                spacing: 6
-                ScrollBar.vertical: ScrollBar {}
-                delegate: Frame {
-                    required property var modelData
-                    width: ListView.view.width
-                    height: eventColumn.implicitHeight + 24
-                    Column {
-                        id: eventColumn
-                        width: parent.width
-                        Label { text: modelData.state + " · " + modelData.kind + " · " + modelData.source; color: modelData.state === "Active" ? "#b03a2e" : "#22863a"; font.bold: true }
-                        Label { text: modelData.time + " · " + modelData.severity }
-                        Label { text: modelData.message; wrapMode: Text.Wrap; width: parent.width }
-                    }
-                }
-                Label { anchors.centerIn: parent; visible: task3Core.events.length === 0; text: "No alert transitions recorded." }
-            }
-            ListView {
-                Layout.fillWidth: true; Layout.fillHeight: true; clip: true; spacing: 10
-                model: task3Core.flows
-                ScrollBar.vertical: ScrollBar {}
-                delegate: Frame {
-                    required property var modelData
-                    width: ListView.view.width
-                    height: route.implicitHeight + 24
-                    ColumnLayout {
-                        id: route; width: parent.width
-                        Label { text: modelData.match_state + " · " + (modelData.flow_state || "Unknown"); font.bold: true; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                        RowLayout {
-                            Layout.fillWidth: true
-                            Label { text: (modelData.source_host || "Unmapped host") + " / " + (modelData.source_application || "Unmapped app") + "\nWriter #" + modelData.writer_id; wrapMode: Text.Wrap; Layout.preferredWidth: route.width * 0.35 }
-                            Label { text: modelData.confirmed ? "→" : "|" }
-                            Label { text: modelData.topic || "Unknown Topic"; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                            Label { text: modelData.confirmed ? "→" : "|" }
-                            Label { text: "Reader #" + (modelData.reader_id || "Unknown") + "\n" + (modelData.target_application || "Unmapped app") + " / " + (modelData.target_host || "Unmapped host"); wrapMode: Text.Wrap; Layout.preferredWidth: route.width * 0.35 }
-                        }
-                        Label { text: "Throughput " + dashboard.number(modelData.throughput_bps) + " B/s · recorded latency " + dashboard.number(modelData.latency_us) + " µs"; wrapMode: Text.Wrap; Layout.fillWidth: true }
-                    }
-                }
-                Label { anchors.centerIn: parent; visible: task3Core.flows.length === 0; text: "No Writer discovered yet. Unconfirmed relationships have no directional arrows."; width: parent.width; wrapMode: Text.Wrap }
+                HostWorkspace { ui: dashboard; Layout.fillWidth: true; Layout.fillHeight: true }
             }
         }
     }
+    EventHistoryView { anchors.fill: parent; visible: dashboard.eventsPage; ui: dashboard }
 }

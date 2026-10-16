@@ -33,7 +33,6 @@ config = {
 config_path = out / 'agent.json'
 config_path.write_text(json.dumps(config))
 env = dict(os.environ, QT_QPA_PLATFORM='offscreen', QSG_RHI_BACKEND='software',
-           TASK3_KEY='subscriber-restart-test-only-key',
            TASK3_DATA_DIR=str(out / 'state'),
            TASK3_SNAPSHOT_PATH=str(out / 'snapshot.json'),
            TASK3_TELEMETRY_DOMAIN='94', TASK3_TIMEOUT_MS='2000',

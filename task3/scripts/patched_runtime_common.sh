@@ -65,15 +65,6 @@ task3_verify_binary_linkage() {
     [[ -n "$fastcdr_path" && "$(realpath "$fastcdr_path")" == "$(realpath "$task3_dds_prefix/lib/libfastcdr.so.2")" ]] || task3_die "$binary does not resolve Fast CDR from $task3_dds_prefix"
 }
 
-task3_require_key() {
-    if [[ -z "${TASK3_KEY:-}" ]]; then
-        read -r -s -p 'Nhập TASK3_KEY (ít nhất 16 byte; không hiển thị): ' TASK3_KEY || task3_die 'cannot read TASK3_KEY from this terminal'
-        printf '\n'
-    fi
-    [[ "$(LC_ALL=C printf '%s' "$TASK3_KEY" | wc -c | tr -d ' ')" -ge 16 ]] || task3_die 'TASK3_KEY must contain at least 16 bytes'
-    export TASK3_KEY
-}
-
 task3_forward_signal() {
     local signal_name="$1"
     kill -s "$signal_name" "$pid" 2>/dev/null || true

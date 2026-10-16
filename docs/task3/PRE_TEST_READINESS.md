@@ -55,7 +55,7 @@ Lượt Local Integration không được cấp quyền mở UDP ban đầu th�
 
 ## Tự kiểm thử Linux
 
-Mở Terminal 1 và chạy Master. Script chọn Release mới nhất, yêu cầu `TASK3_KEY` qua prompt ẩn, xác nhận liên kết động rồi xác minh map thư viện trong tiến trình thực tế:
+Mở Terminal 1 và chạy Master. Script chọn Release mới nhất, xác nhận liên kết động rồi xác minh map thư viện trong tiến trình thực tế:
 
 ```bash
 cd /home/dev/DDS-Monitor

@@ -4,8 +4,6 @@ set -euo pipefail
 task3_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 source "$task3_root/task3/scripts/patched_runtime_common.sh"
 task3_prepare_environment
-task3_require_key
-
 if [[ -n "${TASK3_AGENT_BIN:-}" ]]; then
     agent_bin="$TASK3_AGENT_BIN"
 else
