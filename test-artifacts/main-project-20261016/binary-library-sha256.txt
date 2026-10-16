@@ -1,0 +1,3 @@
+29b424d2566353aff19843d02694451dd04556587e50893964b793fc616457c9  .task3-deps/task3-builds/20261016T060144Z-169555/release/dds_monitor
+806a755bbfc6954efdd0974354a6cf820e35fe709d29fb542effad5be1355b70  .task3-deps/task3-builds/20261016T060144Z-169555/release/task3/task3_agent
+167f5afa4fd7c6b9991f84fdf40b7a99564c264515e10c1507da656e565b9003  .task3-deps/fastdds-statistics-backend-2.5.0-patched/lib/libfastdds_statistics_backend.so.2.5.0

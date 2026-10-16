@@ -45,6 +45,8 @@ public:
     {
         QObject::connect(this, &DataModel::newPointAdded, this, &DataModel::addNewPoint,
                 Qt::QueuedConnection);
+        QObject::connect(this, &DataModel::snapshotReady, this, &DataModel::replaceData,
+                Qt::QueuedConnection);
     }
 
     DataModel(
@@ -54,6 +56,8 @@ public:
         , max_points_(max_points)
     {
         QObject::connect(this, &DataModel::newPointAdded, this, &DataModel::addNewPoint,
+                Qt::QueuedConnection);
+        QObject::connect(this, &DataModel::snapshotReady, this, &DataModel::replaceData,
                 Qt::QueuedConnection);
     }
 
@@ -76,6 +80,7 @@ public:
     //! Function to add a new point by sending signal \c newPointAdded
     void handleNewPoint(
             const QPointF& point);
+    void handleSnapshot(const QVector<QPointF>& points) { emit snapshotReady(points); }
 
     const QVector<QPointF>& get_data() const;
 
@@ -90,12 +95,14 @@ public:
             quint64 max_points);
 
 signals:
+    void snapshotReady(QVector<QPointF> points);
 
     //! Signal to notify a new point must be added
     void newPointAdded(
             const QPointF& point);
 
 protected:
+    void replaceData(QVector<QPointF> points);
 
     //! Function to add a new point to the model
     void addNewPoint(

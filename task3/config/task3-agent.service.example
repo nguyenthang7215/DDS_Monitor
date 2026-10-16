@@ -1,0 +1,17 @@
+# Administrator-reviewed example only. Not installed or activated by this project.
+[Unit]
+Description=Task 3 DDS monitoring agent
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+User=task3
+EnvironmentFile=/etc/task3/agent.env
+ExecStart=/opt/task3/task3_agent --config /etc/task3/agent.json
+Restart=on-failure
+RestartSec=2
+NoNewPrivileges=true
+
+[Install]
+WantedBy=multi-user.target

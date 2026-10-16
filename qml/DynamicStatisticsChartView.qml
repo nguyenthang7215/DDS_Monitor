@@ -29,7 +29,8 @@ StatisticsChartView {
     // TODO if the backend changes and uses max time_frame as time in any point, this delay could be applied
     // to the time_to get_data call and not to the axis.
     // Meanwhile doing that would leave the chart too shifted to the left
-    property int delay_time: 5000
+    // Experimental PoC value; revisit when optimizing the Dynamic Chart.
+    property int delay_time: 30000
     property int axis_refresh_time: 100
 
     property bool running: false

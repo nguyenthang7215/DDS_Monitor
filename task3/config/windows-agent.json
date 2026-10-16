@@ -1,0 +1,10 @@
+{
+  "host_id": "windows-slave-a",
+  "telemetry_domain": 42,
+  "telemetry_topic": "Task3/HostTelemetry/v1",
+  "interval_ms": 1000,
+  "disk_paths": ["C:/"],
+  "applications": [
+    {"application_id": "hello-world", "process_name": "hello_world.exe", "participant_guids": []}
+  ]
+}

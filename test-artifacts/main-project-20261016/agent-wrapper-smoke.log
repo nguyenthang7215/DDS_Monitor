@@ -1,0 +1,3 @@
+Launching Linux Agent; Fast DDS resolves from /home/dev/dds-deps/install. The Agent does not link the Statistics Backend directly.
+Verified running process 180725 maps /home/dev/dds-deps/install/lib/libfastdds.so.3.6.1.0
+Real collectors active; DDS domain 42 topic "Task3/HostTelemetry/v1"

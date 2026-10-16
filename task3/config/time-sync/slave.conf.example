@@ -1,0 +1,3 @@
+# Replace 192.0.2.10 with the approved Master IPv4 address.
+server 192.0.2.10 iburst
+# Choose startup correction policy with the administrator; no clock changes are executed by Task 3.

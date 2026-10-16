@@ -1,0 +1,8 @@
+{
+  "subscriber_and_publisher_discovered": "PASS",
+  "subscriber_disposal_observed": "PASS",
+  "subscriber_restart_remapped": "PASS",
+  "master_alive_after_subscriber_restart": "PASS",
+  "publisher_alive_during_subscriber_restart": "PASS",
+  "master_graceful_shutdown": "PASS"
+}

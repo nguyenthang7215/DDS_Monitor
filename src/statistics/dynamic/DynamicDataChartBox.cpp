@@ -77,7 +77,20 @@ void DynamicDataChartBox::update(
     // Update internal timer so next call to get data use it as from
     time_to_ = time_to;
 
-    DataChartBox::update(new_data);
+    auto incremental = new_data;
+    for (size_t i = 0; i < current_update_parameters_.series_ids.size(); ++i)
+    {
+        if (current_update_parameters_.statistics_kinds[i] != "NONE") continue;
+        const auto id = current_update_parameters_.series_ids[i];
+        auto found = series_.find(id);
+        if (found != series_.end())
+        {
+            found->second->handleSnapshot(new_data[id]);
+            for (const auto& point : new_data[id]) newYValue(point.y());
+        }
+        incremental.erase(id);
+    }
+    DataChartBox::update(incremental);
 }
 
 UpdateParameters DynamicDataChartBox::get_update_parameters()
@@ -85,6 +98,7 @@ UpdateParameters DynamicDataChartBox::get_update_parameters()
     const std::lock_guard<std::recursive_mutex> lock(mutex_);
 
     current_update_parameters_.time_from = time_to_;
+    current_update_parameters_.window_size = window_size_;
 
     return current_update_parameters_;
 }

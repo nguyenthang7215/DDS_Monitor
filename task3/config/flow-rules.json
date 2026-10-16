@@ -1,0 +1,4 @@
+[
+  {"topic": "Task3/RuntimeProbe", "mode": "periodic", "deadline_ms": 1500},
+  {"topic": "BusinessEvents", "mode": "event", "deadline_ms": 15000}
+]

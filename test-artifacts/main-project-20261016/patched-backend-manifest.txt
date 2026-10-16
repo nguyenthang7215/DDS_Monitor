@@ -1,0 +1,10 @@
+version=2.5.0
+source_commit=314fcd6e9d888077497d815406fcf134c6754759
+patch_sha256=83019a4479ec8b05cdab0a2d0e97461d9e3d386bcda865ba5f89fbf02e383a9a
+library_sha256=167f5afa4fd7c6b9991f84fdf40b7a99564c264515e10c1507da656e565b9003
+soname=libfastdds_statistics_backend.so.2
+abi_symbol_count=23081
+build_run=/home/dev/DDS-Monitor/.task3-deps/backend-builds/20261016T060135Z-169559
+dds_prefix=/home/dev/dds-deps/install
+compiler=c++ (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0
+cmake=cmake version 3.22.1

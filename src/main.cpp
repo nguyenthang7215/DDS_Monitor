@@ -25,6 +25,8 @@
 #include <QQuickStyle>
 
 #include <dds_monitor/Engine.h>
+#include "../task3/Dashboard.h"
+#include "../task3/Shutdown.h"
 #include <dds_monitor/io/ClipboardHandler.h>
 
 int main(
@@ -32,6 +34,7 @@ int main(
         char* argv[])
 {
     QApplication app(argc, argv);
+    task3::installShutdownHandler();
     app.setWindowIcon(QIcon(":/resources/images/eprosima_logo.ico"));
     app.setOrganizationName("eProsima");
     app.setOrganizationDomain("eprosima.com");
@@ -54,6 +57,7 @@ int main(
         return -1;
     }
     window->show();
+    task3::installDashboard(engine);
 
     return app.exec();
 }

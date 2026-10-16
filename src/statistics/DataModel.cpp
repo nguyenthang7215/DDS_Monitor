@@ -17,6 +17,8 @@
 
 #include <iostream>
 #include <QDebug>
+#include <algorithm>
+#include <cmath>
 
 #include <dds_monitor/statistics/DataModel.h>
 
@@ -91,6 +93,17 @@ void DataModel::addNewPoint(
             endRemoveRows();
         }
     }
+}
+
+void DataModel::replaceData(QVector<QPointF> points)
+{
+    points.erase(std::remove_if(points.begin(), points.end(), [](const QPointF& p) {
+        return !std::isfinite(p.x()) || !std::isfinite(p.y());
+    }), points.end());
+    std::stable_sort(points.begin(), points.end(), [](const QPointF& a, const QPointF& b) { return a.x() < b.x(); });
+    const auto limit = max_points_ ? max_points_ : 10000;
+    if (quint64(points.size()) > limit) points.remove(0, points.size() - qsizetype(limit));
+    beginResetModel(); m_data_ = std::move(points); endResetModel();
 }
 
 const QVector<QPointF>& DataModel::get_data() const

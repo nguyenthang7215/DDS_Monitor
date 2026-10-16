@@ -1,0 +1,19 @@
+{
+  "telemetry_real": "PASS",
+  "master_launch": "PASS",
+  "metrics_real": "PASS",
+  "process_stopped": "PASS",
+  "agent_timeout": "PASS",
+  "agent_recovery": "PASS",
+  "dds_discovery": "PASS",
+  "dds_throughput": "PASS",
+  "dds_subscription_throughput": "PASS",
+  "dds_latency": "PASS",
+  "dds_no_data_rule": "PASS",
+  "dds_restart_discovered": "PASS",
+  "dds_no_data_recovery": "PASS",
+  "ui_snapshot_event_loop": "PASS",
+  "windows_build": "PENDING_EXTERNAL_TEST",
+  "linux_windows_physical": "PENDING_EXTERNAL_TEST",
+  "ntp_two_machine": "PENDING_EXTERNAL_TEST"
+}

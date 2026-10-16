@@ -45,6 +45,7 @@ struct UpdateParameters
      */
     std::vector<bool> cumulative;
     std::vector<quint64> cumulative_interval;
+    quint64 window_size = 0;
 };
 
 /**

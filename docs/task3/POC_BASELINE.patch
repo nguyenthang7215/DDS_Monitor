@@ -1,0 +1,73 @@
+diff --git a/qml/DynamicStatisticsChartView.qml b/qml/DynamicStatisticsChartView.qml
+index c5a70a2..c9012c0 100644
+--- a/qml/DynamicStatisticsChartView.qml
++++ b/qml/DynamicStatisticsChartView.qml
+@@ -29,7 +29,7 @@ StatisticsChartView {
+     // TODO if the backend changes and uses max time_frame as time in any point, this delay could be applied
+     // to the time_to get_data call and not to the axis.
+     // Meanwhile doing that would leave the chart too shifted to the left
+-    property int delay_time: 5000
++    property int delay_time: 30000
+     property int axis_refresh_time: 100
+ 
+     property bool running: false
+diff --git a/src/Engine.cpp b/src/Engine.cpp
+index ce72171..f171323 100644
+--- a/src/Engine.cpp
++++ b/src/Engine.cpp
+@@ -2002,6 +2002,11 @@ void Engine::update_dynamic_chartbox(
+     // time_from, data_kind, source_ids, target_ids, statistics_kinds
+     const UpdateParameters parameters = dynamic_statistics_data_->get_update_parameters(chartbox_id);
+ 
++    qWarning() << "[DYNAMIC DEBUG]"
++           << "chartbox_id =" << chartbox_id
++           << "time_from =" << parameters.time_from
++           << "time_to =" << time_to
++           << "series_count =" << parameters.series_ids.size();
+     /////
+     // Collect the data for each series and store it in a point vector
+     std::map<quint64, QVector<QPointF>> new_series_points;
+@@ -2080,6 +2085,12 @@ void Engine::update_dynamic_chartbox(
+             }
+         }
+ 
++        qWarning() << "[DYNAMIC RESULT]"
++           << "series =" << parameters.series_ids[i]
++           << "points =" << new_points.size()
++           << "time_from =" << parameters.time_from
++           << "time_to =" << time_to;
++           
+         // Check that get_data call has not failed
+         if (new_points.empty())
+         {
+diff --git a/src/backend/SyncBackendConnection.cpp b/src/backend/SyncBackendConnection.cpp
+index 8092fc8..c0ec648 100644
+--- a/src/backend/SyncBackendConnection.cpp
++++ b/src/backend/SyncBackendConnection.cpp
+@@ -536,7 +536,7 @@ EntityId SyncBackendConnection::init_monitor(
+     try
+     {
+         return StatisticsBackend::init_monitor(domain, nullptr, CallbackMask::all(),
+-                       DataKindMask::none(), DDS_MONITOR_APP, "", easy_mode_ip);
++                       DataKindMask::none(), FASTDDS_MONITOR_APP, "", easy_mode_ip);
+     }
+     catch (const Error& e)
+     {
+@@ -557,7 +557,7 @@ EntityId SyncBackendConnection::init_monitor(
+     {
+         return StatisticsBackend::init_monitor(
+             discovery_server_locators,
+-            nullptr, CallbackMask::all(), DataKindMask::none(), DDS_MONITOR_APP);
++            nullptr, CallbackMask::all(), DataKindMask::none(), FASTDDS_MONITOR_APP);
+     }
+     catch (const Error& e)
+     {
+@@ -578,7 +578,7 @@ EntityId SyncBackendConnection::init_monitor_with_profile(
+     {
+         return StatisticsBackend::init_monitor_with_profile(
+             profile_name,
+-            nullptr, CallbackMask::all(), DataKindMask::none(), DDS_MONITOR_APP);
++            nullptr, CallbackMask::all(), DataKindMask::none(), FASTDDS_MONITOR_APP);
+     }
+     catch (const Error& e)
+     {
