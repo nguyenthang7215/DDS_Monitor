@@ -314,6 +314,50 @@ private slots:
         }
         QVERIFY(foundRecovered);
     }
+    void pagedHistoryDoesNotReintroducePendingRecovery() {
+        QTemporaryDir dir; const auto path = dir.filePath("pending-recovery.sqlite");
+        {
+            task3::AlertStore seed(path);
+            for (int i = 0; i < 501; ++i)
+                seed.condition(QString::number(i), true, "test", "host", "condition", 1000 + i);
+            seed.flush();
+        }
+        {
+            task3::AlertStore store(path);
+            QCOMPARE(store.rows().size(), 500); QVERIFY(store.hasMoreRows());
+            auto db = QSqlDatabase::addDatabase("QSQLITE", "pending-recovery-lock");
+            db.setDatabaseName(path); QVERIFY(db.open());
+            { QSqlQuery lock(db); QVERIFY(lock.exec("BEGIN IMMEDIATE")); }
+            store.condition("0", false, "test", "host", "condition", 2000);
+            QVERIFY(!store.isActive("0"));
+            const auto recoveredId = store.rows().first().toMap()["alert_id"].toString();
+            store.loadOlderRows();
+            QCOMPARE(store.rows().size(), 501);
+            QVERIFY(!store.hasMoreRows());
+            int matching = 0;
+            for (const auto& value : store.rows()) {
+                const auto row = value.toMap();
+                if (row["alert_id"] != recoveredId) continue;
+                ++matching;
+                QCOMPARE(row["state"].toString(), QString("Recovered"));
+                QVERIFY(!row["recovered_ms"].isNull());
+            }
+            QCOMPARE(matching, 1);
+            { QSqlQuery unlock(db); QVERIFY(unlock.exec("COMMIT")); }
+            db.close(); db = QSqlDatabase(); QSqlDatabase::removeDatabase("pending-recovery-lock");
+            store.flush();
+        }
+        task3::AlertStore reopened(path);
+        QCOMPARE(reopened.rows().size(), 500); QVERIFY(reopened.hasMoreRows());
+        reopened.loadOlderRows();
+        QCOMPARE(reopened.rows().size(), 501); QVERIFY(!reopened.hasMoreRows());
+        int matching = 0;
+        for (const auto& value : reopened.rows()) if (value.toMap()["rule_id"] == "0") {
+            ++matching;
+            QCOMPARE(value.toMap()["state"].toString(), QString("Recovered"));
+        }
+        QCOMPARE(matching, 1);
+    }
     void legacySqliteUpgradePreservesHistory() {
         QTemporaryDir dir; const auto path = dir.filePath("legacy.sqlite");
         auto db = QSqlDatabase::addDatabase("QSQLITE", "legacy-test"); db.setDatabaseName(path); QVERIFY(db.open());
@@ -434,6 +478,79 @@ private slots:
             QCOMPARE(row["alert_id"], initial[row["kind"].toString()]["alert_id"]);
             QVERIFY(!row["recovered_ms"].isNull());
         }
+    }
+    void missingApplicationResetsPendingDebounce_data() {
+        QTest::addColumn<bool>("missingApplication");
+        QTest::newRow("missing") << true;
+        QTest::newRow("explicit-unknown") << false;
+    }
+    void missingApplicationResetsPendingDebounce() {
+        QFETCH(bool, missingApplication);
+        const auto previous = qgetenv("TASK3_ALERT_TRIGGER_MS");
+        struct RestoreTrigger {
+            QByteArray value;
+            ~RestoreTrigger() { if (value.isNull()) qunsetenv("TASK3_ALERT_TRIGGER_MS");
+                                else qputenv("TASK3_ALERT_TRIGGER_MS", value); }
+        } restore{previous};
+        qputenv("TASK3_ALERT_TRIGGER_MS", "300");
+        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("debounce.sqlite"));
+        auto s = sample("debounce-host");
+        QJsonObject stopped{{"application_id", "app"}, {"pid", 0}, {"state", "stopped"},
+            {"service_state", "failed"}, {"service", "example.service"}};
+        auto send = [&](int seq, const QJsonArray& apps) {
+            s["sequence"] = QString::number(seq); s["applications"] = apps;
+            return core.ingest(task3::encode(s), "fixture");
+        };
+        QVERIFY(send(1, QJsonArray{stopped}));
+        QTest::qWait(100);
+        auto unknown = stopped; unknown["state"] = "unknown"; unknown["service_state"] = "unknown";
+        const QJsonArray absent = missingApplication ? QJsonArray{} : QJsonArray{unknown};
+        QVERIFY(send(2, absent));
+        QTest::qWait(250);
+        QVERIFY(send(3, QJsonArray{stopped}));
+        QCOMPARE(core.events().size(), 0); // Only a new, uninterrupted interval may trigger.
+        QTest::qWait(320); core.tick();
+        QCOMPARE(core.events().size(), 2);
+        QMap<QString, QString> ids;
+        for (const auto& value : core.events()) {
+            const auto row = value.toMap();
+            QCOMPARE(row["state"].toString(), QString("Active"));
+            ids[row["kind"].toString()] = row["alert_id"].toString();
+            QCOMPARE(row["verification"].toString(), QString("Verified by current Agent telemetry"));
+        }
+        QVERIFY(send(4, absent));
+        for (const auto& value : core.events()) {
+            const auto row = value.toMap();
+            QCOMPARE(row["state"].toString(), QString("Active"));
+            QCOMPARE(row["alert_id"].toString(), ids[row["kind"].toString()]);
+            QVERIFY(row["verification"].toString().startsWith("Not verified"));
+        }
+        auto running = stopped; running["pid"] = 1; running["instance_id"] = "run-1";
+        running["state"] = "running"; running["service_state"] = "running";
+        QVERIFY(send(5, QJsonArray{running}));
+        for (const auto& value : core.events()) {
+            const auto row = value.toMap();
+            QCOMPARE(row["state"].toString(), QString("Recovered"));
+            QCOMPARE(row["alert_id"].toString(), ids[row["kind"].toString()]);
+            QVERIFY(!row["recovered_ms"].isNull());
+        }
+        task3::MonitoringCore interrupted(dir.filePath("interrupted.sqlite"));
+        auto interruptedSample = sample("interrupted-host");
+        interruptedSample["applications"] = QJsonArray{stopped};
+        QVERIFY(interrupted.ingest(task3::encode(interruptedSample), "stopped"));
+        QTest::qWait(100);
+        interruptedSample["applications"] = absent; interruptedSample["sequence"] = "2";
+        QVERIFY(interrupted.ingest(task3::encode(interruptedSample), "unavailable"));
+        QTest::qWait(250);
+        interruptedSample["applications"] = QJsonArray{running}; interruptedSample["sequence"] = "3";
+        QVERIFY(interrupted.ingest(task3::encode(interruptedSample), "running"));
+        QCOMPARE(interrupted.events().size(), 0);
+        qputenv("TASK3_ALERT_TRIGGER_MS", "0");
+        task3::MonitoringCore defaultCore(dir.filePath("default.sqlite"));
+        QVERIFY(defaultCore.ingest(task3::encode(s), "running"));
+        auto immediate = s; immediate["sequence"] = "6"; immediate["applications"] = QJsonArray{stopped};
+        QVERIFY(defaultCore.ingest(task3::encode(immediate), "stopped"));
+        QCOMPARE(defaultCore.events().size(), 2);
     }
     void retentionOptInPreservesActiveAndMigration() {
         QTemporaryDir dir; const auto path = dir.filePath("events.sqlite");

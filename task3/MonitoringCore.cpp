@@ -6,6 +6,7 @@
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QFile>
+#include <QSet>
 namespace task3 {
 QVariantList MonitoringCore::hosts() const {
     auto rows = registry_.rows();
@@ -78,9 +79,20 @@ bool MonitoringCore::startTelemetry(int domain, const QString& topic) {
 void MonitoringCore::stop() { timer_.stop(); transport_.reset(); alerts_.flush(); }
 bool MonitoringCore::ingest(const QByteArray& packet, const QString& source) {
     QJsonObject snapshot; QString error;
-    if (!decode(packet, snapshot, error) ||
-        !registry_.ingest(snapshot, source, clock_.elapsed(), QDateTime::currentMSecsSinceEpoch(), error)) {
+    if (!decode(packet, snapshot, error)) { emit rejected(error); return false; }
+    const auto prior = registry_.hosts().value(snapshot["host_id"].toString()).snapshot["applications"].toArray();
+    if (!registry_.ingest(snapshot, source, clock_.elapsed(), QDateTime::currentMSecsSinceEpoch(), error)) {
         emit rejected(error); return false;
+    }
+    QSet<QString> currentApplications;
+    for (const auto& entry : snapshot["applications"].toArray())
+        currentApplications.insert(entry.toObject()["application_id"].toString());
+    for (const auto& entry : prior) {
+        const auto appId = entry.toObject()["application_id"].toString();
+        if (!currentApplications.contains(appId)) {
+            const auto rule = snapshot["host_id"].toString() + "/" + appId;
+            alerts_.unknown(rule + "/process"); alerts_.unknown(rule + "/service");
+        }
     }
     const QJsonValue cpu = snapshot["metrics"].toObject().value("cpu_percent");
     if (cpu.isDouble()) {

@@ -15,6 +15,7 @@
 #include <QDebug>
 #include <functional>
 #include <QStringList>
+#include <QSet>
 namespace task3 {
 struct AlertStore::Impl {
     QThread thread;
@@ -188,7 +189,17 @@ void AlertStore::loadOlderRows() {
             ++loaded;
         }
     }, Qt::BlockingQueuedConnection);
-    for (const auto& row : older) rows_.append(row);
+    QSet<QString> loadedIds;
+    for (const auto& value : rows_) {
+        const auto id = value.toMap()["alert_id"].toString();
+        if (!id.isEmpty()) loadedIds.insert(id);
+    }
+    for (const auto& row : older) {
+        const auto id = row["alert_id"].toString();
+        if (!id.isEmpty() && loadedIds.contains(id)) continue;
+        rows_.append(row);
+        if (!id.isEmpty()) loadedIds.insert(id);
+    }
     if (older.isEmpty()) hasMoreRows_ = false;
     else { oldestLoadedId_ = nextCursor; hasMoreRows_ = more; }
 }
