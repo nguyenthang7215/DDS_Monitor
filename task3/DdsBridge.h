@@ -7,15 +7,16 @@
 namespace task3 {
 class DdsBridge : public QObject {
     Q_OBJECT
-public:
+  public:
     explicit DdsBridge(QObject* parent = nullptr);
     ~DdsBridge() override;
     void poll();
     void stop();
     static QVariantList snapshot();
-signals:
+  signals:
     void updated(QVariantList);
-private:
+
+  private:
     QTimer timer_;
     QFutureWatcher<QVariantList> watcher_;
 };
