@@ -9,15 +9,18 @@
 #include <functional>
 namespace task3 {
 class Collectors {
-public:
+  public:
     using TimeStatusProvider = std::function<QJsonObject()>;
-    explicit Collectors(QJsonObject config, TimeStatusProvider timeStatusProvider = {}, qint64 timeRefreshMs = 10000);
+    explicit Collectors(QJsonObject config,
+                        TimeStatusProvider timeStatusProvider = {},
+                        qint64 timeRefreshMs = 10000);
     QJsonObject collect();
     static QJsonObject timeStatus();
     static QJsonObject parseChrony(const QString& csv, qint64 checkedMs);
     static QString parseService(const QString& output, bool success);
     static QJsonObject parseWindowsTime(const QJsonObject& evidence, qint64 checkedMs);
-private:
+
+  private:
     QJsonObject config_;
     QString session_;
     quint64 sequence_ = 0, previousIdle_ = 0, previousTotal_ = 0, rx_ = 0, tx_ = 0;

@@ -16,7 +16,7 @@ class MonitoringCore : public QObject {
     Q_PROPERTY(QVariantList entities READ entities NOTIFY changed)
     Q_PROPERTY(QString status READ status NOTIFY changed)
     Q_PROPERTY(QVariantList flows READ flows NOTIFY changed)
-public:
+  public:
     MonitoringCore(const QString& dbPath, int timeoutMs = 5000, QObject* parent = nullptr);
     bool startTelemetry(int domain, const QString& topic);
     bool ingest(const QByteArray&, const QString& source);
@@ -25,20 +25,31 @@ public:
     void updateDds(QVariantList rows);
     QVariantList hosts() const;
     QVariantList events() const;
-    bool hasMoreEvents() const { return alerts_.hasMoreRows(); }
+    bool hasMoreEvents() const {
+        return alerts_.hasMoreRows();
+    }
     Q_INVOKABLE void loadOlderEvents();
-    QVariantList entities() const { return entities_; }
-    QVariantList flows() const { return flows_; }
+    QVariantList entities() const {
+        return entities_;
+    }
+    QVariantList flows() const {
+        return flows_;
+    }
     QString status() const {
         const auto error = alerts_.error();
         return status_ + (error.isEmpty() ? QString() : " | Event database: " + error) +
-            (transport_ && transport_->droppedPackets() ? " | dropped telemetry: " + QString::number(transport_->droppedPackets()) : QString());
+               (transport_ && transport_->droppedPackets()
+                    ? " | dropped telemetry: " + QString::number(transport_->droppedPackets())
+                    : QString());
     }
-    const Registry& registry() const { return registry_; }
-signals:
+    const Registry& registry() const {
+        return registry_;
+    }
+  signals:
     void changed();
     void rejected(QString reason);
-private:
+
+  private:
     Registry registry_;
     AlertStore alerts_;
     std::unique_ptr<DdsTransport> transport_;
@@ -49,7 +60,10 @@ private:
     QVariantList entities_;
     QVariantList flows_;
     QMap<QString, QVariantMap> flowRules_;
-    struct Counter { QString instance, count; qint64 changed = 0; };
+    struct Counter {
+        QString instance, count;
+        qint64 changed = 0;
+    };
     QMap<QString, Counter> counters_;
     QMap<QString, QVariantList> cpuHistory_;
     QMap<QString, qint64> ruleSince_, metricSeen_, metricTimestamp_;

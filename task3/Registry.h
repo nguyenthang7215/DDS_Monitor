@@ -15,14 +15,22 @@ struct Host {
     bool online = true;
 };
 class Registry {
-public:
+  public:
     void expect(const QStringList& hostIds);
-    bool ingest(const QJsonObject&, const QString& address, qint64 monotonicMs, qint64 wallMs, QString& error);
+    bool ingest(const QJsonObject&,
+                const QString& address,
+                qint64 monotonicMs,
+                qint64 wallMs,
+                QString& error);
     void expire(qint64 monotonicMs, qint64 timeoutMs);
     QVariantList rows() const;
-    QVariantMap mapParticipant(const QString& hostname, const QString& pid, const QString& guid = {}) const;
-    const QMap<QString, Host>& hosts() const { return hosts_; }
-private:
+    QVariantMap
+    mapParticipant(const QString& hostname, const QString& pid, const QString& guid = {}) const;
+    const QMap<QString, Host>& hosts() const {
+        return hosts_;
+    }
+
+  private:
     QMap<QString, Host> hosts_;
 };
 }
