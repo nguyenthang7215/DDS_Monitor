@@ -31,16 +31,18 @@ Giữ nguyên 15 kịch bản chính đã có. Bộ Qt Test hiện gồm các ca
 | TEST-30 | Windows time JSON/đơn vị/thiếu counter | Unit parser trên Linux; script/Win32 runtime chưa kiểm thử Windows |
 | TEST-31 | Worker SQLite bị khóa, đọc cache không chặn timer, flush 3000 sự kiện | SQLite thật; mở lại database và kiểm tra trạng thái |
 | TEST-32 | Debounce, cooldown, Unknown và hysteresis | Unit với thời gian kiểm soát |
-| TEST-33 | Master restart và replay cũ, 200 Agent session | Database thật và Registry; cùng máy |
-| TEST-34 | 1024 snapshot ký, 128 host × 32 ứng dụng, 1000 gói sai | Kiểm thử tải tổng hợp, không phải 128 máy vật lý |
+| TEST-33 | Master restart không cần checkpoint; 300 Agent restart, replay session đã quan sát, clock rollback | Database thật và Registry; timestamp fixture, không đổi đồng hồ OS |
+| TEST-34 | 1024 snapshot JSON, 128 host × 32 ứng dụng, 1000 gói sai | Kiểm thử tải tổng hợp, không phải 128 máy vật lý |
 | TEST-35 | Burst 2000 bản tin DDS, queue drop | DDS thật; kiểm tra droppedPackets tăng |
-| TEST-36 | Một cửa sổ, bốn trang Task 3 và trang DDS nâng cao, resize | QML offscreen thật; ảnh từng trang và log lỗi |
+| TEST-36 | Một cửa sổ, ba tab Hybrid, chi tiết Slave/Application/Flow và resize | QML thật; ảnh từng trang và log lỗi |
 | TEST-37 | Shutdown Qt, Master/Agent restart, SQLite integrity | Tiến trình cục bộ thật và integrity_check |
 | TEST-38 | Retention tắt/bật, giữ Active, nâng cấp schema cũ | SQLite thật trong thư mục tạm |
-| TEST-39 | Database hỏng, replay fail closed | Fixture database hỏng; lỗi được báo, không crash |
+| TEST-39 | Database hỏng vẫn nhận telemetry; lỗi hiện trên QML | Fixture database hỏng riêng, final_fix_ui_regression.py và corruptEventDatabaseDoesNotBlockTelemetry |
 | TEST-40 | RSS/CPU/tiến trình và GUI tiếp tục cập nhật | continuation_integration.py với thời gian lấy mẫu được chỉ định |
 
 Kịch bản local_integration.py kiểm tra 14 hành vi cũ. Kịch bản continuation_integration.py kiểm tra chức năng mới và ghi resource-usage.json, ảnh từng trang, snapshot trước/sau restart cùng kết quả SQLite/QML. Mọi tiến trình do test sở hữu được dừng trong finally; không chỉnh dịch vụ, NTP hoặc firewall.
+
+Regression Final Fix bổ sung `agentRestartAfterClockRollbackRecovers`, `activeAlertsAreUnverifiedWithoutCurrentEvidence` (Unknown và thiếu ứng dụng), cùng kiểm tra thực tế Label QML trong `final_fix_ui_regression.py`. Phải giữ Active khi chưa có bằng chứng, không gắn Verified và chỉ Recovered sau Running. Snapshot UI xuất `status_text`/`status_visible` đọc từ Label thật, không phải suy ra từ core.status.
 
 ## Kiểm thử phải thực hiện bên ngoài
 

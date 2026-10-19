@@ -1,4 +1,10 @@
-# Kết quả kiểm thử Task 3 — 16-10-2026
+# Kết quả kiểm thử Task 3
+
+## Final Fix — 19-10-2026
+
+Đợt này tái hiện ba P1 bằng test trước khi sửa, rồi kiểm tra lại trên source hiện hành. Bằng chứng nằm tại `test-artifacts/final-fix-20261019/`; kết quả tổng hợp và giới hạn ở [FINAL_FIX_RESULTS.md](FINAL_FIX_RESULTS.md). Các mục bên dưới giữ lịch sử ngày 16-10, không thay thế kết quả đợt này.
+
+HMAC/TASK3_KEY và checkpoint replay SQLite không còn trong cơ chế vận hành. Registry giữ sequence hiện tại và tối đa 256 session nghỉ/máy trong bộ nhớ; timestamp lùi không ngăn session mới. Test cũ có mô tả checkpoint lưu bền thuộc các phiên bản lịch sử, không phải xác nhận chức năng hiện hành.
 
 ## Xác minh mới trên repository chính `/home/dev/DDS-Monitor`
 

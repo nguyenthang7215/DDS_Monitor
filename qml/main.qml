@@ -123,12 +123,22 @@ ApplicationWindow {
             spacing: 16
             Label { text: "DDS Monitor"; font.pixelSize: 23; font.bold: true; color: Theme.eProsimaDarkBlue; leftPadding: 20 }
             Label {
+                objectName: "monitorStatusLabel"
                 Layout.fillWidth: true
                 // Keep the technical topic in diagnostics, not in the product heading.
-                text: !mainApplicationView.task3Ready ? "Đang khởi tạo giám sát…" : task3Core.status.startsWith("DDS telemetry domain") ? "Giám sát tài nguyên & truyền thông DDS" : task3Core.status
+                text: {
+                    if (!mainApplicationView.task3Ready) return "Đang khởi tạo giám sát…"
+                    const status = task3Core.status
+                    if (!status.startsWith("DDS telemetry domain")) return status
+                    const diagnostics = status.indexOf(" | ")
+                    return "Giám sát tài nguyên & truyền thông DDS" + (diagnostics < 0 ? "" : status.slice(diagnostics))
+                }
                 color: Theme.midGrey
                 elide: Text.ElideRight
                 font.pixelSize: 13
+                ToolTip.visible: statusHover.hovered
+                ToolTip.text: text
+                HoverHandler { id: statusHover }
             }
             Label { text: "Master"; color: Theme.eProsimaDarkBlue; rightPadding: 20 }
         }

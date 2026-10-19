@@ -349,6 +349,8 @@ private slots:
         task3::Registry registry; auto s = sample(); QString error;
         const auto start = s["timestamp_ms"].toDouble();
         auto first = s;
+        // The replay fixture must be a session this Master has actually observed.
+        QVERIFY(registry.ingest(first, "initial-session", 0, 0, error));
         for (int i = 0; i < 200; ++i) {
             s["session_id"] = "session-" + QString::number(i); s["timestamp_ms"] = start+i;
             QVERIFY2(registry.ingest(s, "test", i, i, error), qPrintable(error));
@@ -356,6 +358,82 @@ private slots:
         first["sequence"] = "999999";
         QVERIFY(!registry.ingest(first, "replay", 201, 201, error));
         QCOMPARE(registry.hosts().first().sessionId, s["session_id"].toString());
+        for (int i = 200; i < 300; ++i) {
+            s["session_id"] = "session-" + QString::number(i); s["timestamp_ms"] = start-i;
+            QVERIFY(registry.ingest(s, "clock-backward", i, i, error));
+        }
+        QCOMPARE(registry.hosts().size(), 1);
+        QCOMPARE(registry.hosts().first().retiredSessions.size(), 256);
+        auto retired = s; retired["session_id"] = "session-298"; retired["sequence"] = "999999";
+        QVERIFY(!registry.ingest(retired, "retired-replay", 301, 301, error));
+    }
+    void agentRestartAfterClockRollbackRecovers() {
+        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"), 120);
+        auto before = sample("rollback-host");
+        before["timestamp_ms"] = 100000.0; before["sequence"] = "10";
+        QVERIFY(core.ingest(task3::encode(before), "test"));
+        QTest::qWait(160); core.tick();
+        QVERIFY(!core.hosts()[0].toMap()["online"].toBool());
+        auto restarted = before;
+        restarted["session_id"] = "new-session-after-rollback";
+        restarted["sequence"] = "1"; restarted["timestamp_ms"] = 40000.0;
+        QVERIFY(core.ingest(task3::encode(restarted), "test"));
+        QVERIFY(core.hosts()[0].toMap()["online"].toBool());
+        bool recovered = false;
+        for (const auto& event : core.events())
+            recovered |= event.toMap()["kind"] == "agent_timeout" && event.toMap()["state"] == "Recovered";
+        QVERIFY(recovered);
+        QVERIFY(!core.ingest(task3::encode(restarted), "duplicate"));
+        restarted["sequence"] = "2"; restarted["timestamp_ms"] = 39000.0;
+        QVERIFY(core.ingest(task3::encode(restarted), "same-session-clock-backward"));
+        restarted["sequence"] = "1";
+        QVERIFY(!core.ingest(task3::encode(restarted), "old-sequence"));
+        before["sequence"] = "999999"; before["timestamp_ms"] = 200000.0;
+        QVERIFY(!core.ingest(task3::encode(before), "retired-session"));
+        restarted["schema_version"] = 99;
+        QVERIFY(!core.ingest(task3::encode(restarted), "invalid-schema"));
+    }
+    void activeAlertsAreUnverifiedWithoutCurrentEvidence_data() {
+        QTest::addColumn<bool>("missingApplication");
+        QTest::newRow("unknown-process-and-service") << false;
+        QTest::newRow("application-missing-from-snapshot") << true;
+    }
+    void activeAlertsAreUnverifiedWithoutCurrentEvidence() {
+        QFETCH(bool, missingApplication);
+        QTemporaryDir dir; task3::MonitoringCore core(dir.filePath("events.sqlite"));
+        auto s = sample("unknown-alert-host");
+        QJsonObject app{{"application_id", "app"}, {"pid", 0}, {"state", "stopped"},
+            {"service_state", "failed"}, {"service", "example.service"}};
+        s["applications"] = QJsonArray{app};
+        QVERIFY(core.ingest(task3::encode(s), "stopped"));
+        QCOMPARE(core.events().size(), 2);
+        QMap<QString, QVariantMap> initial;
+        for (const auto& value : core.events()) {
+            const auto row = value.toMap(); initial[row["kind"].toString()] = row;
+            QCOMPARE(row["verification"].toString(), QString("Verified by current Agent telemetry"));
+        }
+        app["state"] = "unknown"; app["service_state"] = "unknown";
+        s["applications"] = missingApplication ? QJsonArray{} : QJsonArray{app};
+        s["sequence"] = "2";
+        QVERIFY(core.ingest(task3::encode(s), "unknown"));
+        for (const auto& value : core.events()) {
+            const auto row = value.toMap(); const auto first = initial[row["kind"].toString()];
+            QCOMPARE(row["state"].toString(), QString("Active"));
+            QCOMPARE(row["alert_id"], first["alert_id"]); QCOMPARE(row["triggered_ms"], first["triggered_ms"]);
+            QVERIFY(row["recovered_ms"].isNull());
+            QVERIFY(row["verification"].toString().startsWith("Not verified"));
+        }
+        app["state"] = "running"; app["pid"] = 1; app["instance_id"] = "test-run";
+        app["service_state"] = "running";
+        s["applications"] = QJsonArray{app}; s["sequence"] = "3";
+        QVERIFY(core.ingest(task3::encode(s), "running"));
+        QCOMPARE(core.events().size(), 2);
+        for (const auto& value : core.events()) {
+            const auto row = value.toMap();
+            QCOMPARE(row["state"].toString(), QString("Recovered"));
+            QCOMPARE(row["alert_id"], initial[row["kind"].toString()]["alert_id"]);
+            QVERIFY(!row["recovered_ms"].isNull());
+        }
     }
     void retentionOptInPreservesActiveAndMigration() {
         QTemporaryDir dir; const auto path = dir.filePath("events.sqlite");

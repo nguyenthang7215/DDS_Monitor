@@ -1,5 +1,7 @@
 # Trạng thái triển khai và ma trận FR — 16-10-2026
 
+Cập nhật Final Fix 19/10/2026: ba P1 đã sửa và hồi quy Linux PASS; chi tiết, file thay đổi và giới hạn tại [FINAL_FIX_RESULTS.md](FINAL_FIX_RESULTS.md). Các build/test ngày 16-10 dưới đây được giữ làm lịch sử. Windows/NTP liên máy chưa được chuyển thành PASS.
+
 ## Tích hợp vào repository chính
 
 Source of truth hiện tại: `/home/dev/DDS-Monitor` (upstream HEAD trước tích hợp `94bbd6d`). Toàn bộ module Task 3, cấu hình, tests, scripts và patch P0 đã được chuyển từ implementation; repo implementation cũ được giữ làm backup. Build mới tại `.task3-deps/task3-builds/20261016T060144Z-169555/`; Debug/Release, CTest, Local 14/14, Continuation 15/15, Subscriber 6/6, Publisher 30/30 đều PASS trên repo chính. Readiness: **MAIN_PROJECT_READY_FOR_MANUAL_LINUX_TESTING**; Windows/NTP/liên máy vật lý vẫn PENDING_EXTERNAL_TEST.
@@ -16,7 +18,7 @@ VERIFIED_LOCAL chỉ xác nhận hành vi đã kiểm thử trên một máy Lin
 
 ## Các module thay đổi
 
-- Collectors/RuntimeIdentity/Registry/Protocol: nhiều instance, manifest theo lần chạy, GUID động, bộ đếm Writer và checkpoint chống phát lại.
+- Collectors/RuntimeIdentity/Registry/Protocol: nhiều instance, manifest theo lần chạy, GUID động, bộ đếm Writer; lọc sequence và 256 session nghỉ gần nhất/máy trong bộ nhớ, không có checkpoint replay lưu bền.
 - DdsBridge/FlowModel/MonitoringCore: GUID ConnectionList, freshness, topology theo máy/ứng dụng, periodic/event và No Data qua restart.
 - AlertStore: worker SQLite sở hữu kết nối riêng, queue/retry, migration/retention, debounce/cooldown, dedup và lưu trạng thái.
 - qml/main.qml/Dashboard: một Main Window, trang Task 3 và DDS nâng cao, chi tiết ứng dụng/Participant, topology và trạng thái chưa xác định.

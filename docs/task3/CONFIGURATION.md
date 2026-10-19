@@ -22,7 +22,7 @@ Nhiều tiến trình khớp được giữ trong instances[], không chọn m�
 | TASK3_AUTO_DOMAIN | 0; off tắt tự khởi tạo Statistics Monitor |
 | TASK3_TIMEOUT_MS | 5000, tối thiểu 100 |
 | TASK3_EXPECTED_HOSTS | ID máy phân tách bằng dấu phẩy; Unknown trước bản tin đầu |
-| TASK3_DATA_DIR | Qt AppLocalDataLocation/task3; chứa events.sqlite và checkpoint |
+| TASK3_DATA_DIR | Qt AppLocalDataLocation/task3; chứa events.sqlite cho lịch sử/trạng thái cảnh báo; không có replay checkpoint |
 | TASK3_EXPECTED_TOPICS | Topic chu kỳ phân tách bằng dấu phẩy, giữ tương thích cấu hình cũ |
 | TASK3_DDS_TIMEOUT_MS | 15000, tối thiểu 1000; timeout quy tắc Topic cũ |
 | TASK3_FLOW_RULES | Đường dẫn JSON liệt kê topic, mode=periodic/event và deadline_ms (100–3600000) |
@@ -48,4 +48,4 @@ Ví dụ flow rules:
 ]
 ~~~
 
-Không tạo hai Statistics Monitor trên cùng Domain. Telemetry Domain và application statistics Domain là hai cấu hình riêng. Agent/Master phải thống nhất Topic/type/QoS và khóa. Discovery, NIC và firewall cần xác minh trên mạng triển khai thật.
+Không tạo hai Statistics Monitor trên cùng Domain. Telemetry Domain và application statistics Domain là hai cấu hình riêng. Agent/Master phải thống nhất Domain/Topic/type/QoS, không dùng TASK3_KEY/HMAC. Discovery, NIC và firewall cần xác minh trên mạng triển khai thật.

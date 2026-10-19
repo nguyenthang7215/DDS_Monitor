@@ -1,5 +1,7 @@
 # Báo cáo bàn giao đợt tiếp tục Task 3 — 16-10-2026
 
+Bàn giao bổ sung Final Fix 19/10/2026: xem [FINAL_FIX_RESULTS.md](FINAL_FIX_RESULTS.md) cho bản sửa ba P1, tests mới và giới hạn. Các số liệu ngày 16-10 phía dưới được giữ làm lịch sử, không thay thế kết quả đợt sửa cuối.
+
 ## Tích hợp vào project gốc
 
 Project chính thức hiện là `/home/dev/DDS-Monitor`, không còn lấy thư mục Downloads làm source để chạy. Task 3 đã được chuyển và build lại tại repo này; patch được lưu tại `test-artifacts/p0-crash-20261016/`, Backend cài riêng trong `.task3-deps/`. Kết quả mới: Debug/Release + CTest PASS, Local 14/14, Continuation 15/15, Subscriber 6/6, Publisher 30/30 PASS; hash Backend `167f5afa4fd7c6b9991f84fdf40b7a99564c264515e10c1507da656e565b9003`. Kết quả chi tiết và trạng thái pending có trong các mục sau.
@@ -21,7 +23,7 @@ Phần dưới ghi lịch sử triển khai trước khi hợp nhất vào proje
 - Runtime write counter: phát hiện Writer còn sống nhưng ngừng ghi. Cảnh báo theo luồng logic máy/ứng dụng/Topic được khôi phục khi instance/GUID mới ghi trở lại; đã sửa lỗi phát hiện trong lượt tích hợp đầu.
 - QML: trang Task 3 và các màn hình DDS nâng cao gốc nằm trong cùng Main Window. Có chi tiết ứng dụng/Participant, topology, metric, cảnh báo, Last Seen/Stale và thời gian.
 - SQLite/AlertStore: một worker sở hữu kết nối, transaction/retry, cache giao diện, migration schema cũ, retention tùy chọn, debounce/cooldown/hysteresis/dedup và lưu Active/Recovered.
-- DdsTransport/Shutdown: queue giới hạn/coalescing, bộ đếm bỏ snapshot, xử lý Qt quit và flush khi thoát bình thường. Replay checkpoint tồn tại qua Master restart; database không đọc được thì telemetry fail closed.
+- DdsTransport/Shutdown: queue giới hạn/coalescing, bộ đếm bỏ snapshot, xử lý Qt quit và flush khi thoát bình thường. Cơ chế replay checkpoint của bản lịch sử đã được loại bỏ; hiện chỉ giữ session/sequence trong bộ nhớ, database lỗi không chặn telemetry.
 - Dynamic Chart: sửa nhánh raw NONE bằng truy vấn lại cửa sổ và thay snapshot của DataModel gốc. Giữ delay_time=30000 và FASTDDS_MONITOR_APP. Nhánh aggregate/cumulative vẫn mở.
 - Time/Windows: Chrony được kiểm tra cấu trúc/nguồn/offset rõ hơn; Windows có JSON CIM adapter và script build theo prefix. Chưa có bằng chứng synchronized native hoặc build/runtime Windows.
 
@@ -78,13 +80,13 @@ cd /home/dev/DDS-Monitor
 bash task3/scripts/run_master_patched.sh
 ~~~
 
-Trong Terminal 2, nhập lại cùng khóa ở prompt ẩn và chạy Agent:
+Trong Terminal 2, chạy Agent, không cần khóa:
 
 ~~~bash
 bash task3/scripts/run_linux_agent_patched.sh
 ~~~
 
-Chọn Slave để xem CPU/RAM, disk/network, ứng dụng và trạng thái thời gian. Dừng Agent bằng Ctrl+C để kiểm tra Offline; chạy lại và nhập cùng khóa để kiểm tra Recovered. Hai wrapper tự chọn build mới nhất, kiểm tra dependency và không chứa sẵn khóa.
+Chọn Slave để xem CPU/RAM, disk/network, ứng dụng và trạng thái thời gian. Dừng Agent bằng Ctrl+C để kiểm tra Offline; chạy lại để kiểm tra Recovered. Hai wrapper tự chọn build mới nhất và kiểm tra dependency; không dùng TASK3_KEY/HMAC.
 
 Publisher/Subscriber DDS và kiểm tra Alerts/SQLite có lệnh đầy đủ ở [BUILD_AND_RUN.md](BUILD_AND_RUN.md). Cần bật Statistics trong ứng dụng DDS trước khi kỳ vọng Throughput/Latency. Trạng thái Time Sync Unknown hoặc Matching Unknown phản ánh thiếu bằng chứng, không được thay bằng trạng thái thành công.
 

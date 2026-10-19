@@ -2,7 +2,7 @@
 
 Repository chính thức là `/home/dev/DDS-Monitor`, phát triển từ eProsima DDS Monitor 4.2.0. Task 3 được gắn vào ứng dụng Qt/QML gốc thông qua target `task3/` và trang Dashboard trong cùng Main Window; Engine, Controller và màn hình DDS gốc vẫn được giữ. Không thay toàn bộ ứng dụng bằng một project Qt độc lập.
 
-Source phát triển hiện nằm trong `/home/dev/DDS-Monitor`, được mở rộng từ eProsima DDS Monitor. Một Main Window chứa trang Task 3 và các màn hình DDS nâng cao cũ. Thanh điều hướng phía dưới chuyển giữa hai nhóm chức năng; Engine, Controller, Statistics Backend, topology, QoS và biểu đồ gốc vẫn được tái sử dụng.
+Source phát triển hiện nằm trong `/home/dev/DDS-Monitor`, được mở rộng từ eProsima DDS Monitor. Một Main Window có ba tab trên cùng: Giám sát hệ thống, DDS chuyên sâu, Cảnh báo & lịch sử. Engine, Controller, Statistics Backend, topology, QoS và biểu đồ gốc vẫn được tái sử dụng.
 
 ## Thành phần và luồng dữ liệu
 
@@ -11,7 +11,7 @@ Source phát triển hiện nằm trong `/home/dev/DDS-Monitor`, được mở r
 3. Callback DDS đưa bản tin vào hàng đợi có giới hạn. Một tác vụ Qt lấy tối đa 32 snapshot mỗi lượt và cập nhật Registry/MonitoringCore trên luồng giao diện.
 4. DdsBridge truy vấn Statistics Backend bằng QtConcurrent, tối đa một job đang chạy. Registry ánh xạ Participant trước rồi chuyển liên kết cho Writer/Reader.
 5. FlowModel dựng quan hệ máy/ứng dụng/Writer/Topic/Reader. Chỉ vẽ mũi tên khi có ConnectionList còn mới và GUID đối tác tương ứng.
-6. AlertStore giữ cache sự kiện trên luồng giao diện; một worker QThread riêng sở hữu duy nhất kết nối SQLite, thực hiện transaction, thử lại khi khóa và lưu checkpoint chống phát lại.
+6. AlertStore giữ cache sự kiện trên luồng giao diện; một worker QThread riêng sở hữu duy nhất kết nối SQLite, thực hiện transaction và thử lại khi khóa. Không lưu checkpoint replay.
 7. Đồng bộ đồng hồ chạy độc lập bằng dịch vụ hệ điều hành. Ứng dụng chỉ đọc trạng thái.
 
 ## Định danh và luồng dữ liệu
@@ -25,9 +25,9 @@ Không có instrumentation thì chỉ kết luận No Data theo quy tắc thận
 ## Luồng xử lý và giới hạn
 
 - Envelope: 48.000 byte; tối đa 128 ứng dụng, 128 instance/ứng dụng, 32 GUID và 64 bộ đếm/instance. Giới hạn tổng envelope vẫn được ưu tiên.
-- Registry: 512 máy/checkpoint, 128 session nghỉ gần nhất/máy và timestamp cao nhất để chống phát lại session cũ.
+- Registry: tối đa 512 máy, sequence hiện tại và 256 session nghỉ gần nhất/máy trong bộ nhớ. Không dùng đồng hồ Slave làm điều kiện chấp nhận session mới; giới hạn lọc replay được mô tả trong COMMUNICATION.md.
 - Hàng đợi callback DDS: 256 snapshot, bỏ bản cũ khi quá tải và công khai bộ đếm bỏ. DDS Reader vẫn có history giới hạn riêng.
-- SQLite: 4096 sự kiện chờ; trạng thái cảnh báo giới hạn 8192; giao diện giữ 500 sự kiện mới nhất. Khi không nhận thêm được chuyển đổi, báo lỗi và thử lại nếu điều kiện được đánh giá tiếp.
+- SQLite: 4096 sự kiện chờ; trạng thái cảnh báo giới hạn 8192; ban đầu tải 500 sự kiện, có tải thêm lịch sử. Khi không nhận thêm được chuyển đổi, báo lỗi và thử lại nếu điều kiện được đánh giá tiếp.
 - DdsBridge: 4096 dòng thực thể, tối đa 64 quan hệ Reader/Writer, topology tối đa 8192 dòng. Mặc định hiển thị 256 mẫu trên cửa sổ 120 giây. Backend có thể cấp phát nhiều mẫu thô trước khi cắt giới hạn hiển thị; chưa có bảo đảm bộ nhớ cứng cho mọi mật độ thống kê.
 - CPU history giữ 120 điểm. Marker thời gian nhận và timeout dùng đồng hồ monotonic của Master.
 

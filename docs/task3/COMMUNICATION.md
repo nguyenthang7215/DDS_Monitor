@@ -1,4 +1,4 @@
-# Giao tiếp telemetry và xác thực
+# Giao tiếp telemetry và kiểm tra bản tin
 
 Agent dùng Fast DDS, Topic Task3/HostTelemetry/v1 trên Domain 42 mặc định, tách khỏi Domain thống kê ứng dụng (mặc định 0). Kiểu task3::TelemetryEnvelopeV1 là chuỗi CDR v1 có giới hạn theo task3/Telemetry.idl.
 
@@ -14,10 +14,10 @@ Callback DDS không trực tiếp cập nhật Registry hoặc QML. Hàng đợi
 
 Master kiểm tra JSON/schema, kích thước, định danh, miền số, trạng thái, số instance/GUID/counter và sequence thập phân. Session/sequence trong bộ nhớ loại bản tin trùng hoặc cũ trong khi Master đang chạy. Bản tin sai không cập nhật last_seen.
 
-Trong cùng session, sequence phải tăng. Session đã nghỉ bị từ chối. Session mới phải có timestamp lớn hơn timestamp cao nhất đã nhận của máy, kể cả sau timeout hoặc Master restart. Trong cùng session, đồng hồ có thể lùi nhưng sequence vẫn bảo vệ thứ tự. Nếu đồng hồ Agent bị lùi rồi Agent restart, session mới sẽ bị từ chối cho đến khi timestamp vượt checkpoint; cần xử lý nguồn thời gian và dữ liệu checkpoint có kiểm soát.
+Trong cùng session, sequence phải tăng. Registry giữ tối đa 256 session đã nghỉ gần nhất mỗi máy và từ chối bản tin từ các session này, kể cả khi sequence hoặc timestamp lớn hơn. Session chưa từng thấy được tiếp nhận nếu schema/sequence hợp lệ; đồng hồ Slave lùi không cản Agent restart và Recovery. Timeout/Last Seen dùng thời điểm nhận tại Master, không dùng timestamp của Slave để quyết định Online.
 
-Checkpoint được lưu trong SQLite cùng transaction metadata. Worker gộp cập nhật khoảng 100 ms; dừng bình thường sẽ flush. Crash/mất điện có thể để lại một khoảng chưa được lưu. Khi database không đọc/khởi tạo được, Master từ chối telemetry thay vì coi checkpoint rỗng là an toàn; sửa database rồi khởi động lại. Trạng thái DDS qua Backend vẫn có thể được quan sát.
+Không còn HMAC/TASK3_KEY hoặc checkpoint replay lưu bền. SQLite chỉ lưu lịch sử/trạng thái cảnh báo và metadata migration. Database lỗi không chặn telemetry nhưng không bảo đảm lưu sự kiện; giao diện hiển thị lỗi Event database. Dữ liệu checkpoint cũ trong database, nếu có, không bị xóa và không còn được sử dụng.
 
-128 session nghỉ gần nhất được giữ cùng timestamp cao nhất; session cũ bị loại khỏi danh sách vẫn không vượt được điều kiện timestamp. Registry/checkpoint tối đa 512 máy.
+Registry tối đa 512 máy. Bộ nhớ session bị xóa khi Master restart; session đã ra ngoài cửa sổ 256 hoặc chưa từng được Master quan sát không thể phân biệt chắc chắn với session mới khi đồng hồ có thể lùi. Đây là lọc bản tin cũ/trùng trong mạng tin cậy, không phải cơ chế xác thực hay chống replay bảo mật.
 
-Shared key không phân quyền từng máy: thành viên có khóa có thể giả danh nhau. File runtime identity cũng dựa vào quyền truy cập cục bộ. Với mạng không tin cậy, cần DDS Security và chứng thực riêng từng máy; chưa tích hợp hoặc xác minh cấu hình đó trong phiên này.
+Agent/Master không yêu cầu shared key. File runtime identity dựa vào quyền truy cập cục bộ. Chỉ dùng trên mạng DDS tin cậy; DDS Security/chứng thực cho mạng không tin cậy chưa nằm trong phạm vi đã kiểm chứng.

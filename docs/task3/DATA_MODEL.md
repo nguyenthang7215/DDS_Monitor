@@ -32,8 +32,8 @@ Dữ liệu DDS có id, kind, GUID, metadata máy/tiến trình, Participant cha
 
 flows chứa Writer/Reader ID, máy và ứng dụng hai đầu, Topic, match_state, confirmed, flow_state và phép đo. Chỉ confirmed=true mới tạo mũi tên; quan hệ Backend hoặc phép đo lịch sử không tự xác nhận matching hiện tại.
 
-## Sự kiện và checkpoint
+## Sự kiện và trạng thái trong bộ nhớ
 
 Mỗi chuyển đổi Active/Recovered có rule_id, alert_id, kind, source, severity, message, triggered_ms, recovered_ms và time. Cùng trạng thái không tạo sự kiện lặp.
 
-SQLite giữ bảng events theo schema cũ, thêm alert_state và metadata. Checkpoint lưu session hiện tại, sequence cao nhất, timestamp cao nhất và tối đa 128 session nghỉ/máy. Việc lưu checkpoint được gộp theo chu kỳ worker; flush bình thường trước khi thoát.
+SQLite giữ bảng events theo schema cũ, alert_state và metadata migration. Không còn ghi/đọc checkpoint replay. Session hiện tại, sequence và tối đa 256 session đã nghỉ/máy chỉ nằm trong Registry của Master đang chạy; chúng không được phục hồi từ SQLite. Các hàng metadata cũ không bị xóa. Timestamp của Slave vẫn có trong schema nhưng không quyết định thứ tự giữa các session.

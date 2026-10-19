@@ -70,6 +70,10 @@ void installDashboard(Engine& engine) {
                     {"selection_retained", root->property("task3SelectionRetained")},
                     {"dds_workspace_count", root->findChildren<QObject*>("ddsOriginalWorkspace").size()},
                     {"title", root->property("title")}};
+                if (auto* statusLabel = root->findChild<QObject*>("monitorStatusLabel")) {
+                    ui.insert("status_text", statusLabel->property("text"));
+                    ui.insert("status_visible", statusLabel->property("visible"));
+                }
                 if (auto* network = root->findChild<QObject*>("hostNetworkMetrics")) {
                     ui.insert("network_view", QVariantMap{{"width", network->property("width")},
                         {"height", network->property("height")}, {"count", network->property("count")},

@@ -1,5 +1,9 @@
 # Checkpoint để tiếp tục phát triển
 
+## Final Fix — 19/10/2026
+
+Ba P1 đã được tái hiện rồi sửa: nhãn QML giữ lỗi database/dropped telemetry, session restart không bị chặn do clock rollback, cảnh báo Active không còn gắn Verified khi thiếu bằng chứng. Debug/Release + CTest 1/1 mỗi bản, regression P1, local 14/14, continuation 15/15 và UI 17/17 PASS; Agent standalone build/`--once` PASS trên Linux. Build đang dùng: `.task3-deps/task3-builds/20261016T085922Z-251510/`; wrapper lấy build từ LATEST. Xem [FINAL_FIX_RESULTS.md](FINAL_FIX_RESULTS.md). Các kết quả Publisher 30 chu kỳ/Subscriber 6 kiểm tra bên dưới là lịch sử, không chạy lại trong đợt này. Chưa commit/push; Windows/NTP liên máy vẫn PENDING_EXTERNAL_TEST.
+
 ## Source of truth sau tích hợp
 
 Repo chính: `/home/dev/DDS-Monitor` (branch `main`, upstream trước tích hợp `94bbd6d`). Repo implementation trong Downloads được giữ nguyên làm backup; không còn là runtime/build root. Checkpoint trước tích hợp gồm Git status/diff/log và bản sao docs: `.task3-migration-checkpoints/20261016-pre-integration/`.
@@ -12,13 +16,13 @@ Build từ root bằng `bash task3/scripts/build_task3_patched.sh --jobs 4`; ch�
 
 **READY_FOR_MANUAL_LINUX_TESTING** là kết luận lịch sử của build trong implementation backup. Backend source/patch/library hashes nêu trên vẫn được giữ; kết quả và build root hiện hành của repo chính được ghi ở mục “Source of truth sau tích hợp” phía trên. `/home/dev/dds-deps/install` vẫn là bản chưa vá.
 
-Build bằng `bash task3/scripts/build_task3_patched.sh --jobs 4`; chạy bằng `bash task3/scripts/run_master_patched.sh` và `bash task3/scripts/run_linux_agent_patched.sh`. Xem `docs/PRE_TEST_READINESS.md` cho ma trận kết quả và hướng dẫn người dùng. Windows/NTP liên máy/Linux–Windows vẫn PENDING_EXTERNAL_TEST.
+Build bằng `bash task3/scripts/build_task3_patched.sh --jobs 4`; chạy bằng `bash task3/scripts/run_master_patched.sh` và `bash task3/scripts/run_linux_agent_patched.sh`. Xem `docs/task3/PRE_TEST_READINESS.md` cho ma trận kết quả và hướng dẫn người dùng. Windows/NTP liên máy/Linux–Windows vẫn PENDING_EXTERNAL_TEST.
 
 Lịch sử checkpoint `3881967` và `52bbdea` thuộc bản implementation backup. Mã để phát triển, build và chạy hiện nằm trong `/home/dev/DDS-Monitor`; bản backup được giữ nguyên. Không dùng `git reset --hard` hoặc `git clean`.
 
 ## Đã thực hiện
 
-RuntimeIdentity manifest theo PID/instance/GUID; nhiều process/Participant; bộ đếm write; FlowModel/ConnectionList freshness; một Main Window; raw Dynamic Chart snapshot; worker SQLite/retry/retention/migration; debounce/cooldown/hysteresis; checkpoint replay; queue DDS giới hạn; shutdown Qt và build Windows cấu hình prefix.
+RuntimeIdentity manifest theo PID/instance/GUID; nhiều process/Participant; bộ đếm write; FlowModel/ConnectionList freshness; một Main Window; raw Dynamic Chart snapshot; worker SQLite/retry/retention/migration; debounce/cooldown/hysteresis; session/sequence trong bộ nhớ; queue DDS giới hạn; shutdown Qt và build Windows cấu hình prefix.
 
 Binary Linux trong lần kiểm chứng của implementation backup (lịch sử):
 - `.task3-deps/task3-builds/20261016T054514Z-2/debug/dds_monitor`
@@ -26,7 +30,7 @@ Binary Linux trong lần kiểm chứng của implementation backup (lịch sử
 - Agent và probe cùng nằm trong `debug/task3/` hoặc `release/task3/`.
 - Build script đặt đường dẫn Release gần nhất trong `.task3-deps/task3-builds/LATEST`.
 
-Đường dẫn dependency Linux: Qt `/home/dev/Qt/6.7.2/gcc_64`, Fast DDS/Fast CDR `/home/dev/dds-deps/install`, Statistics Backend đã vá `.task3-deps/fastdds-statistics-backend-2.5.0-patched`. Wrapper đặt Backend vá trước trong `LD_LIBRARY_PATH`, xác minh `ldd` và `/proc/<pid>/maps`. Không ghi khóa triển khai vào source.
+Đường dẫn dependency Linux: Qt `/home/dev/Qt/6.7.2/gcc_64`, Fast DDS/Fast CDR `/home/dev/dds-deps/install`, Statistics Backend đã vá `.task3-deps/fastdds-statistics-backend-2.5.0-patched`. Wrapper đặt Backend vá trước trong `LD_LIBRARY_PATH`, xác minh `ldd` và `/proc/<pid>/maps`. Master/Agent không cần shared key.
 
 ## Kiểm tra gần nhất
 
@@ -42,4 +46,4 @@ Các lệnh đầy đủ nằm trong BUILD_AND_RUN.md. Test DDS cần socket; sa
 4. Đo DDS mật độ cao: Backend get_data(raw) có thể cấp phát nhiều mẫu trước display cap. Đo migration DB rất lớn và chạy dài theo quy mô/thời gian do người dùng xác định.
 5. Rà soát UX trên cửa sổ thật, service lifecycle thật trong môi trường test được cấp quyền và bookkeeping disposal upstream.
 
-Checkpoint replay lưu gộp mỗi khoảng 100 ms, có flush normal shutdown; crash có khoảng chưa commit. Session mới phải vượt timestamp cao nhất đã lưu. DB hỏng thì telemetry fail closed. Đừng bỏ các bảo vệ này để làm test PASS.
+Không còn HMAC/TASK3_KEY hoặc checkpoint replay SQLite. Trong cùng session, sequence phải tăng; Master nhớ 256 session nghỉ gần nhất/máy và từ chối bản tin từ chúng. Session mới không phụ thuộc timestamp tăng nên Agent restart vẫn phục hồi khi đồng hồ lùi. Phạm vi lọc này chỉ trong bộ nhớ và mạng tin cậy, xem COMMUNICATION.md. Event History và trạng thái cảnh báo vẫn lưu SQLite; database hỏng không chặn telemetry nhưng cần hiển thị lỗi lưu trữ.
