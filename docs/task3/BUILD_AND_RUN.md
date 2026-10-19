@@ -32,7 +32,7 @@ cd /home/dev/DDS-Monitor
 bash task3/scripts/run_master_patched.sh
 ```
 
-Wrapper chọn Release từ build gần nhất, đưa Backend vá lên đầu `LD_LIBRARY_PATH`, xác minh `ldd` và đợi thấy library đúng trong `/proc/<pid>/maps`. Khi được hỏi, nhập khóa chia sẻ tối thiểu 16 byte. Prompt không hiển thị ký tự; không gõ khóa trực tiếp vào lệnh shell, không commit khóa.
+Wrapper chọn Release từ build gần nhất, đưa Backend vá lên đầu `LD_LIBRARY_PATH`, xác minh `ldd` và đợi thấy library đúng trong `/proc/<pid>/maps`. Master và Agent không dùng HMAC/TASK3_KEY; không có prompt nhập khóa.
 
 ## Khởi động Linux Agent
 
@@ -47,7 +47,7 @@ Không cần chia sẻ khóa giữa các terminal. Agent mặc định dùng `ta
 
 ## Kiểm tra Host, Offline và Recovery
 
-Trong Master, chọn Host `linux-slave-a`, kiểm tra CPU, RAM, Disk, Network, ứng dụng và Last Seen. `Unknown`/`Stale` không đồng nghĩa với trạng thái hiện tại. Dừng Agent bằng `Ctrl+C`, giữ Master chạy và chờ quá `TASK3_TIMEOUT_MS` mặc định 5000 ms. Xác nhận Host Offline và xem Alerts/Event History. Chạy lại script Agent trong Terminal 2, nhập cùng khóa và xác nhận Host Online/Recovered.
+Trong Master, chọn Host `linux-slave-a`, kiểm tra CPU, RAM, Disk, Network, ứng dụng và Last Seen. `Unknown`/`Stale` không đồng nghĩa với trạng thái hiện tại. Dừng Agent bằng `Ctrl+C`, giữ Master chạy và chờ quá `TASK3_TIMEOUT_MS` mặc định 5000 ms. Xác nhận Host Offline và xem Alerts/Event History. Chạy lại script Agent trong Terminal 2, không cần khóa, và xác nhận Host Online/Recovered.
 
 ## Publisher, Subscriber và DDS Statistics
 
@@ -74,6 +74,8 @@ Trong Master mở `DDS entities & data flow` và DDS nâng cao để xem Discove
 Để kiểm tra Writer im lặng, GUID mapping và No Data có instrumentation, dùng `task3/config/runtime-agent.json` và `task3_probe` theo ví dụ trong `PRE_TEST_READINESS.md` hoặc chạy continuation integration.
 
 ## Shutdown và SQLite
+
+SQLite chỉ lưu lịch sử/trạng thái cảnh báo; không còn replay checkpoint lưu bền. Khi database không ghi được, telemetry vẫn được tiếp nhận nhưng không thể bảo đảm lưu sự kiện. Thanh trạng thái và tooltip hiển thị lỗi Event database hoặc dropped telemetry; không xem các sự kiện đang hiện trong bộ nhớ là bằng chứng chúng đã được lưu thành công.
 
 Dừng Publisher/Subscriber trước, sau đó Agent và Master bằng `Ctrl+C`. DB mặc định của Master runner ở `.task3-runtime/manual-master/events.sqlite`. Kiểm tra integrity sau khi Master thoát:
 

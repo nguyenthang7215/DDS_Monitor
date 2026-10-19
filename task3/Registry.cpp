@@ -22,16 +22,17 @@ bool Registry::ingest(const QJsonObject& s, const QString& address, qint64 mono,
     auto it = hosts_.find(id);
     if (it != hosts_.end()) {
         if (session == it->sessionId && seq <= it->sequence) { error = "duplicate/out-of-order"; return false; }
-        if (session != it->sessionId) {
-            if (!it->sessionId.isEmpty() && s["timestamp_ms"].toDouble() <= it->maximumTimestamp) {
-                error = "older session"; return false;
-            }
+        if (session != it->sessionId && it->retiredSessions.contains(session)) {
+            error = "retired session"; return false;
         }
     }
     auto& h = hosts_[id];
+    if (!h.sessionId.isEmpty() && session != h.sessionId) {
+        h.retiredSessions.append(h.sessionId);
+        if (h.retiredSessions.size() > 256) h.retiredSessions.removeFirst();
+    }
     h.snapshot = s; h.address = address; h.seenMono = mono; h.seenWall = wall;
     h.sessionId = session; h.sequence = seq; h.online = true;
-    h.maximumTimestamp = qMax(h.maximumTimestamp, qint64(s["timestamp_ms"].toDouble()));
     return true;
 }
 void Registry::expire(qint64 now, qint64 timeout) {

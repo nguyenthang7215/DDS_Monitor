@@ -1,5 +1,7 @@
 # Kế hoạch tiếp nối và checkpoint
 
+Cơ chế trong các mốc lịch sử bên dưới không phải hướng dẫn vận hành hiện hành: HMAC/TASK3_KEY và replay checkpoint SQLite đã được loại bỏ. Source hiện giữ session/sequence trong bộ nhớ và Event History trong SQLite; xem COMMUNICATION.md và BUILD_AND_RUN.md.
+
 ## Trạng thái hiện tại sau khi tích hợp
 
 Repository nguồn chính thức hiện là `/home/dev/DDS-Monitor`; mã Task 3, CMake, script, cấu hình, kiểm thử, patch và tài liệu đã được tích hợp tại đó. Tài liệu này được giữ lại từ workspace triển khai trước để bảo toàn lịch sử kế hoạch, không còn mô tả vị trí source hiện hành. Chi tiết trạng thái và kết quả xác minh trên repo chính xem `IMPLEMENTATION_STATUS.md`, `TEST_RESULTS.md` và `PRE_TEST_READINESS.md`.

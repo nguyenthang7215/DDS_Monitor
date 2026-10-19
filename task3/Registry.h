@@ -10,8 +10,8 @@ struct Host {
     QString address;
     qint64 seenMono = 0, seenWall = 0;
     quint64 sequence = 0;
-    qint64 maximumTimestamp = 0;
     QString sessionId;
+    QStringList retiredSessions; // Bounded in-memory protection, not persistent authentication.
     bool online = true;
 };
 class Registry {

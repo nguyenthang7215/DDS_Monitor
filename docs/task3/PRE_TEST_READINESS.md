@@ -8,6 +8,8 @@ Kết luận hiện tại: **MAIN_PROJECT_READY_FOR_MANUAL_LINUX_TESTING**. Đâ
 
 ## Kết luận
 
+Cập nhật Final Fix 19/10/2026: ba P1 và các chỉ dẫn key/checkpoint đã được sửa, regression Linux PASS. Bằng chứng mới và phạm vi đủ điều kiện tạo commit tại [FINAL_FIX_RESULTS.md](FINAL_FIX_RESULTS.md); các bảng ngày 16-10 bên dưới là lịch sử. Không suy ra Windows/NTP liên máy PASS.
+
 **READY_FOR_MANUAL_LINUX_TESTING.** Patch race condition của Fast DDS Statistics Backend 2.5.0 đã được tái tạo từ source sạch vào prefix bền vững trong workspace. Master Debug/Release mới, CTest, Local Integration 14/14, Continuation Integration 15/15, Subscriber restart 6/6 và Publisher stop/restart 30/30 đều PASS trên artifact mới. `ldd`, cấu hình CMake và `/proc/<pid>/maps` xác nhận Master thực sự nạp thư viện đã vá. SQLite integrity, QML và shutdown sạch cũng PASS.
 
 Kết luận này chỉ áp dụng cho kiểm thử thủ công trên Linux với các script `task3/scripts/run_*_patched.sh`. **Không** áp dụng cho `/home/dev/dds-deps/install`, vốn vẫn giữ Backend chưa vá, hoặc cho Windows, NTP liên máy và Linux–Windows vật lý.
@@ -62,16 +64,16 @@ cd /home/dev/DDS-Monitor
 bash task3/scripts/run_master_patched.sh
 ```
 
-Mở Terminal 2 và chạy Linux Agent. Nhập lại cùng khóa tại prompt ẩn:
+Mở Terminal 2 và chạy Linux Agent, không có prompt nhập khóa:
 
 ```bash
 cd /home/dev/DDS-Monitor
 bash task3/scripts/run_linux_agent_patched.sh
 ```
 
-Agent dùng `task3/config/linux-agent.json`. Trong Master, chọn Host để xem CPU/RAM/Disk/Network, Applications và Last Seen. Nhấn `Ctrl+C` ở Terminal 2; đợi quá timeout 5 giây để kiểm tra Offline/alert. Chạy lại script Agent và nhập cùng khóa để kiểm tra Online/Recovery và lịch sử sự kiện.
+Agent dùng `task3/config/linux-agent.json`. Trong Master, chọn Host để xem CPU/RAM/Disk/Network, Applications và Last Seen. Nhấn `Ctrl+C` ở Terminal 2; đợi quá timeout 5 giây để kiểm tra Offline/alert. Chạy lại script Agent để kiểm tra Online/Recovery và lịch sử sự kiện; không cần TASK3_KEY.
 
-Để quan sát DDS Statistics, mở Terminal 3 và 4, đặt cùng đường dẫn runtime đã vá ở đầu `LD_LIBRARY_PATH`, bật Statistics rồi chạy Publisher/Subscriber. Các lệnh không chứa khóa triển khai:
+Để quan sát DDS Statistics, mở Terminal 3 và 4, đặt cùng đường dẫn runtime đã vá ở đầu `LD_LIBRARY_PATH`, bật Statistics rồi chạy Publisher/Subscriber:
 
 ```bash
 cd /home/dev/DDS-Monitor

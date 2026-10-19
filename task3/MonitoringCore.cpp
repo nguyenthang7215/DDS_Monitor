@@ -28,8 +28,17 @@ QVariantList MonitoringCore::events() const {
                 row["verification"] = "Not verified — awaiting Agent telemetry";
             else if (!host->online)
                 row["verification"] = "Not verified — Agent Offline";
-            else
-                row["verification"] = "Verified by current Agent telemetry";
+            else {
+                const auto applicationId = row["rule_id"].toString().section('/', 1, 1);
+                QJsonObject application;
+                for (const auto& entry : host->snapshot["applications"].toArray()) {
+                    const auto candidate = entry.toObject();
+                    if (candidate["application_id"] == applicationId) { application = candidate; break; }
+                }
+                const auto state = application[row["kind"] == "process_stopped" ? "state" : "service_state"].toString();
+                row["verification"] = state == "stopped" || state == "failed" ?
+                    "Verified by current Agent telemetry" : "Not verified — current application/service evidence unavailable";
+            }
             value = row;
         }
     }
