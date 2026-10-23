@@ -1,0 +1,12 @@
+[
+  {
+    "pid": 19112,
+    "library": "/home/dev/DDS-Monitor/.task3-deps/fastdds-statistics-backend-2.5.0-patched/lib/libfastdds_statistics_backend.so.2.5.0",
+    "verified": true
+  },
+  {
+    "pid": 19464,
+    "library": "/home/dev/DDS-Monitor/.task3-deps/fastdds-statistics-backend-2.5.0-patched/lib/libfastdds_statistics_backend.so.2.5.0",
+    "verified": true
+  }
+]

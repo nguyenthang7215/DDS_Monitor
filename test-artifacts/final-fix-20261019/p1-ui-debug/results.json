@@ -1,0 +1,5 @@
+{
+  "corrupt_database_reproduced": "PASS",
+  "database_error_visible_on_real_qml_label": "PASS",
+  "master_shutdown": "PASS"
+}

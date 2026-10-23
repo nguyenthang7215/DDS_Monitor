@@ -1,0 +1,4317 @@
+{
+  "entities": [
+    {
+      "alive": true,
+      "details": "{\n  \"alias\": \"0\",\n  \"alive\": true,\n  \"discovery_source\": \"unknown\",\n  \"domain_id\": 0,\n  \"id\": 0,\n  \"kind\": \"domain\",\n  \"metatraffic\": false,\n  \"name\": \"0\",\n  \"status\": \"OK\"\n}",
+      "guid": "",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "0",
+      "kind": "Domain",
+      "mapping_state": "unknown",
+      "match_state": "not inferred from discovery",
+      "name": "0",
+      "pid": "",
+      "qos": ""
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Reader\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1\",\n  \"id\": 1,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7413\",\n    \"UDPv4:[127.0.0.1]:7412\",\n    \"UDPv4:[127.0.0.1]:7413\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Reader\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20068\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7412\",\n                  \"UDPv4:[172.20.10.2/28]:7412\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7412\",\n          \"UDPv4:[172.20.10.2]:7412\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7413\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7413\",\n                \"UDPv4:[172.20.10.2/28]:7413\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7413\",\n        \"UDPv4:[172.18.0.1]:7413\",\n        \"UDPv4:[172.20.10.2]:7413\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 0,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "1",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Reader",
+      "network_latency": [],
+      "pid": "20068",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20068\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7412\",\n                \"UDPv4:[172.20.10.2/28]:7412\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7412\",\n        \"UDPv4:[172.20.10.2]:7412\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7413\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7413\",\n              \"UDPv4:[172.20.10.2/28]:7413\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7413\",\n      \"UDPv4:[172.18.0.1]:7413\",\n      \"UDPv4:[172.20.10.2]:7413\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 0,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {}
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Reader\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1\",\n  \"id\": 9,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7417\",\n    \"UDPv4:[127.0.0.1]:7416\",\n    \"UDPv4:[127.0.0.1]:7417\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Reader\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20068\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7416\",\n                  \"UDPv4:[172.20.10.2/28]:7416\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7416\",\n          \"UDPv4:[172.20.10.2]:7416\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7417\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7417\",\n                \"UDPv4:[172.20.10.2/28]:7417\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7417\",\n        \"UDPv4:[172.18.0.1]:7417\",\n        \"UDPv4:[172.20.10.2]:7417\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 1,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "9",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Reader",
+      "network_latency": [],
+      "pid": "20068",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20068\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7416\",\n                \"UDPv4:[172.20.10.2/28]:7416\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7416\",\n        \"UDPv4:[172.20.10.2]:7416\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7417\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7417\",\n              \"UDPv4:[172.20.10.2/28]:7417\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7417\",\n      \"UDPv4:[172.18.0.1]:7417\",\n      \"UDPv4:[172.20.10.2]:7417\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 1,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {}
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Writer\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1\",\n  \"id\": 13,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7415\",\n    \"UDPv4:[127.0.0.1]:7414\",\n    \"UDPv4:[127.0.0.1]:7415\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Writer\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20069\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7414\",\n                  \"UDPv4:[172.20.10.2/28]:7414\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7414\",\n          \"UDPv4:[172.20.10.2]:7414\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7415\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7415\",\n                \"UDPv4:[172.20.10.2/28]:7415\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7415\",\n        \"UDPv4:[172.18.0.1]:7415\",\n        \"UDPv4:[172.20.10.2]:7415\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 1,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "13",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Writer",
+      "network_latency": [],
+      "pid": "20069",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20069\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7414\",\n                \"UDPv4:[172.20.10.2/28]:7414\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7414\",\n        \"UDPv4:[172.20.10.2]:7414\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7415\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7415\",\n              \"UDPv4:[172.20.10.2/28]:7415\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7415\",\n      \"UDPv4:[172.18.0.1]:7415\",\n      \"UDPv4:[172.20.10.2]:7415\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 1,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "261",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "261"
+      }
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Writer\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1\",\n  \"id\": 18,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7411\",\n    \"UDPv4:[127.0.0.1]:7410\",\n    \"UDPv4:[127.0.0.1]:7411\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Writer\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20069\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7410\",\n                  \"UDPv4:[172.20.10.2/28]:7410\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7410\",\n          \"UDPv4:[172.20.10.2]:7410\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7411\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7411\",\n                \"UDPv4:[172.20.10.2/28]:7411\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7411\",\n        \"UDPv4:[172.18.0.1]:7411\",\n        \"UDPv4:[172.20.10.2]:7411\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 0,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "18",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Writer",
+      "network_latency": [],
+      "pid": "20069",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20069\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7410\",\n                \"UDPv4:[172.20.10.2/28]:7410\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7410\",\n        \"UDPv4:[172.20.10.2]:7410\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7411\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7411\",\n              \"UDPv4:[172.20.10.2/28]:7411\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7411\",\n      \"UDPv4:[172.18.0.1]:7411\",\n      \"UDPv4:[172.20.10.2]:7411\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 0,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "261",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "261"
+      }
+    },
+    {
+      "alive": true,
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe\",\n  \"alive\": true,\n  \"data_type\": \"task3::TelemetryEnvelopeV1\",\n  \"discovery_source\": \"unknown\",\n  \"id\": 22,\n  \"kind\": \"topic\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe\",\n  \"status\": \"OK\"\n}",
+      "guid": "",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "22",
+      "kind": "Topic",
+      "mapping_state": "unknown",
+      "match_state": "not inferred from discovery",
+      "name": "Task3/RuntimeProbe",
+      "pid": "",
+      "qos": ""
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "connection_count": 2,
+      "connection_guids": [
+        "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.4",
+        "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.4"
+      ],
+      "connection_status_timestamp_ms": 1792374499266,
+      "data_state": "Active (runtime write counter)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3\",\n  \"id\": 52,\n  \"kind\": \"datawriter\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"durability_service\": {\n      \"history_depth\": 1,\n      \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n      \"max_instances\": -1,\n      \"max_samples\": -1,\n      \"max_samples_per_instance\": -1,\n      \"service_cleanup_delay\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"endpoint_qos\": {\n      \"entity_id\": -1,\n      \"external_unicast_locators\": [],\n      \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"multicast_locators\": [],\n      \"remote_locators\": [],\n      \"unicast_locators\": [],\n      \"user_defined_id\": -1\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 32,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"ownership_strength\": {\n      \"value\": 0\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"publish_mode\": {\n      \"kind\": \"SYNCHRONOUS_PUBLISH_MODE\"\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"resource_limits\": {\n      \"allocated_samples\": 32,\n      \"extra_samples\": 1,\n      \"max_instances\": -1,\n      \"max_samples\": 64,\n      \"max_samples_per_instance\": -1\n    },\n    \"rtps_reliable_writer\": {\n      \"disable_heartbeat_piggyback\": \"false\",\n      \"disable_positive_acks\": {\n        \"duration\": {\n          \"nanoseconds\": 4294967295,\n          \"seconds\": 2147483647\n        },\n        \"enabled\": \"false\"\n      },\n      \"writer_times\": {\n        \"heartbeat_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"initial_heartbeat_delay\": {\n          \"nanoseconds\": 12000000,\n          \"seconds\": 0\n        },\n        \"nack_response_delay\": {\n          \"nanoseconds\": 5000000,\n          \"seconds\": 0\n        },\n        \"nack_supression_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 0\n        }\n      }\n    },\n    \"topic_data\": \"\",\n    \"transport_priority\": 0,\n    \"user_data\": \"\",\n    \"writer_data_lifecycle\": {\n      \"autodispose_unregistered_instances\": \"true\"\n    },\n    \"writer_resource_limits\": {\n      \"matched_subscriber_allocation\": {\n        \"increment\": 1,\n        \"initial\": 0,\n        \"maximum\": 18446744073709551615\n      },\n      \"reader_filters_allocation\": {\n        \"increment\": 1,\n        \"initial\": 0,\n        \"maximum\": 32\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "52",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Writer",
+      "links": [
+        {
+          "latency_timestamp_ms": 1792374544032,
+          "latency_us": 167.588,
+          "reader_id": "24",
+          "relation": "latency measurements available"
+        },
+        {
+          "latency_timestamp_ms": 1792374544032,
+          "latency_us": 169.44,
+          "reader_id": "44",
+          "relation": "latency measurements available"
+        }
+      ],
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374544032,
+      "name": "Task3/RuntimeProbe_0.0.1.3",
+      "participant_ids": [
+        "13"
+      ],
+      "pid": "20069",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"durability_service\": {\n    \"history_depth\": 1,\n    \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n    \"max_instances\": -1,\n    \"max_samples\": -1,\n    \"max_samples_per_instance\": -1,\n    \"service_cleanup_delay\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"endpoint_qos\": {\n    \"entity_id\": -1,\n    \"external_unicast_locators\": [],\n    \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"multicast_locators\": [],\n    \"remote_locators\": [],\n    \"unicast_locators\": [],\n    \"user_defined_id\": -1\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 32,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"ownership_strength\": {\n    \"value\": 0\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"publish_mode\": {\n    \"kind\": \"SYNCHRONOUS_PUBLISH_MODE\"\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"resource_limits\": {\n    \"allocated_samples\": 32,\n    \"extra_samples\": 1,\n    \"max_instances\": -1,\n    \"max_samples\": 64,\n    \"max_samples_per_instance\": -1\n  },\n  \"rtps_reliable_writer\": {\n    \"disable_heartbeat_piggyback\": \"false\",\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"writer_times\": {\n      \"heartbeat_period\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 3\n      },\n      \"initial_heartbeat_delay\": {\n        \"nanoseconds\": 12000000,\n        \"seconds\": 0\n      },\n      \"nack_response_delay\": {\n        \"nanoseconds\": 5000000,\n        \"seconds\": 0\n      },\n      \"nack_supression_duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    }\n  },\n  \"topic_data\": \"\",\n  \"transport_priority\": 0,\n  \"user_data\": \"\",\n  \"writer_data_lifecycle\": {\n    \"autodispose_unregistered_instances\": \"true\"\n  },\n  \"writer_resource_limits\": {\n    \"matched_subscriber_allocation\": {\n      \"increment\": 1,\n      \"initial\": 0,\n      \"maximum\": 18446744073709551615\n    },\n    \"reader_filters_allocation\": {\n      \"increment\": 1,\n      \"initial\": 0,\n      \"maximum\": 32\n    }\n  }\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495766,
+          "value": 326676.9375
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 184.50743103027344
+        },
+        {
+          "timestamp_ms": 1792374497231,
+          "value": 190.82797241210938
+        },
+        {
+          "timestamp_ms": 1792374497431,
+          "value": 195.11045837402344
+        },
+        {
+          "timestamp_ms": 1792374497631,
+          "value": 200.2845458984375
+        },
+        {
+          "timestamp_ms": 1792374497832,
+          "value": 199.02854919433594
+        },
+        {
+          "timestamp_ms": 1792374498032,
+          "value": 200.2632293701172
+        },
+        {
+          "timestamp_ms": 1792374498231,
+          "value": 200.3611297607422
+        },
+        {
+          "timestamp_ms": 1792374498431,
+          "value": 200.04855346679688
+        },
+        {
+          "timestamp_ms": 1792374498632,
+          "value": 199.6027374267578
+        },
+        {
+          "timestamp_ms": 1792374498832,
+          "value": 199.7953643798828
+        },
+        {
+          "timestamp_ms": 1792374499031,
+          "value": 200.52989196777344
+        },
+        {
+          "timestamp_ms": 1792374500231,
+          "value": 199.9447021484375
+        },
+        {
+          "timestamp_ms": 1792374500432,
+          "value": 199.16343688964844
+        },
+        {
+          "timestamp_ms": 1792374500631,
+          "value": 200.70797729492188
+        },
+        {
+          "timestamp_ms": 1792374500832,
+          "value": 199.61288452148438
+        },
+        {
+          "timestamp_ms": 1792374501031,
+          "value": 200.5005340576172
+        },
+        {
+          "timestamp_ms": 1792374501232,
+          "value": 198.93389892578125
+        },
+        {
+          "timestamp_ms": 1792374501431,
+          "value": 200.99905395507812
+        },
+        {
+          "timestamp_ms": 1792374501631,
+          "value": 200.1730499267578
+        },
+        {
+          "timestamp_ms": 1792374501831,
+          "value": 199.92857360839844
+        },
+        {
+          "timestamp_ms": 1792374502031,
+          "value": 199.99200439453125
+        },
+        {
+          "timestamp_ms": 1792374503231,
+          "value": 200.73683166503906
+        },
+        {
+          "timestamp_ms": 1792374503432,
+          "value": 199.2675323486328
+        },
+        {
+          "timestamp_ms": 1792374503631,
+          "value": 200.499755859375
+        },
+        {
+          "timestamp_ms": 1792374503831,
+          "value": 200.05096435546875
+        },
+        {
+          "timestamp_ms": 1792374504032,
+          "value": 199.277099609375
+        },
+        {
+          "timestamp_ms": 1792374504231,
+          "value": 200.5240020751953
+        },
+        {
+          "timestamp_ms": 1792374504431,
+          "value": 199.83058166503906
+        },
+        {
+          "timestamp_ms": 1792374504631,
+          "value": 199.92767333984375
+        },
+        {
+          "timestamp_ms": 1792374504831,
+          "value": 200.636474609375
+        },
+        {
+          "timestamp_ms": 1792374505031,
+          "value": 199.37075805664062
+        },
+        {
+          "timestamp_ms": 1792374506231,
+          "value": 199.94146728515625
+        },
+        {
+          "timestamp_ms": 1792374506431,
+          "value": 200.56961059570312
+        },
+        {
+          "timestamp_ms": 1792374506631,
+          "value": 199.40737915039062
+        },
+        {
+          "timestamp_ms": 1792374506831,
+          "value": 200.40467834472656
+        },
+        {
+          "timestamp_ms": 1792374507031,
+          "value": 199.96200561523438
+        },
+        {
+          "timestamp_ms": 1792374507231,
+          "value": 199.9852752685547
+        },
+        {
+          "timestamp_ms": 1792374507431,
+          "value": 199.94863891601562
+        },
+        {
+          "timestamp_ms": 1792374507632,
+          "value": 199.1573028564453
+        },
+        {
+          "timestamp_ms": 1792374507832,
+          "value": 200.43020629882812
+        },
+        {
+          "timestamp_ms": 1792374508031,
+          "value": 200.21949768066406
+        },
+        {
+          "timestamp_ms": 1792374509231,
+          "value": 200.1221466064453
+        },
+        {
+          "timestamp_ms": 1792374509431,
+          "value": 200.1769561767578
+        },
+        {
+          "timestamp_ms": 1792374509631,
+          "value": 200.08441162109375
+        },
+        {
+          "timestamp_ms": 1792374509832,
+          "value": 199.357177734375
+        },
+        {
+          "timestamp_ms": 1792374510031,
+          "value": 200.11083984375
+        },
+        {
+          "timestamp_ms": 1792374510232,
+          "value": 199.7413787841797
+        },
+        {
+          "timestamp_ms": 1792374510432,
+          "value": 199.41964721679688
+        },
+        {
+          "timestamp_ms": 1792374510631,
+          "value": 201.1232452392578
+        },
+        {
+          "timestamp_ms": 1792374510832,
+          "value": 199.42501831054688
+        },
+        {
+          "timestamp_ms": 1792374511031,
+          "value": 200.465576171875
+        },
+        {
+          "timestamp_ms": 1792374512231,
+          "value": 200.4973602294922
+        },
+        {
+          "timestamp_ms": 1792374512431,
+          "value": 199.73129272460938
+        },
+        {
+          "timestamp_ms": 1792374512631,
+          "value": 199.73007202148438
+        },
+        {
+          "timestamp_ms": 1792374512831,
+          "value": 200.2184600830078
+        },
+        {
+          "timestamp_ms": 1792374513031,
+          "value": 200.21678161621094
+        },
+        {
+          "timestamp_ms": 1792374513232,
+          "value": 199.4941864013672
+        },
+        {
+          "timestamp_ms": 1792374513431,
+          "value": 200.63710021972656
+        },
+        {
+          "timestamp_ms": 1792374513631,
+          "value": 199.71629333496094
+        },
+        {
+          "timestamp_ms": 1792374513832,
+          "value": 199.32229614257812
+        },
+        {
+          "timestamp_ms": 1792374514031,
+          "value": 200.3415069580078
+        },
+        {
+          "timestamp_ms": 1792374515231,
+          "value": 200.40330505371094
+        },
+        {
+          "timestamp_ms": 1792374515431,
+          "value": 199.95155334472656
+        },
+        {
+          "timestamp_ms": 1792374515631,
+          "value": 204.67176818847656
+        },
+        {
+          "timestamp_ms": 1792374515831,
+          "value": 205.1182861328125
+        },
+        {
+          "timestamp_ms": 1792374516032,
+          "value": 204.3836669921875
+        },
+        {
+          "timestamp_ms": 1792374516231,
+          "value": 205.3949737548828
+        },
+        {
+          "timestamp_ms": 1792374516432,
+          "value": 204.6251678466797
+        },
+        {
+          "timestamp_ms": 1792374516632,
+          "value": 204.87020874023438
+        },
+        {
+          "timestamp_ms": 1792374516831,
+          "value": 205.44496154785156
+        },
+        {
+          "timestamp_ms": 1792374517032,
+          "value": 204.93215942382812
+        },
+        {
+          "timestamp_ms": 1792374518232,
+          "value": 204.79205322265625
+        },
+        {
+          "timestamp_ms": 1792374518431,
+          "value": 205.69090270996094
+        },
+        {
+          "timestamp_ms": 1792374518631,
+          "value": 204.97499084472656
+        },
+        {
+          "timestamp_ms": 1792374518831,
+          "value": 204.769287109375
+        },
+        {
+          "timestamp_ms": 1792374519032,
+          "value": 204.48434448242188
+        },
+        {
+          "timestamp_ms": 1792374519231,
+          "value": 206.11599731445312
+        },
+        {
+          "timestamp_ms": 1792374519432,
+          "value": 204.0592498779297
+        },
+        {
+          "timestamp_ms": 1792374519631,
+          "value": 205.57298278808594
+        },
+        {
+          "timestamp_ms": 1792374519832,
+          "value": 204.41464233398438
+        },
+        {
+          "timestamp_ms": 1792374520032,
+          "value": 204.9696502685547
+        },
+        {
+          "timestamp_ms": 1792374521231,
+          "value": 205.52081298828125
+        },
+        {
+          "timestamp_ms": 1792374521432,
+          "value": 204.1543731689453
+        },
+        {
+          "timestamp_ms": 1792374521632,
+          "value": 205.14730834960938
+        },
+        {
+          "timestamp_ms": 1792374521831,
+          "value": 205.3303985595703
+        },
+        {
+          "timestamp_ms": 1792374522031,
+          "value": 204.85043334960938
+        },
+        {
+          "timestamp_ms": 1792374522231,
+          "value": 205.59619140625
+        },
+        {
+          "timestamp_ms": 1792374522432,
+          "value": 204.1750030517578
+        },
+        {
+          "timestamp_ms": 1792374522631,
+          "value": 205.86334228515625
+        },
+        {
+          "timestamp_ms": 1792374522831,
+          "value": 204.9285125732422
+        },
+        {
+          "timestamp_ms": 1792374523031,
+          "value": 204.6468963623047
+        },
+        {
+          "timestamp_ms": 1792374524231,
+          "value": 205.6304168701172
+        },
+        {
+          "timestamp_ms": 1792374524432,
+          "value": 204.2117462158203
+        },
+        {
+          "timestamp_ms": 1792374524631,
+          "value": 205.34658813476562
+        },
+        {
+          "timestamp_ms": 1792374524832,
+          "value": 204.57366943359375
+        },
+        {
+          "timestamp_ms": 1792374525031,
+          "value": 205.34754943847656
+        },
+        {
+          "timestamp_ms": 1792374525231,
+          "value": 205.4783172607422
+        },
+        {
+          "timestamp_ms": 1792374525431,
+          "value": 204.6611328125
+        },
+        {
+          "timestamp_ms": 1792374525631,
+          "value": 205.0130615234375
+        },
+        {
+          "timestamp_ms": 1792374525831,
+          "value": 205.33023071289062
+        },
+        {
+          "timestamp_ms": 1792374526031,
+          "value": 205.0448760986328
+        },
+        {
+          "timestamp_ms": 1792374527231,
+          "value": 207.41378784179688
+        },
+        {
+          "timestamp_ms": 1792374527432,
+          "value": 204.0734100341797
+        },
+        {
+          "timestamp_ms": 1792374527631,
+          "value": 205.38792419433594
+        },
+        {
+          "timestamp_ms": 1792374527832,
+          "value": 204.73008728027344
+        },
+        {
+          "timestamp_ms": 1792374528031,
+          "value": 205.3387451171875
+        },
+        {
+          "timestamp_ms": 1792374528234,
+          "value": 202.7521514892578
+        },
+        {
+          "timestamp_ms": 1792374528431,
+          "value": 207.56930541992188
+        },
+        {
+          "timestamp_ms": 1792374528631,
+          "value": 204.94186401367188
+        },
+        {
+          "timestamp_ms": 1792374528831,
+          "value": 204.80682373046875
+        },
+        {
+          "timestamp_ms": 1792374529032,
+          "value": 204.70608520507812
+        },
+        {
+          "timestamp_ms": 1792374530231,
+          "value": 204.7548370361328
+        },
+        {
+          "timestamp_ms": 1792374530431,
+          "value": 205.30471801757812
+        },
+        {
+          "timestamp_ms": 1792374530631,
+          "value": 204.78460693359375
+        },
+        {
+          "timestamp_ms": 1792374530831,
+          "value": 205.24560546875
+        },
+        {
+          "timestamp_ms": 1792374531031,
+          "value": 204.93801879882812
+        },
+        {
+          "timestamp_ms": 1792374531232,
+          "value": 204.18092346191406
+        },
+        {
+          "timestamp_ms": 1792374531432,
+          "value": 205.29104614257812
+        },
+        {
+          "timestamp_ms": 1792374531631,
+          "value": 205.89378356933594
+        },
+        {
+          "timestamp_ms": 1792374531831,
+          "value": 204.3876953125
+        },
+        {
+          "timestamp_ms": 1792374532031,
+          "value": 205.31163024902344
+        },
+        {
+          "timestamp_ms": 1792374533231,
+          "value": 205.3989715576172
+        },
+        {
+          "timestamp_ms": 1792374533432,
+          "value": 204.37237548828125
+        },
+        {
+          "timestamp_ms": 1792374533631,
+          "value": 205.89541625976562
+        },
+        {
+          "timestamp_ms": 1792374533832,
+          "value": 204.120361328125
+        },
+        {
+          "timestamp_ms": 1792374534031,
+          "value": 205.4859619140625
+        },
+        {
+          "timestamp_ms": 1792374534231,
+          "value": 205.41778564453125
+        },
+        {
+          "timestamp_ms": 1792374534431,
+          "value": 204.51754760742188
+        },
+        {
+          "timestamp_ms": 1792374534631,
+          "value": 205.1441650390625
+        },
+        {
+          "timestamp_ms": 1792374534831,
+          "value": 204.82525634765625
+        },
+        {
+          "timestamp_ms": 1792374535031,
+          "value": 204.972900390625
+        },
+        {
+          "timestamp_ms": 1792374536232,
+          "value": 204.33721923828125
+        },
+        {
+          "timestamp_ms": 1792374536432,
+          "value": 205.1056365966797
+        },
+        {
+          "timestamp_ms": 1792374536631,
+          "value": 205.36871337890625
+        },
+        {
+          "timestamp_ms": 1792374536831,
+          "value": 204.81163024902344
+        },
+        {
+          "timestamp_ms": 1792374537032,
+          "value": 204.44517517089844
+        },
+        {
+          "timestamp_ms": 1792374537231,
+          "value": 205.90975952148438
+        },
+        {
+          "timestamp_ms": 1792374537432,
+          "value": 204.4171600341797
+        },
+        {
+          "timestamp_ms": 1792374537632,
+          "value": 204.8982391357422
+        },
+        {
+          "timestamp_ms": 1792374537831,
+          "value": 205.39566040039062
+        },
+        {
+          "timestamp_ms": 1792374538032,
+          "value": 204.7079315185547
+        },
+        {
+          "timestamp_ms": 1792374539231,
+          "value": 204.89202880859375
+        },
+        {
+          "timestamp_ms": 1792374539431,
+          "value": 204.9464111328125
+        },
+        {
+          "timestamp_ms": 1792374539631,
+          "value": 204.80972290039062
+        },
+        {
+          "timestamp_ms": 1792374539833,
+          "value": 203.7767333984375
+        },
+        {
+          "timestamp_ms": 1792374540031,
+          "value": 206.232421875
+        },
+        {
+          "timestamp_ms": 1792374540231,
+          "value": 205.29820251464844
+        },
+        {
+          "timestamp_ms": 1792374540431,
+          "value": 204.91986083984375
+        },
+        {
+          "timestamp_ms": 1792374540631,
+          "value": 204.9219970703125
+        },
+        {
+          "timestamp_ms": 1792374540832,
+          "value": 204.29901123046875
+        },
+        {
+          "timestamp_ms": 1792374541032,
+          "value": 205.22019958496094
+        },
+        {
+          "timestamp_ms": 1792374542231,
+          "value": 205.1286163330078
+        },
+        {
+          "timestamp_ms": 1792374542431,
+          "value": 205.2194061279297
+        },
+        {
+          "timestamp_ms": 1792374542631,
+          "value": 205.021484375
+        },
+        {
+          "timestamp_ms": 1792374542832,
+          "value": 204.3260040283203
+        },
+        {
+          "timestamp_ms": 1792374543031,
+          "value": 205.22116088867188
+        },
+        {
+          "timestamp_ms": 1792374543232,
+          "value": 204.89010620117188
+        },
+        {
+          "timestamp_ms": 1792374543432,
+          "value": 204.85011291503906
+        },
+        {
+          "timestamp_ms": 1792374543631,
+          "value": 205.8344268798828
+        },
+        {
+          "timestamp_ms": 1792374543832,
+          "value": 204.24598693847656
+        },
+        {
+          "timestamp_ms": 1792374544032,
+          "value": 205.1486358642578
+        }
+      ],
+      "throughput_bps": 205.1486358642578,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 205.1486358642578,
+        "normalized_unit": "B/s",
+        "normalized_value": 205.1486358642578,
+        "raw_unit": "B/s",
+        "raw_value": 205.1486358642578
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "261",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "261"
+      }
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "connection_count": 2,
+      "connection_guids": [
+        "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.4",
+        "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.4"
+      ],
+      "connection_status_timestamp_ms": 1792374499262,
+      "data_state": "Active (runtime write counter)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3\",\n  \"id\": 60,\n  \"kind\": \"datawriter\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"durability_service\": {\n      \"history_depth\": 1,\n      \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n      \"max_instances\": -1,\n      \"max_samples\": -1,\n      \"max_samples_per_instance\": -1,\n      \"service_cleanup_delay\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"endpoint_qos\": {\n      \"entity_id\": -1,\n      \"external_unicast_locators\": [],\n      \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"multicast_locators\": [],\n      \"remote_locators\": [],\n      \"unicast_locators\": [],\n      \"user_defined_id\": -1\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 32,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"ownership_strength\": {\n      \"value\": 0\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"publish_mode\": {\n      \"kind\": \"SYNCHRONOUS_PUBLISH_MODE\"\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"resource_limits\": {\n      \"allocated_samples\": 32,\n      \"extra_samples\": 1,\n      \"max_instances\": -1,\n      \"max_samples\": 64,\n      \"max_samples_per_instance\": -1\n    },\n    \"rtps_reliable_writer\": {\n      \"disable_heartbeat_piggyback\": \"false\",\n      \"disable_positive_acks\": {\n        \"duration\": {\n          \"nanoseconds\": 4294967295,\n          \"seconds\": 2147483647\n        },\n        \"enabled\": \"false\"\n      },\n      \"writer_times\": {\n        \"heartbeat_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"initial_heartbeat_delay\": {\n          \"nanoseconds\": 12000000,\n          \"seconds\": 0\n        },\n        \"nack_response_delay\": {\n          \"nanoseconds\": 5000000,\n          \"seconds\": 0\n        },\n        \"nack_supression_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 0\n        }\n      }\n    },\n    \"topic_data\": \"\",\n    \"transport_priority\": 0,\n    \"user_data\": \"\",\n    \"writer_data_lifecycle\": {\n      \"autodispose_unregistered_instances\": \"true\"\n    },\n    \"writer_resource_limits\": {\n      \"matched_subscriber_allocation\": {\n        \"increment\": 1,\n        \"initial\": 0,\n        \"maximum\": 18446744073709551615\n      },\n      \"reader_filters_allocation\": {\n        \"increment\": 1,\n        \"initial\": 0,\n        \"maximum\": 32\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "60",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Writer",
+      "links": [
+        {
+          "latency_timestamp_ms": 1792374544032,
+          "latency_us": 204.205,
+          "reader_id": "24",
+          "relation": "latency measurements available"
+        },
+        {
+          "latency_timestamp_ms": 1792374544032,
+          "latency_us": 223.248,
+          "reader_id": "44",
+          "relation": "latency measurements available"
+        }
+      ],
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374544031,
+      "name": "Task3/RuntimeProbe_0.0.1.3",
+      "participant_ids": [
+        "18"
+      ],
+      "pid": "20069",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"durability_service\": {\n    \"history_depth\": 1,\n    \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n    \"max_instances\": -1,\n    \"max_samples\": -1,\n    \"max_samples_per_instance\": -1,\n    \"service_cleanup_delay\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"endpoint_qos\": {\n    \"entity_id\": -1,\n    \"external_unicast_locators\": [],\n    \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"multicast_locators\": [],\n    \"remote_locators\": [],\n    \"unicast_locators\": [],\n    \"user_defined_id\": -1\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 32,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"ownership_strength\": {\n    \"value\": 0\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"publish_mode\": {\n    \"kind\": \"SYNCHRONOUS_PUBLISH_MODE\"\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"resource_limits\": {\n    \"allocated_samples\": 32,\n    \"extra_samples\": 1,\n    \"max_instances\": -1,\n    \"max_samples\": 64,\n    \"max_samples_per_instance\": -1\n  },\n  \"rtps_reliable_writer\": {\n    \"disable_heartbeat_piggyback\": \"false\",\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"writer_times\": {\n      \"heartbeat_period\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 3\n      },\n      \"initial_heartbeat_delay\": {\n        \"nanoseconds\": 12000000,\n        \"seconds\": 0\n      },\n      \"nack_response_delay\": {\n        \"nanoseconds\": 5000000,\n        \"seconds\": 0\n      },\n      \"nack_supression_duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    }\n  },\n  \"topic_data\": \"\",\n  \"transport_priority\": 0,\n  \"user_data\": \"\",\n  \"writer_data_lifecycle\": {\n    \"autodispose_unregistered_instances\": \"true\"\n  },\n  \"writer_resource_limits\": {\n    \"matched_subscriber_allocation\": {\n      \"increment\": 1,\n      \"initial\": 0,\n      \"maximum\": 18446744073709551615\n    },\n    \"reader_filters_allocation\": {\n      \"increment\": 1,\n      \"initial\": 0,\n      \"maximum\": 32\n    }\n  }\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495766,
+          "value": 11007.453125
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 184.55392456054688
+        },
+        {
+          "timestamp_ms": 1792374497231,
+          "value": 190.82322692871094
+        },
+        {
+          "timestamp_ms": 1792374497431,
+          "value": 195.11834716796875
+        },
+        {
+          "timestamp_ms": 1792374497631,
+          "value": 200.26515197753906
+        },
+        {
+          "timestamp_ms": 1792374497832,
+          "value": 199.05870056152344
+        },
+        {
+          "timestamp_ms": 1792374498032,
+          "value": 200.26312255859375
+        },
+        {
+          "timestamp_ms": 1792374498231,
+          "value": 200.363037109375
+        },
+        {
+          "timestamp_ms": 1792374498431,
+          "value": 200.03546142578125
+        },
+        {
+          "timestamp_ms": 1792374498631,
+          "value": 199.61776733398438
+        },
+        {
+          "timestamp_ms": 1792374498832,
+          "value": 199.7769012451172
+        },
+        {
+          "timestamp_ms": 1792374499031,
+          "value": 200.53134155273438
+        },
+        {
+          "timestamp_ms": 1792374500231,
+          "value": 199.9664764404297
+        },
+        {
+          "timestamp_ms": 1792374500432,
+          "value": 199.13787841796875
+        },
+        {
+          "timestamp_ms": 1792374500631,
+          "value": 200.71041870117188
+        },
+        {
+          "timestamp_ms": 1792374500832,
+          "value": 199.60794067382812
+        },
+        {
+          "timestamp_ms": 1792374501031,
+          "value": 200.50502014160156
+        },
+        {
+          "timestamp_ms": 1792374501232,
+          "value": 198.93312072753906
+        },
+        {
+          "timestamp_ms": 1792374501431,
+          "value": 200.99571228027344
+        },
+        {
+          "timestamp_ms": 1792374501631,
+          "value": 200.18051147460938
+        },
+        {
+          "timestamp_ms": 1792374501831,
+          "value": 199.9215850830078
+        },
+        {
+          "timestamp_ms": 1792374502031,
+          "value": 199.98968505859375
+        },
+        {
+          "timestamp_ms": 1792374503231,
+          "value": 200.7318572998047
+        },
+        {
+          "timestamp_ms": 1792374503432,
+          "value": 199.25596618652344
+        },
+        {
+          "timestamp_ms": 1792374503631,
+          "value": 200.51138305664062
+        },
+        {
+          "timestamp_ms": 1792374503831,
+          "value": 200.05242919921875
+        },
+        {
+          "timestamp_ms": 1792374504032,
+          "value": 199.27569580078125
+        },
+        {
+          "timestamp_ms": 1792374504231,
+          "value": 200.52313232421875
+        },
+        {
+          "timestamp_ms": 1792374504431,
+          "value": 199.82876586914062
+        },
+        {
+          "timestamp_ms": 1792374504631,
+          "value": 199.92764282226562
+        },
+        {
+          "timestamp_ms": 1792374504831,
+          "value": 200.6290283203125
+        },
+        {
+          "timestamp_ms": 1792374505031,
+          "value": 199.3763885498047
+        },
+        {
+          "timestamp_ms": 1792374506231,
+          "value": 199.9459991455078
+        },
+        {
+          "timestamp_ms": 1792374506431,
+          "value": 200.578857421875
+        },
+        {
+          "timestamp_ms": 1792374506631,
+          "value": 199.39898681640625
+        },
+        {
+          "timestamp_ms": 1792374506831,
+          "value": 200.41212463378906
+        },
+        {
+          "timestamp_ms": 1792374507031,
+          "value": 199.96273803710938
+        },
+        {
+          "timestamp_ms": 1792374507231,
+          "value": 199.98516845703125
+        },
+        {
+          "timestamp_ms": 1792374507431,
+          "value": 199.92835998535156
+        },
+        {
+          "timestamp_ms": 1792374507632,
+          "value": 199.17526245117188
+        },
+        {
+          "timestamp_ms": 1792374507831,
+          "value": 200.43731689453125
+        },
+        {
+          "timestamp_ms": 1792374508031,
+          "value": 200.20779418945312
+        },
+        {
+          "timestamp_ms": 1792374509231,
+          "value": 200.09507751464844
+        },
+        {
+          "timestamp_ms": 1792374509431,
+          "value": 200.1778106689453
+        },
+        {
+          "timestamp_ms": 1792374509631,
+          "value": 200.09127807617188
+        },
+        {
+          "timestamp_ms": 1792374509831,
+          "value": 199.3722686767578
+        },
+        {
+          "timestamp_ms": 1792374510031,
+          "value": 200.1035614013672
+        },
+        {
+          "timestamp_ms": 1792374510232,
+          "value": 199.7421875
+        },
+        {
+          "timestamp_ms": 1792374510432,
+          "value": 199.40541076660156
+        },
+        {
+          "timestamp_ms": 1792374510631,
+          "value": 201.12098693847656
+        },
+        {
+          "timestamp_ms": 1792374510832,
+          "value": 199.4512481689453
+        },
+        {
+          "timestamp_ms": 1792374511031,
+          "value": 200.46664428710938
+        },
+        {
+          "timestamp_ms": 1792374512231,
+          "value": 200.49197387695312
+        },
+        {
+          "timestamp_ms": 1792374512431,
+          "value": 199.73658752441406
+        },
+        {
+          "timestamp_ms": 1792374512631,
+          "value": 199.72789001464844
+        },
+        {
+          "timestamp_ms": 1792374512831,
+          "value": 200.22267150878906
+        },
+        {
+          "timestamp_ms": 1792374513031,
+          "value": 200.2108612060547
+        },
+        {
+          "timestamp_ms": 1792374513231,
+          "value": 199.49002075195312
+        },
+        {
+          "timestamp_ms": 1792374513431,
+          "value": 200.63926696777344
+        },
+        {
+          "timestamp_ms": 1792374513631,
+          "value": 199.71414184570312
+        },
+        {
+          "timestamp_ms": 1792374513832,
+          "value": 199.32139587402344
+        },
+        {
+          "timestamp_ms": 1792374514031,
+          "value": 200.34805297851562
+        },
+        {
+          "timestamp_ms": 1792374515231,
+          "value": 200.404052734375
+        },
+        {
+          "timestamp_ms": 1792374515431,
+          "value": 199.95420837402344
+        },
+        {
+          "timestamp_ms": 1792374515631,
+          "value": 204.67724609375
+        },
+        {
+          "timestamp_ms": 1792374515831,
+          "value": 205.1173553466797
+        },
+        {
+          "timestamp_ms": 1792374516032,
+          "value": 204.38938903808594
+        },
+        {
+          "timestamp_ms": 1792374516231,
+          "value": 205.38201904296875
+        },
+        {
+          "timestamp_ms": 1792374516432,
+          "value": 204.62229919433594
+        },
+        {
+          "timestamp_ms": 1792374516632,
+          "value": 204.879638671875
+        },
+        {
+          "timestamp_ms": 1792374516831,
+          "value": 205.44363403320312
+        },
+        {
+          "timestamp_ms": 1792374517031,
+          "value": 204.93505859375
+        },
+        {
+          "timestamp_ms": 1792374518232,
+          "value": 204.8041534423828
+        },
+        {
+          "timestamp_ms": 1792374518431,
+          "value": 205.65467834472656
+        },
+        {
+          "timestamp_ms": 1792374518631,
+          "value": 204.99252319335938
+        },
+        {
+          "timestamp_ms": 1792374518831,
+          "value": 204.77435302734375
+        },
+        {
+          "timestamp_ms": 1792374519032,
+          "value": 204.48764038085938
+        },
+        {
+          "timestamp_ms": 1792374519231,
+          "value": 206.10101318359375
+        },
+        {
+          "timestamp_ms": 1792374519432,
+          "value": 204.069091796875
+        },
+        {
+          "timestamp_ms": 1792374519631,
+          "value": 205.55435180664062
+        },
+        {
+          "timestamp_ms": 1792374519832,
+          "value": 204.4274139404297
+        },
+        {
+          "timestamp_ms": 1792374520032,
+          "value": 204.9536895751953
+        },
+        {
+          "timestamp_ms": 1792374521231,
+          "value": 205.51312255859375
+        },
+        {
+          "timestamp_ms": 1792374521432,
+          "value": 204.14991760253906
+        },
+        {
+          "timestamp_ms": 1792374521632,
+          "value": 205.15638732910156
+        },
+        {
+          "timestamp_ms": 1792374521831,
+          "value": 205.3312530517578
+        },
+        {
+          "timestamp_ms": 1792374522031,
+          "value": 204.8473663330078
+        },
+        {
+          "timestamp_ms": 1792374522231,
+          "value": 205.5899658203125
+        },
+        {
+          "timestamp_ms": 1792374522432,
+          "value": 204.1876983642578
+        },
+        {
+          "timestamp_ms": 1792374522631,
+          "value": 205.84808349609375
+        },
+        {
+          "timestamp_ms": 1792374522831,
+          "value": 204.92449951171875
+        },
+        {
+          "timestamp_ms": 1792374523031,
+          "value": 204.66470336914062
+        },
+        {
+          "timestamp_ms": 1792374524231,
+          "value": 205.6220703125
+        },
+        {
+          "timestamp_ms": 1792374524432,
+          "value": 204.2167205810547
+        },
+        {
+          "timestamp_ms": 1792374524631,
+          "value": 205.34815979003906
+        },
+        {
+          "timestamp_ms": 1792374524832,
+          "value": 204.57870483398438
+        },
+        {
+          "timestamp_ms": 1792374525031,
+          "value": 205.34605407714844
+        },
+        {
+          "timestamp_ms": 1792374525231,
+          "value": 205.50450134277344
+        },
+        {
+          "timestamp_ms": 1792374525431,
+          "value": 204.637939453125
+        },
+        {
+          "timestamp_ms": 1792374525631,
+          "value": 205.0030975341797
+        },
+        {
+          "timestamp_ms": 1792374525831,
+          "value": 205.32948303222656
+        },
+        {
+          "timestamp_ms": 1792374526031,
+          "value": 205.0372314453125
+        },
+        {
+          "timestamp_ms": 1792374527231,
+          "value": 207.41331481933594
+        },
+        {
+          "timestamp_ms": 1792374527432,
+          "value": 204.0844268798828
+        },
+        {
+          "timestamp_ms": 1792374527631,
+          "value": 205.3839569091797
+        },
+        {
+          "timestamp_ms": 1792374527832,
+          "value": 204.73484802246094
+        },
+        {
+          "timestamp_ms": 1792374528031,
+          "value": 205.34413146972656
+        },
+        {
+          "timestamp_ms": 1792374528234,
+          "value": 202.73873901367188
+        },
+        {
+          "timestamp_ms": 1792374528431,
+          "value": 207.5672607421875
+        },
+        {
+          "timestamp_ms": 1792374528631,
+          "value": 204.94000244140625
+        },
+        {
+          "timestamp_ms": 1792374528831,
+          "value": 204.81805419921875
+        },
+        {
+          "timestamp_ms": 1792374529032,
+          "value": 204.68988037109375
+        },
+        {
+          "timestamp_ms": 1792374530231,
+          "value": 204.7461395263672
+        },
+        {
+          "timestamp_ms": 1792374530431,
+          "value": 205.2962188720703
+        },
+        {
+          "timestamp_ms": 1792374530631,
+          "value": 204.79185485839844
+        },
+        {
+          "timestamp_ms": 1792374530831,
+          "value": 205.2511444091797
+        },
+        {
+          "timestamp_ms": 1792374531031,
+          "value": 204.94900512695312
+        },
+        {
+          "timestamp_ms": 1792374531232,
+          "value": 204.17648315429688
+        },
+        {
+          "timestamp_ms": 1792374531432,
+          "value": 205.26724243164062
+        },
+        {
+          "timestamp_ms": 1792374531631,
+          "value": 205.91323852539062
+        },
+        {
+          "timestamp_ms": 1792374531831,
+          "value": 204.3920440673828
+        },
+        {
+          "timestamp_ms": 1792374532031,
+          "value": 205.3013916015625
+        },
+        {
+          "timestamp_ms": 1792374533231,
+          "value": 205.4115447998047
+        },
+        {
+          "timestamp_ms": 1792374533432,
+          "value": 204.36441040039062
+        },
+        {
+          "timestamp_ms": 1792374533631,
+          "value": 205.91021728515625
+        },
+        {
+          "timestamp_ms": 1792374533832,
+          "value": 204.11146545410156
+        },
+        {
+          "timestamp_ms": 1792374534031,
+          "value": 205.4823760986328
+        },
+        {
+          "timestamp_ms": 1792374534231,
+          "value": 205.42433166503906
+        },
+        {
+          "timestamp_ms": 1792374534431,
+          "value": 204.52040100097656
+        },
+        {
+          "timestamp_ms": 1792374534631,
+          "value": 205.13795471191406
+        },
+        {
+          "timestamp_ms": 1792374534831,
+          "value": 204.82752990722656
+        },
+        {
+          "timestamp_ms": 1792374535031,
+          "value": 204.97650146484375
+        },
+        {
+          "timestamp_ms": 1792374536232,
+          "value": 204.32337951660156
+        },
+        {
+          "timestamp_ms": 1792374536432,
+          "value": 205.12864685058594
+        },
+        {
+          "timestamp_ms": 1792374536631,
+          "value": 205.3497314453125
+        },
+        {
+          "timestamp_ms": 1792374536831,
+          "value": 204.81845092773438
+        },
+        {
+          "timestamp_ms": 1792374537032,
+          "value": 204.4522705078125
+        },
+        {
+          "timestamp_ms": 1792374537231,
+          "value": 205.9022674560547
+        },
+        {
+          "timestamp_ms": 1792374537432,
+          "value": 204.4180450439453
+        },
+        {
+          "timestamp_ms": 1792374537632,
+          "value": 204.90139770507812
+        },
+        {
+          "timestamp_ms": 1792374537831,
+          "value": 205.38856506347656
+        },
+        {
+          "timestamp_ms": 1792374538032,
+          "value": 204.7133331298828
+        },
+        {
+          "timestamp_ms": 1792374539231,
+          "value": 204.89927673339844
+        },
+        {
+          "timestamp_ms": 1792374539431,
+          "value": 204.94122314453125
+        },
+        {
+          "timestamp_ms": 1792374539631,
+          "value": 204.8101348876953
+        },
+        {
+          "timestamp_ms": 1792374539832,
+          "value": 203.786865234375
+        },
+        {
+          "timestamp_ms": 1792374540031,
+          "value": 206.24203491210938
+        },
+        {
+          "timestamp_ms": 1792374540231,
+          "value": 205.28692626953125
+        },
+        {
+          "timestamp_ms": 1792374540431,
+          "value": 204.90769958496094
+        },
+        {
+          "timestamp_ms": 1792374540631,
+          "value": 204.94764709472656
+        },
+        {
+          "timestamp_ms": 1792374540832,
+          "value": 204.29701232910156
+        },
+        {
+          "timestamp_ms": 1792374541032,
+          "value": 205.21864318847656
+        },
+        {
+          "timestamp_ms": 1792374542231,
+          "value": 205.10789489746094
+        },
+        {
+          "timestamp_ms": 1792374542431,
+          "value": 205.22598266601562
+        },
+        {
+          "timestamp_ms": 1792374542631,
+          "value": 205.0404815673828
+        },
+        {
+          "timestamp_ms": 1792374542832,
+          "value": 204.32858276367188
+        },
+        {
+          "timestamp_ms": 1792374543031,
+          "value": 205.21707153320312
+        },
+        {
+          "timestamp_ms": 1792374543232,
+          "value": 204.8844757080078
+        },
+        {
+          "timestamp_ms": 1792374543432,
+          "value": 204.85003662109375
+        },
+        {
+          "timestamp_ms": 1792374543631,
+          "value": 205.837890625
+        },
+        {
+          "timestamp_ms": 1792374543832,
+          "value": 204.22792053222656
+        },
+        {
+          "timestamp_ms": 1792374544031,
+          "value": 205.16558837890625
+        }
+      ],
+      "throughput_bps": 205.16558837890625,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 205.16558837890625,
+        "normalized_unit": "B/s",
+        "normalized_value": 205.16558837890625,
+        "raw_unit": "B/s",
+        "raw_value": 205.16558837890625
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "261",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "261"
+      }
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "connection_count": 2,
+      "connection_guids": [
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3"
+      ],
+      "connection_status_timestamp_ms": 1792374499265,
+      "data_state": "Active (measured statistics)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.4\",\n  \"id\": 24,\n  \"kind\": \"datareader\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"endpoint_qos\": {\n      \"entity_id\": -1,\n      \"external_unicast_locators\": [],\n      \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"multicast_locators\": [],\n      \"remote_locators\": [],\n      \"unicast_locators\": [],\n      \"user_defined_id\": -1\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 256,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"reader_data_lifecycle\": {\n      \"autopurge_disposed_samples_delay\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"autopurge_no_writer_samples_delay\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"reader_resource_limits\": {\n      \"matched_publisher_allocation\": {\n        \"increment\": 1,\n        \"initial\": 0,\n        \"maximum\": 18446744073709551615\n      },\n      \"max_samples_per_read\": 32,\n      \"outstanding_reads_allocation\": {\n        \"increment\": 1,\n        \"initial\": 2,\n        \"maximum\": 18446744073709551615\n      },\n      \"sample_infos_allocation\": {\n        \"increment\": 1,\n        \"initial\": 32,\n        \"maximum\": 18446744073709551615\n      }\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"resource_limits\": {\n      \"allocated_samples\": 32,\n      \"extra_samples\": 1,\n      \"max_instances\": -1,\n      \"max_samples\": 512,\n      \"max_samples_per_instance\": -1\n    },\n    \"rtps_reliable_reader\": {\n      \"disable_positive_acks\": {\n        \"duration\": {\n          \"nanoseconds\": 4294967295,\n          \"seconds\": 2147483647\n        },\n        \"enabled\": \"false\"\n      },\n      \"reader_times\": {\n        \"heartbeat_response_delay\": {\n          \"nanoseconds\": 5000000,\n          \"seconds\": 0\n        },\n        \"initial_acknack_delay\": {\n          \"nanoseconds\": 70000000,\n          \"seconds\": 0\n        }\n      }\n    },\n    \"time_based_filter\": {\n      \"minimum_separation\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"topic_data\": \"\",\n    \"type_consistency\": {\n      \"force_type_validation\": \"false\",\n      \"ignore_member_names\": \"false\",\n      \"ignore_sequence_bounds\": \"true\",\n      \"ignore_string_bounds\": \"true\",\n      \"kind\": \"ALLOW_TYPE_COERCION\",\n      \"prevent_type_widening\": \"false\"\n    },\n    \"user_data\": \"\"\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.4",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "24",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Reader",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374544032,
+      "name": "Task3/RuntimeProbe_0.0.1.4",
+      "participant_ids": [
+        "9"
+      ],
+      "pid": "20068",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"endpoint_qos\": {\n    \"entity_id\": -1,\n    \"external_unicast_locators\": [],\n    \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"multicast_locators\": [],\n    \"remote_locators\": [],\n    \"unicast_locators\": [],\n    \"user_defined_id\": -1\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 256,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"reader_data_lifecycle\": {\n    \"autopurge_disposed_samples_delay\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"autopurge_no_writer_samples_delay\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"reader_resource_limits\": {\n    \"matched_publisher_allocation\": {\n      \"increment\": 1,\n      \"initial\": 0,\n      \"maximum\": 18446744073709551615\n    },\n    \"max_samples_per_read\": 32,\n    \"outstanding_reads_allocation\": {\n      \"increment\": 1,\n      \"initial\": 2,\n      \"maximum\": 18446744073709551615\n    },\n    \"sample_infos_allocation\": {\n      \"increment\": 1,\n      \"initial\": 32,\n      \"maximum\": 18446744073709551615\n    }\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"resource_limits\": {\n    \"allocated_samples\": 32,\n    \"extra_samples\": 1,\n    \"max_instances\": -1,\n    \"max_samples\": 512,\n    \"max_samples_per_instance\": -1\n  },\n  \"rtps_reliable_reader\": {\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"reader_times\": {\n      \"heartbeat_response_delay\": {\n        \"nanoseconds\": 5000000,\n        \"seconds\": 0\n      },\n      \"initial_acknack_delay\": {\n        \"nanoseconds\": 70000000,\n        \"seconds\": 0\n      }\n    }\n  },\n  \"time_based_filter\": {\n    \"minimum_separation\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"topic_data\": \"\",\n  \"type_consistency\": {\n    \"force_type_validation\": \"false\",\n    \"ignore_member_names\": \"false\",\n    \"ignore_sequence_bounds\": \"true\",\n    \"ignore_string_bounds\": \"true\",\n    \"kind\": \"ALLOW_TYPE_COERCION\",\n    \"prevent_type_widening\": \"false\"\n  },\n  \"user_data\": \"\"\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495955,
+          "value": 211.6449432373047
+        },
+        {
+          "timestamp_ms": 1792374495957,
+          "value": 16707.01953125
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 1964.13916015625
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 2346041
+        },
+        {
+          "timestamp_ms": 1792374498231,
+          "value": 200.18112182617188
+        },
+        {
+          "timestamp_ms": 1792374498231,
+          "value": 2917365.5
+        },
+        {
+          "timestamp_ms": 1792374498433,
+          "value": 198.2156219482422
+        },
+        {
+          "timestamp_ms": 1792374498433,
+          "value": 3440860.25
+        },
+        {
+          "timestamp_ms": 1792374498632,
+          "value": 201.70614624023438
+        },
+        {
+          "timestamp_ms": 1792374498632,
+          "value": 2081382.125
+        },
+        {
+          "timestamp_ms": 1792374498833,
+          "value": 198.77398681640625
+        },
+        {
+          "timestamp_ms": 1792374498833,
+          "value": 2013693.25
+        },
+        {
+          "timestamp_ms": 1792374499031,
+          "value": 201.5260772705078
+        },
+        {
+          "timestamp_ms": 1792374499031,
+          "value": 1971706
+        },
+        {
+          "timestamp_ms": 1792374501232,
+          "value": 199.147216796875
+        },
+        {
+          "timestamp_ms": 1792374501232,
+          "value": 2291869.75
+        },
+        {
+          "timestamp_ms": 1792374501431,
+          "value": 200.9341583251953
+        },
+        {
+          "timestamp_ms": 1792374501431,
+          "value": 2440810.5
+        },
+        {
+          "timestamp_ms": 1792374501631,
+          "value": 200.0458984375
+        },
+        {
+          "timestamp_ms": 1792374501631,
+          "value": 2564431.5
+        },
+        {
+          "timestamp_ms": 1792374501831,
+          "value": 199.94393920898438
+        },
+        {
+          "timestamp_ms": 1792374501831,
+          "value": 2589332
+        },
+        {
+          "timestamp_ms": 1792374502031,
+          "value": 200.04666137695312
+        },
+        {
+          "timestamp_ms": 1792374502031,
+          "value": 2550532.5
+        },
+        {
+          "timestamp_ms": 1792374504231,
+          "value": 200.5303955078125
+        },
+        {
+          "timestamp_ms": 1792374504231,
+          "value": 2148458.5
+        },
+        {
+          "timestamp_ms": 1792374504432,
+          "value": 199.83168029785156
+        },
+        {
+          "timestamp_ms": 1792374504432,
+          "value": 2265005.5
+        },
+        {
+          "timestamp_ms": 1792374504632,
+          "value": 200.02467346191406
+        },
+        {
+          "timestamp_ms": 1792374504632,
+          "value": 2092488
+        },
+        {
+          "timestamp_ms": 1792374504831,
+          "value": 200.55787658691406
+        },
+        {
+          "timestamp_ms": 1792374504831,
+          "value": 2823064.5
+        },
+        {
+          "timestamp_ms": 1792374505032,
+          "value": 199.39170837402344
+        },
+        {
+          "timestamp_ms": 1792374505032,
+          "value": 2136409.75
+        },
+        {
+          "timestamp_ms": 1792374507231,
+          "value": 200.20993041992188
+        },
+        {
+          "timestamp_ms": 1792374507231,
+          "value": 1171097.25
+        },
+        {
+          "timestamp_ms": 1792374507431,
+          "value": 199.86846923828125
+        },
+        {
+          "timestamp_ms": 1792374507431,
+          "value": 5091001.5
+        },
+        {
+          "timestamp_ms": 1792374507632,
+          "value": 199.1970977783203
+        },
+        {
+          "timestamp_ms": 1792374507632,
+          "value": 5639362.5
+        },
+        {
+          "timestamp_ms": 1792374507832,
+          "value": 200.45228576660156
+        },
+        {
+          "timestamp_ms": 1792374507832,
+          "value": 1282791.375
+        },
+        {
+          "timestamp_ms": 1792374508031,
+          "value": 200.2640838623047
+        },
+        {
+          "timestamp_ms": 1792374508031,
+          "value": 4741583.5
+        },
+        {
+          "timestamp_ms": 1792374510232,
+          "value": 199.852294921875
+        },
+        {
+          "timestamp_ms": 1792374510232,
+          "value": 3003679.5
+        },
+        {
+          "timestamp_ms": 1792374510432,
+          "value": 199.31320190429688
+        },
+        {
+          "timestamp_ms": 1792374510432,
+          "value": 2091065.875
+        },
+        {
+          "timestamp_ms": 1792374510631,
+          "value": 201.1925048828125
+        },
+        {
+          "timestamp_ms": 1792374510631,
+          "value": 2602641.75
+        },
+        {
+          "timestamp_ms": 1792374510832,
+          "value": 199.1493682861328
+        },
+        {
+          "timestamp_ms": 1792374510832,
+          "value": 2451431
+        },
+        {
+          "timestamp_ms": 1792374511031,
+          "value": 200.77403259277344
+        },
+        {
+          "timestamp_ms": 1792374511031,
+          "value": 2513194.25
+        },
+        {
+          "timestamp_ms": 1792374513232,
+          "value": 199.47933959960938
+        },
+        {
+          "timestamp_ms": 1792374513232,
+          "value": 2499062.75
+        },
+        {
+          "timestamp_ms": 1792374513431,
+          "value": 200.7176513671875
+        },
+        {
+          "timestamp_ms": 1792374513431,
+          "value": 2566405.75
+        },
+        {
+          "timestamp_ms": 1792374513631,
+          "value": 199.71026611328125
+        },
+        {
+          "timestamp_ms": 1792374513631,
+          "value": 2370230
+        },
+        {
+          "timestamp_ms": 1792374513832,
+          "value": 199.24026489257812
+        },
+        {
+          "timestamp_ms": 1792374513832,
+          "value": 3795786.5
+        },
+        {
+          "timestamp_ms": 1792374514032,
+          "value": 200.2849884033203
+        },
+        {
+          "timestamp_ms": 1792374514032,
+          "value": 3814246.25
+        },
+        {
+          "timestamp_ms": 1792374516232,
+          "value": 220.48162841796875
+        },
+        {
+          "timestamp_ms": 1792374516232,
+          "value": 2757410.5
+        },
+        {
+          "timestamp_ms": 1792374516432,
+          "value": 219.28526306152344
+        },
+        {
+          "timestamp_ms": 1792374516432,
+          "value": 2846238.5
+        },
+        {
+          "timestamp_ms": 1792374516632,
+          "value": 220.23524475097656
+        },
+        {
+          "timestamp_ms": 1792374516632,
+          "value": 2838160.5
+        },
+        {
+          "timestamp_ms": 1792374516832,
+          "value": 220.4227294921875
+        },
+        {
+          "timestamp_ms": 1792374516832,
+          "value": 193191.75
+        },
+        {
+          "timestamp_ms": 1792374517032,
+          "value": 220.23036193847656
+        },
+        {
+          "timestamp_ms": 1792374517032,
+          "value": 2655722
+        },
+        {
+          "timestamp_ms": 1792374519231,
+          "value": 221.27490234375
+        },
+        {
+          "timestamp_ms": 1792374519231,
+          "value": 2654440.25
+        },
+        {
+          "timestamp_ms": 1792374519432,
+          "value": 218.97779846191406
+        },
+        {
+          "timestamp_ms": 1792374519432,
+          "value": 2950446
+        },
+        {
+          "timestamp_ms": 1792374519631,
+          "value": 220.57366943359375
+        },
+        {
+          "timestamp_ms": 1792374519631,
+          "value": 3026759.25
+        },
+        {
+          "timestamp_ms": 1792374519832,
+          "value": 219.47015380859375
+        },
+        {
+          "timestamp_ms": 1792374519832,
+          "value": 2115282.75
+        },
+        {
+          "timestamp_ms": 1792374520032,
+          "value": 219.9987030029297
+        },
+        {
+          "timestamp_ms": 1792374520032,
+          "value": 1813535.5
+        },
+        {
+          "timestamp_ms": 1792374522231,
+          "value": 221.01226806640625
+        },
+        {
+          "timestamp_ms": 1792374522231,
+          "value": 2755683.5
+        },
+        {
+          "timestamp_ms": 1792374522432,
+          "value": 219.03016662597656
+        },
+        {
+          "timestamp_ms": 1792374522432,
+          "value": 2491647.25
+        },
+        {
+          "timestamp_ms": 1792374522631,
+          "value": 221.0272216796875
+        },
+        {
+          "timestamp_ms": 1792374522631,
+          "value": 2901035
+        },
+        {
+          "timestamp_ms": 1792374522831,
+          "value": 220.03773498535156
+        },
+        {
+          "timestamp_ms": 1792374522831,
+          "value": 3833420.5
+        },
+        {
+          "timestamp_ms": 1792374523032,
+          "value": 219.34356689453125
+        },
+        {
+          "timestamp_ms": 1792374523032,
+          "value": 783727
+        },
+        {
+          "timestamp_ms": 1792374525231,
+          "value": 220.57470703125
+        },
+        {
+          "timestamp_ms": 1792374525231,
+          "value": 2705527.75
+        },
+        {
+          "timestamp_ms": 1792374525431,
+          "value": 219.59603881835938
+        },
+        {
+          "timestamp_ms": 1792374525431,
+          "value": 2367755.5
+        },
+        {
+          "timestamp_ms": 1792374525631,
+          "value": 220.06959533691406
+        },
+        {
+          "timestamp_ms": 1792374525631,
+          "value": 2288686.5
+        },
+        {
+          "timestamp_ms": 1792374525831,
+          "value": 220.39659118652344
+        },
+        {
+          "timestamp_ms": 1792374525831,
+          "value": 2530626.5
+        },
+        {
+          "timestamp_ms": 1792374526031,
+          "value": 220.05584716796875
+        },
+        {
+          "timestamp_ms": 1792374526031,
+          "value": 2620295.25
+        },
+        {
+          "timestamp_ms": 1792374528234,
+          "value": 217.60482788085938
+        },
+        {
+          "timestamp_ms": 1792374528234,
+          "value": 2632208.75
+        },
+        {
+          "timestamp_ms": 1792374528431,
+          "value": 222.9304656982422
+        },
+        {
+          "timestamp_ms": 1792374528431,
+          "value": 4236064.5
+        },
+        {
+          "timestamp_ms": 1792374528631,
+          "value": 219.84593200683594
+        },
+        {
+          "timestamp_ms": 1792374528631,
+          "value": 2570994.5
+        },
+        {
+          "timestamp_ms": 1792374528831,
+          "value": 219.9221954345703
+        },
+        {
+          "timestamp_ms": 1792374528831,
+          "value": 2752408.5
+        },
+        {
+          "timestamp_ms": 1792374529032,
+          "value": 219.5843048095703
+        },
+        {
+          "timestamp_ms": 1792374529032,
+          "value": 2741603.75
+        },
+        {
+          "timestamp_ms": 1792374531232,
+          "value": 219.02601623535156
+        },
+        {
+          "timestamp_ms": 1792374531232,
+          "value": 2369923.5
+        },
+        {
+          "timestamp_ms": 1792374531432,
+          "value": 220.3770751953125
+        },
+        {
+          "timestamp_ms": 1792374531432,
+          "value": 3252753.75
+        },
+        {
+          "timestamp_ms": 1792374531631,
+          "value": 220.52386474609375
+        },
+        {
+          "timestamp_ms": 1792374531631,
+          "value": 2948468.75
+        },
+        {
+          "timestamp_ms": 1792374531832,
+          "value": 219.8911590576172
+        },
+        {
+          "timestamp_ms": 1792374531832,
+          "value": 1719354.5
+        },
+        {
+          "timestamp_ms": 1792374532031,
+          "value": 220.31983947753906
+        },
+        {
+          "timestamp_ms": 1792374532031,
+          "value": 2347919
+        },
+        {
+          "timestamp_ms": 1792374534231,
+          "value": 220.48434448242188
+        },
+        {
+          "timestamp_ms": 1792374534231,
+          "value": 2164715
+        },
+        {
+          "timestamp_ms": 1792374534431,
+          "value": 219.62510681152344
+        },
+        {
+          "timestamp_ms": 1792374534431,
+          "value": 2864210.25
+        },
+        {
+          "timestamp_ms": 1792374534631,
+          "value": 220.07196044921875
+        },
+        {
+          "timestamp_ms": 1792374534631,
+          "value": 2745024.5
+        },
+        {
+          "timestamp_ms": 1792374534831,
+          "value": 219.84417724609375
+        },
+        {
+          "timestamp_ms": 1792374534832,
+          "value": 2550133.25
+        },
+        {
+          "timestamp_ms": 1792374535032,
+          "value": 219.91281127929688
+        },
+        {
+          "timestamp_ms": 1792374535032,
+          "value": 2454946.25
+        },
+        {
+          "timestamp_ms": 1792374537231,
+          "value": 221.03126525878906
+        },
+        {
+          "timestamp_ms": 1792374537231,
+          "value": 2352563.75
+        },
+        {
+          "timestamp_ms": 1792374537432,
+          "value": 219.407958984375
+        },
+        {
+          "timestamp_ms": 1792374537432,
+          "value": 2624515.5
+        },
+        {
+          "timestamp_ms": 1792374537632,
+          "value": 219.9055633544922
+        },
+        {
+          "timestamp_ms": 1792374537632,
+          "value": 2577017.5
+        },
+        {
+          "timestamp_ms": 1792374537832,
+          "value": 220.43275451660156
+        },
+        {
+          "timestamp_ms": 1792374537832,
+          "value": 2641215
+        },
+        {
+          "timestamp_ms": 1792374538032,
+          "value": 219.70970153808594
+        },
+        {
+          "timestamp_ms": 1792374538032,
+          "value": 2373375
+        },
+        {
+          "timestamp_ms": 1792374540231,
+          "value": 220.17095947265625
+        },
+        {
+          "timestamp_ms": 1792374540231,
+          "value": 3442071.5
+        },
+        {
+          "timestamp_ms": 1792374540431,
+          "value": 219.93382263183594
+        },
+        {
+          "timestamp_ms": 1792374540431,
+          "value": 5654800
+        },
+        {
+          "timestamp_ms": 1792374540635,
+          "value": 216.49200439453125
+        },
+        {
+          "timestamp_ms": 1792374540635,
+          "value": 3242207.75
+        },
+        {
+          "timestamp_ms": 1792374540832,
+          "value": 222.89356994628906
+        },
+        {
+          "timestamp_ms": 1792374540832,
+          "value": 3887956.25
+        },
+        {
+          "timestamp_ms": 1792374541032,
+          "value": 220.17555236816406
+        },
+        {
+          "timestamp_ms": 1792374541032,
+          "value": 2637257.25
+        },
+        {
+          "timestamp_ms": 1792374543232,
+          "value": 219.95254516601562
+        },
+        {
+          "timestamp_ms": 1792374543232,
+          "value": 2771828
+        },
+        {
+          "timestamp_ms": 1792374543432,
+          "value": 219.8378143310547
+        },
+        {
+          "timestamp_ms": 1792374543432,
+          "value": 2455631.25
+        },
+        {
+          "timestamp_ms": 1792374543631,
+          "value": 220.9359893798828
+        },
+        {
+          "timestamp_ms": 1792374543631,
+          "value": 2272492.5
+        },
+        {
+          "timestamp_ms": 1792374543832,
+          "value": 219.2561492919922
+        },
+        {
+          "timestamp_ms": 1792374543832,
+          "value": 3167746.5
+        },
+        {
+          "timestamp_ms": 1792374544032,
+          "value": 220.1190185546875
+        },
+        {
+          "timestamp_ms": 1792374544032,
+          "value": 2470799.5
+        }
+      ],
+      "throughput_bps": 2470799.5,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 2470799.5,
+        "normalized_unit": "B/s",
+        "normalized_value": 2470799.5,
+        "raw_unit": "B/s",
+        "raw_value": 2470799.5
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {}
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "connection_count": 2,
+      "connection_guids": [
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3"
+      ],
+      "connection_status_timestamp_ms": 1792374499263,
+      "data_state": "Active (measured statistics)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.4\",\n  \"id\": 44,\n  \"kind\": \"datareader\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"endpoint_qos\": {\n      \"entity_id\": -1,\n      \"external_unicast_locators\": [],\n      \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"multicast_locators\": [],\n      \"remote_locators\": [],\n      \"unicast_locators\": [],\n      \"user_defined_id\": -1\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 256,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"reader_data_lifecycle\": {\n      \"autopurge_disposed_samples_delay\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"autopurge_no_writer_samples_delay\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"reader_resource_limits\": {\n      \"matched_publisher_allocation\": {\n        \"increment\": 1,\n        \"initial\": 0,\n        \"maximum\": 18446744073709551615\n      },\n      \"max_samples_per_read\": 32,\n      \"outstanding_reads_allocation\": {\n        \"increment\": 1,\n        \"initial\": 2,\n        \"maximum\": 18446744073709551615\n      },\n      \"sample_infos_allocation\": {\n        \"increment\": 1,\n        \"initial\": 32,\n        \"maximum\": 18446744073709551615\n      }\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"resource_limits\": {\n      \"allocated_samples\": 32,\n      \"extra_samples\": 1,\n      \"max_instances\": -1,\n      \"max_samples\": 512,\n      \"max_samples_per_instance\": -1\n    },\n    \"rtps_reliable_reader\": {\n      \"disable_positive_acks\": {\n        \"duration\": {\n          \"nanoseconds\": 4294967295,\n          \"seconds\": 2147483647\n        },\n        \"enabled\": \"false\"\n      },\n      \"reader_times\": {\n        \"heartbeat_response_delay\": {\n          \"nanoseconds\": 5000000,\n          \"seconds\": 0\n        },\n        \"initial_acknack_delay\": {\n          \"nanoseconds\": 70000000,\n          \"seconds\": 0\n        }\n      }\n    },\n    \"time_based_filter\": {\n      \"minimum_separation\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"topic_data\": \"\",\n    \"type_consistency\": {\n      \"force_type_validation\": \"false\",\n      \"ignore_member_names\": \"false\",\n      \"ignore_sequence_bounds\": \"true\",\n      \"ignore_string_bounds\": \"true\",\n      \"kind\": \"ALLOW_TYPE_COERCION\",\n      \"prevent_type_widening\": \"false\"\n    },\n    \"user_data\": \"\"\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.4",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "44",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Reader",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374544032,
+      "name": "Task3/RuntimeProbe_0.0.1.4",
+      "participant_ids": [
+        "1"
+      ],
+      "pid": "20068",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"endpoint_qos\": {\n    \"entity_id\": -1,\n    \"external_unicast_locators\": [],\n    \"history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"multicast_locators\": [],\n    \"remote_locators\": [],\n    \"unicast_locators\": [],\n    \"user_defined_id\": -1\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 256,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"reader_data_lifecycle\": {\n    \"autopurge_disposed_samples_delay\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"autopurge_no_writer_samples_delay\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"reader_resource_limits\": {\n    \"matched_publisher_allocation\": {\n      \"increment\": 1,\n      \"initial\": 0,\n      \"maximum\": 18446744073709551615\n    },\n    \"max_samples_per_read\": 32,\n    \"outstanding_reads_allocation\": {\n      \"increment\": 1,\n      \"initial\": 2,\n      \"maximum\": 18446744073709551615\n    },\n    \"sample_infos_allocation\": {\n      \"increment\": 1,\n      \"initial\": 32,\n      \"maximum\": 18446744073709551615\n    }\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"resource_limits\": {\n    \"allocated_samples\": 32,\n    \"extra_samples\": 1,\n    \"max_instances\": -1,\n    \"max_samples\": 512,\n    \"max_samples_per_instance\": -1\n  },\n  \"rtps_reliable_reader\": {\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"reader_times\": {\n      \"heartbeat_response_delay\": {\n        \"nanoseconds\": 5000000,\n        \"seconds\": 0\n      },\n      \"initial_acknack_delay\": {\n        \"nanoseconds\": 70000000,\n        \"seconds\": 0\n      }\n    }\n  },\n  \"time_based_filter\": {\n    \"minimum_separation\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"topic_data\": \"\",\n  \"type_consistency\": {\n    \"force_type_validation\": \"false\",\n    \"ignore_member_names\": \"false\",\n    \"ignore_sequence_bounds\": \"true\",\n    \"ignore_string_bounds\": \"true\",\n    \"kind\": \"ALLOW_TYPE_COERCION\",\n    \"prevent_type_widening\": \"false\"\n  },\n  \"user_data\": \"\"\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495955,
+          "value": 208.62242126464844
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 1757.2886962890625
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 1385761.25
+        },
+        {
+          "timestamp_ms": 1792374498231,
+          "value": 200.1031951904297
+        },
+        {
+          "timestamp_ms": 1792374498231,
+          "value": 5262465.5
+        },
+        {
+          "timestamp_ms": 1792374498433,
+          "value": 198.6222686767578
+        },
+        {
+          "timestamp_ms": 1792374498433,
+          "value": 2099737.5
+        },
+        {
+          "timestamp_ms": 1792374498632,
+          "value": 201.05812072753906
+        },
+        {
+          "timestamp_ms": 1792374498632,
+          "value": 2817695.25
+        },
+        {
+          "timestamp_ms": 1792374498832,
+          "value": 199.92816162109375
+        },
+        {
+          "timestamp_ms": 1792374498832,
+          "value": 2723126.25
+        },
+        {
+          "timestamp_ms": 1792374499032,
+          "value": 200.25376892089844
+        },
+        {
+          "timestamp_ms": 1792374499032,
+          "value": 2562131.5
+        },
+        {
+          "timestamp_ms": 1792374501232,
+          "value": 199.05148315429688
+        },
+        {
+          "timestamp_ms": 1792374501232,
+          "value": 1981571.375
+        },
+        {
+          "timestamp_ms": 1792374501431,
+          "value": 201.0365753173828
+        },
+        {
+          "timestamp_ms": 1792374501431,
+          "value": 1933674.875
+        },
+        {
+          "timestamp_ms": 1792374501631,
+          "value": 200.12347412109375
+        },
+        {
+          "timestamp_ms": 1792374501631,
+          "value": 1731826.625
+        },
+        {
+          "timestamp_ms": 1792374501831,
+          "value": 199.9405517578125
+        },
+        {
+          "timestamp_ms": 1792374501831,
+          "value": 1673290.125
+        },
+        {
+          "timestamp_ms": 1792374502031,
+          "value": 200.05604553222656
+        },
+        {
+          "timestamp_ms": 1792374502031,
+          "value": 1641093
+        },
+        {
+          "timestamp_ms": 1792374504231,
+          "value": 200.69085693359375
+        },
+        {
+          "timestamp_ms": 1792374504231,
+          "value": 2470966.25
+        },
+        {
+          "timestamp_ms": 1792374504432,
+          "value": 199.83026123046875
+        },
+        {
+          "timestamp_ms": 1792374504432,
+          "value": 2285714.25
+        },
+        {
+          "timestamp_ms": 1792374504632,
+          "value": 199.9627685546875
+        },
+        {
+          "timestamp_ms": 1792374504632,
+          "value": 1974821
+        },
+        {
+          "timestamp_ms": 1792374504831,
+          "value": 200.63906860351562
+        },
+        {
+          "timestamp_ms": 1792374504831,
+          "value": 2522227.25
+        },
+        {
+          "timestamp_ms": 1792374505032,
+          "value": 199.37527465820312
+        },
+        {
+          "timestamp_ms": 1792374505032,
+          "value": 2307337.25
+        },
+        {
+          "timestamp_ms": 1792374507231,
+          "value": 200.2042694091797
+        },
+        {
+          "timestamp_ms": 1792374507231,
+          "value": 2282453.5
+        },
+        {
+          "timestamp_ms": 1792374507431,
+          "value": 199.85560607910156
+        },
+        {
+          "timestamp_ms": 1792374507431,
+          "value": 3171331.25
+        },
+        {
+          "timestamp_ms": 1792374507632,
+          "value": 199.20814514160156
+        },
+        {
+          "timestamp_ms": 1792374507632,
+          "value": 3486142.75
+        },
+        {
+          "timestamp_ms": 1792374507832,
+          "value": 200.4311065673828
+        },
+        {
+          "timestamp_ms": 1792374507832,
+          "value": 2171081.25
+        },
+        {
+          "timestamp_ms": 1792374508031,
+          "value": 200.3055419921875
+        },
+        {
+          "timestamp_ms": 1792374508031,
+          "value": 3903581.5
+        },
+        {
+          "timestamp_ms": 1792374510232,
+          "value": 199.76332092285156
+        },
+        {
+          "timestamp_ms": 1792374510232,
+          "value": 2825856.5
+        },
+        {
+          "timestamp_ms": 1792374510432,
+          "value": 199.52371215820312
+        },
+        {
+          "timestamp_ms": 1792374510432,
+          "value": 2465331.25
+        },
+        {
+          "timestamp_ms": 1792374510631,
+          "value": 201.05935668945312
+        },
+        {
+          "timestamp_ms": 1792374510631,
+          "value": 3262642.75
+        },
+        {
+          "timestamp_ms": 1792374510832,
+          "value": 199.13938903808594
+        },
+        {
+          "timestamp_ms": 1792374510832,
+          "value": 2577817.75
+        },
+        {
+          "timestamp_ms": 1792374511032,
+          "value": 200.3762969970703
+        },
+        {
+          "timestamp_ms": 1792374511032,
+          "value": 2293315
+        },
+        {
+          "timestamp_ms": 1792374513232,
+          "value": 199.40379333496094
+        },
+        {
+          "timestamp_ms": 1792374513232,
+          "value": 2425859.5
+        },
+        {
+          "timestamp_ms": 1792374513431,
+          "value": 200.75575256347656
+        },
+        {
+          "timestamp_ms": 1792374513431,
+          "value": 2394636
+        },
+        {
+          "timestamp_ms": 1792374513631,
+          "value": 199.64447021484375
+        },
+        {
+          "timestamp_ms": 1792374513631,
+          "value": 3843197.5
+        },
+        {
+          "timestamp_ms": 1792374513832,
+          "value": 199.32350158691406
+        },
+        {
+          "timestamp_ms": 1792374513832,
+          "value": 2361414.5
+        },
+        {
+          "timestamp_ms": 1792374514032,
+          "value": 200.289794921875
+        },
+        {
+          "timestamp_ms": 1792374514032,
+          "value": 2620888.5
+        },
+        {
+          "timestamp_ms": 1792374516232,
+          "value": 220.36973571777344
+        },
+        {
+          "timestamp_ms": 1792374516232,
+          "value": 2009683
+        },
+        {
+          "timestamp_ms": 1792374516432,
+          "value": 219.80137634277344
+        },
+        {
+          "timestamp_ms": 1792374516432,
+          "value": 1894673.375
+        },
+        {
+          "timestamp_ms": 1792374516632,
+          "value": 219.8234100341797
+        },
+        {
+          "timestamp_ms": 1792374516632,
+          "value": 1823607.5
+        },
+        {
+          "timestamp_ms": 1792374516832,
+          "value": 220.38864135742188
+        },
+        {
+          "timestamp_ms": 1792374516832,
+          "value": 525693.25
+        },
+        {
+          "timestamp_ms": 1792374517032,
+          "value": 220.0703887939453
+        },
+        {
+          "timestamp_ms": 1792374517032,
+          "value": 2385858.25
+        },
+        {
+          "timestamp_ms": 1792374519231,
+          "value": 221.27845764160156
+        },
+        {
+          "timestamp_ms": 1792374519231,
+          "value": 2591131.5
+        },
+        {
+          "timestamp_ms": 1792374519432,
+          "value": 219.1444549560547
+        },
+        {
+          "timestamp_ms": 1792374519432,
+          "value": 3859310.5
+        },
+        {
+          "timestamp_ms": 1792374519631,
+          "value": 220.5218048095703
+        },
+        {
+          "timestamp_ms": 1792374519631,
+          "value": 2719238.5
+        },
+        {
+          "timestamp_ms": 1792374519832,
+          "value": 219.39991760253906
+        },
+        {
+          "timestamp_ms": 1792374519832,
+          "value": 2700877.75
+        },
+        {
+          "timestamp_ms": 1792374520032,
+          "value": 219.9490509033203
+        },
+        {
+          "timestamp_ms": 1792374520032,
+          "value": 2762778
+        },
+        {
+          "timestamp_ms": 1792374522231,
+          "value": 220.74916076660156
+        },
+        {
+          "timestamp_ms": 1792374522231,
+          "value": 2490660
+        },
+        {
+          "timestamp_ms": 1792374522432,
+          "value": 219.02810668945312
+        },
+        {
+          "timestamp_ms": 1792374522432,
+          "value": 2775675
+        },
+        {
+          "timestamp_ms": 1792374522631,
+          "value": 221.03790283203125
+        },
+        {
+          "timestamp_ms": 1792374522631,
+          "value": 2961766.25
+        },
+        {
+          "timestamp_ms": 1792374522831,
+          "value": 219.90087890625
+        },
+        {
+          "timestamp_ms": 1792374522831,
+          "value": 2420109
+        },
+        {
+          "timestamp_ms": 1792374523032,
+          "value": 219.50869750976562
+        },
+        {
+          "timestamp_ms": 1792374523032,
+          "value": 2411751.75
+        },
+        {
+          "timestamp_ms": 1792374525231,
+          "value": 220.44845581054688
+        },
+        {
+          "timestamp_ms": 1792374525231,
+          "value": 2465814.75
+        },
+        {
+          "timestamp_ms": 1792374525431,
+          "value": 219.61181640625
+        },
+        {
+          "timestamp_ms": 1792374525431,
+          "value": 2222334.5
+        },
+        {
+          "timestamp_ms": 1792374525632,
+          "value": 219.92884826660156
+        },
+        {
+          "timestamp_ms": 1792374525632,
+          "value": 3005054
+        },
+        {
+          "timestamp_ms": 1792374525831,
+          "value": 220.593017578125
+        },
+        {
+          "timestamp_ms": 1792374525831,
+          "value": 2637099
+        },
+        {
+          "timestamp_ms": 1792374526031,
+          "value": 219.9425811767578
+        },
+        {
+          "timestamp_ms": 1792374526031,
+          "value": 2920871
+        },
+        {
+          "timestamp_ms": 1792374528234,
+          "value": 217.853759765625
+        },
+        {
+          "timestamp_ms": 1792374528234,
+          "value": 2452073.25
+        },
+        {
+          "timestamp_ms": 1792374528431,
+          "value": 222.78659057617188
+        },
+        {
+          "timestamp_ms": 1792374528431,
+          "value": 2786397.25
+        },
+        {
+          "timestamp_ms": 1792374528631,
+          "value": 219.99371337890625
+        },
+        {
+          "timestamp_ms": 1792374528631,
+          "value": 3899326.5
+        },
+        {
+          "timestamp_ms": 1792374528832,
+          "value": 219.75743103027344
+        },
+        {
+          "timestamp_ms": 1792374528832,
+          "value": 2394297
+        },
+        {
+          "timestamp_ms": 1792374529032,
+          "value": 219.7362823486328
+        },
+        {
+          "timestamp_ms": 1792374529032,
+          "value": 2561266.75
+        },
+        {
+          "timestamp_ms": 1792374531232,
+          "value": 218.89163208007812
+        },
+        {
+          "timestamp_ms": 1792374531232,
+          "value": 2772177.5
+        },
+        {
+          "timestamp_ms": 1792374531432,
+          "value": 220.65850830078125
+        },
+        {
+          "timestamp_ms": 1792374531432,
+          "value": 3568242.5
+        },
+        {
+          "timestamp_ms": 1792374531631,
+          "value": 220.5830841064453
+        },
+        {
+          "timestamp_ms": 1792374531631,
+          "value": 2155700.25
+        },
+        {
+          "timestamp_ms": 1792374531832,
+          "value": 219.6992645263672
+        },
+        {
+          "timestamp_ms": 1792374531832,
+          "value": 2569193
+        },
+        {
+          "timestamp_ms": 1792374532031,
+          "value": 220.301513671875
+        },
+        {
+          "timestamp_ms": 1792374532031,
+          "value": 2522212.75
+        },
+        {
+          "timestamp_ms": 1792374534231,
+          "value": 220.48367309570312
+        },
+        {
+          "timestamp_ms": 1792374534231,
+          "value": 2129100.75
+        },
+        {
+          "timestamp_ms": 1792374534431,
+          "value": 219.5341339111328
+        },
+        {
+          "timestamp_ms": 1792374534431,
+          "value": 2652200
+        },
+        {
+          "timestamp_ms": 1792374534631,
+          "value": 220.16432189941406
+        },
+        {
+          "timestamp_ms": 1792374534631,
+          "value": 2539242.75
+        },
+        {
+          "timestamp_ms": 1792374534832,
+          "value": 219.82350158691406
+        },
+        {
+          "timestamp_ms": 1792374534832,
+          "value": 2551908
+        },
+        {
+          "timestamp_ms": 1792374535032,
+          "value": 219.9350128173828
+        },
+        {
+          "timestamp_ms": 1792374535032,
+          "value": 2340052
+        },
+        {
+          "timestamp_ms": 1792374537231,
+          "value": 220.84352111816406
+        },
+        {
+          "timestamp_ms": 1792374537231,
+          "value": 5717256
+        },
+        {
+          "timestamp_ms": 1792374537432,
+          "value": 219.540283203125
+        },
+        {
+          "timestamp_ms": 1792374537432,
+          "value": 862322.375
+        },
+        {
+          "timestamp_ms": 1792374537632,
+          "value": 219.94850158691406
+        },
+        {
+          "timestamp_ms": 1792374537632,
+          "value": 2548951.5
+        },
+        {
+          "timestamp_ms": 1792374537832,
+          "value": 220.44363403320312
+        },
+        {
+          "timestamp_ms": 1792374537832,
+          "value": 2336076.5
+        },
+        {
+          "timestamp_ms": 1792374538032,
+          "value": 219.68820190429688
+        },
+        {
+          "timestamp_ms": 1792374538032,
+          "value": 2522646.5
+        },
+        {
+          "timestamp_ms": 1792374540231,
+          "value": 220.271728515625
+        },
+        {
+          "timestamp_ms": 1792374540231,
+          "value": 2308378.25
+        },
+        {
+          "timestamp_ms": 1792374540431,
+          "value": 219.91600036621094
+        },
+        {
+          "timestamp_ms": 1792374540431,
+          "value": 3821103
+        },
+        {
+          "timestamp_ms": 1792374540631,
+          "value": 220.05450439453125
+        },
+        {
+          "timestamp_ms": 1792374540631,
+          "value": 3311258.25
+        },
+        {
+          "timestamp_ms": 1792374540832,
+          "value": 219.20912170410156
+        },
+        {
+          "timestamp_ms": 1792374540832,
+          "value": 3022600.75
+        },
+        {
+          "timestamp_ms": 1792374541032,
+          "value": 220.25685119628906
+        },
+        {
+          "timestamp_ms": 1792374541032,
+          "value": 2639155.5
+        },
+        {
+          "timestamp_ms": 1792374543232,
+          "value": 219.95140075683594
+        },
+        {
+          "timestamp_ms": 1792374543232,
+          "value": 2597249.25
+        },
+        {
+          "timestamp_ms": 1792374543432,
+          "value": 219.8387451171875
+        },
+        {
+          "timestamp_ms": 1792374543432,
+          "value": 2250179
+        },
+        {
+          "timestamp_ms": 1792374543631,
+          "value": 220.9373321533203
+        },
+        {
+          "timestamp_ms": 1792374543631,
+          "value": 2353067
+        },
+        {
+          "timestamp_ms": 1792374543832,
+          "value": 219.30978393554688
+        },
+        {
+          "timestamp_ms": 1792374543832,
+          "value": 3780068.75
+        },
+        {
+          "timestamp_ms": 1792374544032,
+          "value": 220.0579833984375
+        },
+        {
+          "timestamp_ms": 1792374544032,
+          "value": 2709359.75
+        }
+      ],
+      "throughput_bps": 2709359.75,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 2709359.75,
+        "normalized_unit": "B/s",
+        "normalized_value": 2709359.75,
+        "raw_unit": "B/s",
+        "raw_value": 2709359.75
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {}
+    }
+  ],
+  "events": [
+    {
+      "alert_id": "ff43d441-ad12-459d-a4ef-3a4ccd7682da",
+      "kind": "agent_timeout",
+      "message": "Agent telemetry timed out; physical host state unknown",
+      "recovered_ms": 1792374537818,
+      "rule_id": "linux-agent-a/agent",
+      "severity": "error",
+      "source": "linux-agent-a",
+      "state": "Recovered",
+      "time": "2026-10-19T08:48:57.818",
+      "triggered_ms": 1792374526228
+    },
+    {
+      "alert_id": "99a23f47-eb5a-491a-9f0a-95eef348072f",
+      "kind": "process_stopped",
+      "message": "Configured process stopped",
+      "recovered_ms": null,
+      "rule_id": "linux-agent-a/missing-process/process",
+      "severity": "error",
+      "source": "linux-agent-a/missing-process",
+      "state": "Active",
+      "time": "2026-10-19T08:48:16.111",
+      "triggered_ms": 1792374496111,
+      "verification": "Verified by current Agent telemetry"
+    }
+  ],
+  "flows": [
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374544032,
+      "latency_us": 167.588,
+      "match_state": "Unknown",
+      "reader_id": "24",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 205.1486358642578,
+      "throughput_timestamp_ms": 1792374544032,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "52"
+    },
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374544032,
+      "latency_us": 169.44,
+      "match_state": "Unknown",
+      "reader_id": "44",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 205.1486358642578,
+      "throughput_timestamp_ms": 1792374544032,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "52"
+    },
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374544032,
+      "latency_us": 204.205,
+      "match_state": "Unknown",
+      "reader_id": "24",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 205.16558837890625,
+      "throughput_timestamp_ms": 1792374544031,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "60"
+    },
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374544032,
+      "latency_us": 223.248,
+      "match_state": "Unknown",
+      "reader_id": "44",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 205.16558837890625,
+      "throughput_timestamp_ms": 1792374544031,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "60"
+    }
+  ],
+  "hosts": [
+    {
+      "address": "DDS telemetry",
+      "alert_count": 1,
+      "applications": [
+        {
+          "application_id": "publisher",
+          "checked_ms": 1792374547885,
+          "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+          "instances": [
+            {
+              "binding_source": "runtime_manifest",
+              "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+              "participant_guids": [
+                "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1",
+                "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1"
+              ],
+              "pid": 20069,
+              "state": "running",
+              "writer_counts": {
+                "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "261",
+                "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "261"
+              }
+            }
+          ],
+          "participant_guids": [],
+          "pid": 20069,
+          "process_count": 1,
+          "process_name": "task3_probe",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "running"
+        },
+        {
+          "application_id": "subscriber",
+          "checked_ms": 1792374547888,
+          "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+          "instances": [
+            {
+              "binding_source": "runtime_manifest",
+              "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+              "participant_guids": [
+                "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1",
+                "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1"
+              ],
+              "pid": 20068,
+              "state": "running",
+              "writer_counts": {}
+            }
+          ],
+          "participant_guids": [],
+          "pid": 20068,
+          "process_count": 1,
+          "process_name": "task3_probe",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "running"
+        },
+        {
+          "application_id": "missing-process",
+          "checked_ms": 1792374547890,
+          "instance_id": "",
+          "instances": [],
+          "participant_guids": [],
+          "pid": 0,
+          "process_count": 0,
+          "process_name": "dds-ui-test-no-such-process",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "stopped"
+        }
+      ],
+      "collector_health": {
+        "cpu": "available",
+        "disk": "available",
+        "network": "available",
+        "ram": "available"
+      },
+      "cpu_history": [
+        {
+          "timestamp_ms": 1792374504643,
+          "value": 8.183632734530944
+        },
+        {
+          "timestamp_ms": 1792374504892,
+          "value": 8.433734939759042
+        },
+        {
+          "timestamp_ms": 1792374505268,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374505393,
+          "value": 5.823293172690757
+        },
+        {
+          "timestamp_ms": 1792374505642,
+          "value": 2.409638554216864
+        },
+        {
+          "timestamp_ms": 1792374505893,
+          "value": 5.200000000000005
+        },
+        {
+          "timestamp_ms": 1792374506291,
+          "value": 8.232931726907633
+        },
+        {
+          "timestamp_ms": 1792374506393,
+          "value": 5.2208835341365445
+        },
+        {
+          "timestamp_ms": 1792374506644,
+          "value": 7.4446680080482945
+        },
+        {
+          "timestamp_ms": 1792374506892,
+          "value": 2.8056112224448926
+        },
+        {
+          "timestamp_ms": 1792374507299,
+          "value": 6.012024048096187
+        },
+        {
+          "timestamp_ms": 1792374507395,
+          "value": 7.784431137724546
+        },
+        {
+          "timestamp_ms": 1792374507646,
+          "value": 8.333333333333337
+        },
+        {
+          "timestamp_ms": 1792374507893,
+          "value": 8.999999999999996
+        },
+        {
+          "timestamp_ms": 1792374508297,
+          "value": 8.21643286573146
+        },
+        {
+          "timestamp_ms": 1792374508391,
+          "value": 8.266129032258062
+        },
+        {
+          "timestamp_ms": 1792374508647,
+          "value": 8.651911468812878
+        },
+        {
+          "timestamp_ms": 1792374508890,
+          "value": 7.768924302788848
+        },
+        {
+          "timestamp_ms": 1792374509276,
+          "value": 2.4144869215291798
+        },
+        {
+          "timestamp_ms": 1792374509392,
+          "value": 5.200000000000005
+        },
+        {
+          "timestamp_ms": 1792374509643,
+          "value": 3.006012024048099
+        },
+        {
+          "timestamp_ms": 1792374509892,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374510272,
+          "value": 6.425702811244982
+        },
+        {
+          "timestamp_ms": 1792374510396,
+          "value": 7.414829659318634
+        },
+        {
+          "timestamp_ms": 1792374510643,
+          "value": 5.020080321285136
+        },
+        {
+          "timestamp_ms": 1792374510892,
+          "value": 2.605210420841686
+        },
+        {
+          "timestamp_ms": 1792374511277,
+          "value": 3.607214428857719
+        },
+        {
+          "timestamp_ms": 1792374511391,
+          "value": 5.200000000000005
+        },
+        {
+          "timestamp_ms": 1792374511642,
+          "value": 10.297029702970296
+        },
+        {
+          "timestamp_ms": 1792374511892,
+          "value": 4.63709677419355
+        },
+        {
+          "timestamp_ms": 1792374512268,
+          "value": 3.4068136272545124
+        },
+        {
+          "timestamp_ms": 1792374512392,
+          "value": 5.410821643286578
+        },
+        {
+          "timestamp_ms": 1792374512644,
+          "value": 3.200000000000003
+        },
+        {
+          "timestamp_ms": 1792374512891,
+          "value": 6.425702811244982
+        },
+        {
+          "timestamp_ms": 1792374513235,
+          "value": 7.599999999999996
+        },
+        {
+          "timestamp_ms": 1792374513392,
+          "value": 4.008016032064132
+        },
+        {
+          "timestamp_ms": 1792374513643,
+          "value": 1.8072289156626509
+        },
+        {
+          "timestamp_ms": 1792374513893,
+          "value": 2.6000000000000023
+        },
+        {
+          "timestamp_ms": 1792374514240,
+          "value": 2.2044088176352727
+        },
+        {
+          "timestamp_ms": 1792374514393,
+          "value": 6.7864271457085845
+        },
+        {
+          "timestamp_ms": 1792374514644,
+          "value": 4.233870967741938
+        },
+        {
+          "timestamp_ms": 1792374514892,
+          "value": 6.25
+        },
+        {
+          "timestamp_ms": 1792374515236,
+          "value": 3.585657370517925
+        },
+        {
+          "timestamp_ms": 1792374515392,
+          "value": 4.417670682730924
+        },
+        {
+          "timestamp_ms": 1792374515643,
+          "value": 4.618473895582332
+        },
+        {
+          "timestamp_ms": 1792374515894,
+          "value": 9.325396825396826
+        },
+        {
+          "timestamp_ms": 1792374516268,
+          "value": 2.822580645161288
+        },
+        {
+          "timestamp_ms": 1792374516396,
+          "value": 5.389221556886225
+        },
+        {
+          "timestamp_ms": 1792374516643,
+          "value": 2.8169014084507005
+        },
+        {
+          "timestamp_ms": 1792374516893,
+          "value": 3.0120481927710885
+        },
+        {
+          "timestamp_ms": 1792374517296,
+          "value": 6.586826347305386
+        },
+        {
+          "timestamp_ms": 1792374517394,
+          "value": 8.21643286573146
+        },
+        {
+          "timestamp_ms": 1792374517645,
+          "value": 9.677419354838712
+        },
+        {
+          "timestamp_ms": 1792374517893,
+          "value": 16.96969696969697
+        },
+        {
+          "timestamp_ms": 1792374518299,
+          "value": 13.078470824949695
+        },
+        {
+          "timestamp_ms": 1792374518397,
+          "value": 11.823647294589179
+        },
+        {
+          "timestamp_ms": 1792374518644,
+          "value": 5.846774193548388
+        },
+        {
+          "timestamp_ms": 1792374518899,
+          "value": 3.2128514056224855
+        },
+        {
+          "timestamp_ms": 1792374519293,
+          "value": 3.2128514056224855
+        },
+        {
+          "timestamp_ms": 1792374519393,
+          "value": 5.800000000000005
+        },
+        {
+          "timestamp_ms": 1792374519649,
+          "value": 2.8000000000000025
+        },
+        {
+          "timestamp_ms": 1792374519891,
+          "value": 4.225352112676061
+        },
+        {
+          "timestamp_ms": 1792374520278,
+          "value": 8.316831683168314
+        },
+        {
+          "timestamp_ms": 1792374520395,
+          "value": 5.200000000000005
+        },
+        {
+          "timestamp_ms": 1792374520644,
+          "value": 3.0000000000000027
+        },
+        {
+          "timestamp_ms": 1792374520893,
+          "value": 2.8000000000000025
+        },
+        {
+          "timestamp_ms": 1792374521275,
+          "value": 2.409638554216864
+        },
+        {
+          "timestamp_ms": 1792374521394,
+          "value": 8.764940239043828
+        },
+        {
+          "timestamp_ms": 1792374521643,
+          "value": 6.212424849699394
+        },
+        {
+          "timestamp_ms": 1792374521893,
+          "value": 2.200000000000002
+        },
+        {
+          "timestamp_ms": 1792374522272,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374522393,
+          "value": 5.800000000000005
+        },
+        {
+          "timestamp_ms": 1792374522644,
+          "value": 2.8056112224448926
+        },
+        {
+          "timestamp_ms": 1792374522891,
+          "value": 8.799999999999997
+        },
+        {
+          "timestamp_ms": 1792374523269,
+          "value": 2.409638554216864
+        },
+        {
+          "timestamp_ms": 1792374523393,
+          "value": 4.609218436873752
+        },
+        {
+          "timestamp_ms": 1792374523643,
+          "value": 2.0000000000000018
+        },
+        {
+          "timestamp_ms": 1792374523892,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374524239,
+          "value": 4.609218436873752
+        },
+        {
+          "timestamp_ms": 1792374537818,
+          "value": 1.6605166051660514
+        },
+        {
+          "timestamp_ms": 1792374538077,
+          "value": 3.6398467432950166
+        },
+        {
+          "timestamp_ms": 1792374538340,
+          "value": 8.3969465648855
+        },
+        {
+          "timestamp_ms": 1792374538603,
+          "value": 4.230769230769226
+        },
+        {
+          "timestamp_ms": 1792374538865,
+          "value": 3.065134099616862
+        },
+        {
+          "timestamp_ms": 1792374539125,
+          "value": 2.6819923371647514
+        },
+        {
+          "timestamp_ms": 1792374539391,
+          "value": 4.406130268199238
+        },
+        {
+          "timestamp_ms": 1792374539643,
+          "value": 9.411764705882353
+        },
+        {
+          "timestamp_ms": 1792374539891,
+          "value": 8.249496981891348
+        },
+        {
+          "timestamp_ms": 1792374540306,
+          "value": 8.81763527054108
+        },
+        {
+          "timestamp_ms": 1792374540394,
+          "value": 7.2289156626506035
+        },
+        {
+          "timestamp_ms": 1792374540643,
+          "value": 8.782435129740518
+        },
+        {
+          "timestamp_ms": 1792374540893,
+          "value": 8.199999999999996
+        },
+        {
+          "timestamp_ms": 1792374541311,
+          "value": 3.4136546184738936
+        },
+        {
+          "timestamp_ms": 1792374541394,
+          "value": 5.6112224448897745
+        },
+        {
+          "timestamp_ms": 1792374541647,
+          "value": 3.1872509960159334
+        },
+        {
+          "timestamp_ms": 1792374541892,
+          "value": 2.2177419354838745
+        },
+        {
+          "timestamp_ms": 1792374542301,
+          "value": 2.200000000000002
+        },
+        {
+          "timestamp_ms": 1792374542390,
+          "value": 6.639839034205231
+        },
+        {
+          "timestamp_ms": 1792374542643,
+          "value": 7.784431137724546
+        },
+        {
+          "timestamp_ms": 1792374542893,
+          "value": 2.7944111776447067
+        },
+        {
+          "timestamp_ms": 1792374543276,
+          "value": 3.006012024048099
+        },
+        {
+          "timestamp_ms": 1792374543394,
+          "value": 5.020080321285136
+        },
+        {
+          "timestamp_ms": 1792374543643,
+          "value": 2.7944111776447067
+        },
+        {
+          "timestamp_ms": 1792374543890,
+          "value": 8.686868686868687
+        },
+        {
+          "timestamp_ms": 1792374544288,
+          "value": 2.6156941649899346
+        },
+        {
+          "timestamp_ms": 1792374544391,
+          "value": 8.416833667334666
+        },
+        {
+          "timestamp_ms": 1792374544646,
+          "value": 2.594810379241519
+        },
+        {
+          "timestamp_ms": 1792374544891,
+          "value": 5.835010060362178
+        },
+        {
+          "timestamp_ms": 1792374545266,
+          "value": 5.210420841683372
+        },
+        {
+          "timestamp_ms": 1792374545391,
+          "value": 6.813627254509013
+        },
+        {
+          "timestamp_ms": 1792374545643,
+          "value": 3.0000000000000027
+        },
+        {
+          "timestamp_ms": 1792374545893,
+          "value": 3.200000000000003
+        },
+        {
+          "timestamp_ms": 1792374546270,
+          "value": 2.0000000000000018
+        },
+        {
+          "timestamp_ms": 1792374546393,
+          "value": 4.208416833667339
+        },
+        {
+          "timestamp_ms": 1792374546644,
+          "value": 8.266129032258062
+        },
+        {
+          "timestamp_ms": 1792374546892,
+          "value": 5.811623246492981
+        },
+        {
+          "timestamp_ms": 1792374547244,
+          "value": 3.0000000000000027
+        },
+        {
+          "timestamp_ms": 1792374547391,
+          "value": 4.4088176352705455
+        },
+        {
+          "timestamp_ms": 1792374547642,
+          "value": 2.012072434607648
+        },
+        {
+          "timestamp_ms": 1792374547891,
+          "value": 4.008016032064132
+        }
+      ],
+      "dds_host_identifier": "816a45bc53a340678fef0c971444ed45",
+      "host_id": "linux-agent-a",
+      "host_state": "Online",
+      "hostname": "dev",
+      "last_seen": "2026-10-19T08:49:07.891",
+      "metrics": {
+        "cpu_percent": 4.008016032064132,
+        "disk_free": 944375513088,
+        "disk_path": "/",
+        "disk_total": 1006450962432,
+        "disk_used": 62075449344,
+        "disks": [
+          {
+            "free": 944375513088,
+            "path": "/",
+            "total": 1006450962432,
+            "used": 62075449344,
+            "valid": true
+          },
+          {
+            "free": 944375513088,
+            "path": "/tmp",
+            "total": 1006450962432,
+            "used": 62075449344,
+            "valid": true
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "br-7e70ae54acd7",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 84,
+            "tx_bps": 0,
+            "tx_bytes": 409787
+          },
+          {
+            "name": "br-e44bc5e8d5e3",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 2240,
+            "tx_bps": 0,
+            "tx_bytes": 12298
+          },
+          {
+            "name": "docker0",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enp128s31f6",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enxae007ae2386e",
+            "rate_valid": true,
+            "rx_bps": 5356,
+            "rx_bytes": 102282502,
+            "tx_bps": 2176,
+            "tx_bytes": 31631224
+          },
+          {
+            "name": "veth06d0ccb",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 126,
+            "tx_bps": 0,
+            "tx_bytes": 414397
+          }
+        ],
+        "network_rx_bps": 5356,
+        "network_rx_bytes": 102284952,
+        "network_scope": "aggregate non-loopback interfaces",
+        "network_tx_bps": 2176,
+        "network_tx_bytes": 32467706,
+        "ram_available": 27091959808,
+        "ram_percent": 17.781133478953308,
+        "ram_total": 32951025664,
+        "ram_used": 5859065856
+      },
+      "metrics_state": "fresh",
+      "online": true,
+      "os": "Xubuntu 22.04.5 2026.08.28 LTS (Cubic 2026-08-28 09:50)",
+      "schema_version": 1,
+      "sequence": "42",
+      "session_id": "2f1abdc1-1b29-4bab-b284-7723ec03dc43",
+      "time_sync": {
+        "checked_ms": 1792374547632,
+        "detail": "chronyc unavailable or daemon not reachable",
+        "offset_seconds": null,
+        "source": "",
+        "state": "unknown"
+      },
+      "timestamp_ms": 1792374547882,
+      "type": "telemetry"
+    },
+    {
+      "address": "DDS telemetry",
+      "alert_count": 0,
+      "applications": [],
+      "collector_health": {
+        "cpu": "available",
+        "disk": "available",
+        "network": "available",
+        "ram": "available"
+      },
+      "cpu_history": [
+        {
+          "timestamp_ms": 1792374518293,
+          "value": 12.955465587044534
+        },
+        {
+          "timestamp_ms": 1792374518384,
+          "value": 11.799999999999999
+        },
+        {
+          "timestamp_ms": 1792374518637,
+          "value": 6.024096385542165
+        },
+        {
+          "timestamp_ms": 1792374518884,
+          "value": 3.0181086519114664
+        },
+        {
+          "timestamp_ms": 1792374519287,
+          "value": 3.2193158953722323
+        },
+        {
+          "timestamp_ms": 1792374519383,
+          "value": 5.988023952095811
+        },
+        {
+          "timestamp_ms": 1792374519636,
+          "value": 2.605210420841686
+        },
+        {
+          "timestamp_ms": 1792374519883,
+          "value": 4.225352112676061
+        },
+        {
+          "timestamp_ms": 1792374520273,
+          "value": 8.316831683168314
+        },
+        {
+          "timestamp_ms": 1792374520383,
+          "value": 5.210420841683372
+        },
+        {
+          "timestamp_ms": 1792374520634,
+          "value": 2.9940119760479056
+        },
+        {
+          "timestamp_ms": 1792374520883,
+          "value": 2.7944111776447067
+        },
+        {
+          "timestamp_ms": 1792374521132,
+          "value": 2.4144869215291798
+        },
+        {
+          "timestamp_ms": 1792374521383,
+          "value": 8.782435129740518
+        },
+        {
+          "timestamp_ms": 1792374521639,
+          "value": 6.2000000000000055
+        },
+        {
+          "timestamp_ms": 1792374521884,
+          "value": 2.200000000000002
+        },
+        {
+          "timestamp_ms": 1792374522267,
+          "value": 2.400000000000002
+        },
+        {
+          "timestamp_ms": 1792374522383,
+          "value": 5.811623246492981
+        },
+        {
+          "timestamp_ms": 1792374522635,
+          "value": 2.8112449799196804
+        },
+        {
+          "timestamp_ms": 1792374522883,
+          "value": 8.782435129740518
+        },
+        {
+          "timestamp_ms": 1792374523262,
+          "value": 2.409638554216864
+        },
+        {
+          "timestamp_ms": 1792374523383,
+          "value": 4.609218436873752
+        },
+        {
+          "timestamp_ms": 1792374523636,
+          "value": 2.004008016032066
+        },
+        {
+          "timestamp_ms": 1792374523884,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374524235,
+          "value": 4.417670682730924
+        },
+        {
+          "timestamp_ms": 1792374524383,
+          "value": 7.01402805611222
+        },
+        {
+          "timestamp_ms": 1792374524636,
+          "value": 1.8036072144288595
+        },
+        {
+          "timestamp_ms": 1792374524883,
+          "value": 1.4028056112224463
+        },
+        {
+          "timestamp_ms": 1792374525233,
+          "value": 1.4000000000000012
+        },
+        {
+          "timestamp_ms": 1792374525383,
+          "value": 4.208416833667339
+        },
+        {
+          "timestamp_ms": 1792374525634,
+          "value": 6.048387096774189
+        },
+        {
+          "timestamp_ms": 1792374525883,
+          "value": 4.024144869215296
+        },
+        {
+          "timestamp_ms": 1792374526234,
+          "value": 1.8000000000000016
+        },
+        {
+          "timestamp_ms": 1792374526384,
+          "value": 3.9920159680638667
+        },
+        {
+          "timestamp_ms": 1792374526636,
+          "value": 1.810865191146882
+        },
+        {
+          "timestamp_ms": 1792374526883,
+          "value": 3.200000000000003
+        },
+        {
+          "timestamp_ms": 1792374527268,
+          "value": 6.599999999999994
+        },
+        {
+          "timestamp_ms": 1792374527384,
+          "value": 4.208416833667339
+        },
+        {
+          "timestamp_ms": 1792374527635,
+          "value": 1.6064257028112428
+        },
+        {
+          "timestamp_ms": 1792374527883,
+          "value": 1.8072289156626509
+        },
+        {
+          "timestamp_ms": 1792374528272,
+          "value": 1.6000000000000014
+        },
+        {
+          "timestamp_ms": 1792374528383,
+          "value": 7.815631262525047
+        },
+        {
+          "timestamp_ms": 1792374528635,
+          "value": 8.799999999999997
+        },
+        {
+          "timestamp_ms": 1792374528885,
+          "value": 9.108910891089106
+        },
+        {
+          "timestamp_ms": 1792374529288,
+          "value": 9.4758064516129
+        },
+        {
+          "timestamp_ms": 1792374529384,
+          "value": 8.531746031746035
+        },
+        {
+          "timestamp_ms": 1792374529635,
+          "value": 8.888888888888891
+        },
+        {
+          "timestamp_ms": 1792374529884,
+          "value": 4.3912175648702645
+        },
+        {
+          "timestamp_ms": 1792374530287,
+          "value": 2.2044088176352727
+        },
+        {
+          "timestamp_ms": 1792374530383,
+          "value": 5.6112224448897745
+        },
+        {
+          "timestamp_ms": 1792374530637,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374530883,
+          "value": 3.2128514056224855
+        },
+        {
+          "timestamp_ms": 1792374531265,
+          "value": 7.01402805611222
+        },
+        {
+          "timestamp_ms": 1792374531383,
+          "value": 7.952286282306165
+        },
+        {
+          "timestamp_ms": 1792374531638,
+          "value": 3.8076152304609256
+        },
+        {
+          "timestamp_ms": 1792374531884,
+          "value": 2.39520958083832
+        },
+        {
+          "timestamp_ms": 1792374532263,
+          "value": 2.0000000000000018
+        },
+        {
+          "timestamp_ms": 1792374532384,
+          "value": 4.809619238476959
+        },
+        {
+          "timestamp_ms": 1792374532632,
+          "value": 7.399999999999995
+        },
+        {
+          "timestamp_ms": 1792374532883,
+          "value": 4.008016032064132
+        },
+        {
+          "timestamp_ms": 1792374533260,
+          "value": 1.6064257028112428
+        },
+        {
+          "timestamp_ms": 1792374533384,
+          "value": 4.3912175648702645
+        },
+        {
+          "timestamp_ms": 1792374533635,
+          "value": 1.8000000000000016
+        },
+        {
+          "timestamp_ms": 1792374533883,
+          "value": 3.4068136272545124
+        },
+        {
+          "timestamp_ms": 1792374534259,
+          "value": 8.582834331337331
+        },
+        {
+          "timestamp_ms": 1792374534383,
+          "value": 9.036144578313255
+        },
+        {
+          "timestamp_ms": 1792374534636,
+          "value": 1.8036072144288595
+        },
+        {
+          "timestamp_ms": 1792374534884,
+          "value": 2.7888446215139417
+        },
+        {
+          "timestamp_ms": 1792374535133,
+          "value": 3.427419354838712
+        },
+        {
+          "timestamp_ms": 1792374535382,
+          "value": 10.663983903420526
+        },
+        {
+          "timestamp_ms": 1792374535635,
+          "value": 6.000000000000005
+        },
+        {
+          "timestamp_ms": 1792374535884,
+          "value": 2.6000000000000023
+        },
+        {
+          "timestamp_ms": 1792374536133,
+          "value": 4.0000000000000036
+        },
+        {
+          "timestamp_ms": 1792374536383,
+          "value": 5.010020040080166
+        },
+        {
+          "timestamp_ms": 1792374536634,
+          "value": 3.3864541832669293
+        },
+        {
+          "timestamp_ms": 1792374536883,
+          "value": 8.433734939759042
+        },
+        {
+          "timestamp_ms": 1792374537236,
+          "value": 2.39520958083832
+        },
+        {
+          "timestamp_ms": 1792374537383,
+          "value": 3.8076152304609256
+        },
+        {
+          "timestamp_ms": 1792374537636,
+          "value": 2.012072434607648
+        },
+        {
+          "timestamp_ms": 1792374537883,
+          "value": 2.400000000000002
+        },
+        {
+          "timestamp_ms": 1792374538263,
+          "value": 5.210420841683372
+        },
+        {
+          "timestamp_ms": 1792374538383,
+          "value": 8.416833667334666
+        },
+        {
+          "timestamp_ms": 1792374538633,
+          "value": 3.0303030303030276
+        },
+        {
+          "timestamp_ms": 1792374538883,
+          "value": 3.206412825651306
+        },
+        {
+          "timestamp_ms": 1792374539260,
+          "value": 2.39520958083832
+        },
+        {
+          "timestamp_ms": 1792374539383,
+          "value": 4.435483870967738
+        },
+        {
+          "timestamp_ms": 1792374539634,
+          "value": 9.199999999999998
+        },
+        {
+          "timestamp_ms": 1792374539883,
+          "value": 8.399999999999997
+        },
+        {
+          "timestamp_ms": 1792374540300,
+          "value": 8.853118712273645
+        },
+        {
+          "timestamp_ms": 1792374540383,
+          "value": 7.199999999999996
+        },
+        {
+          "timestamp_ms": 1792374540637,
+          "value": 8.799999999999997
+        },
+        {
+          "timestamp_ms": 1792374540884,
+          "value": 8.199999999999996
+        },
+        {
+          "timestamp_ms": 1792374541135,
+          "value": 3.4136546184738936
+        },
+        {
+          "timestamp_ms": 1792374541383,
+          "value": 5.6112224448897745
+        },
+        {
+          "timestamp_ms": 1792374541641,
+          "value": 3.0000000000000027
+        },
+        {
+          "timestamp_ms": 1792374541883,
+          "value": 2.4048096192384794
+        },
+        {
+          "timestamp_ms": 1792374542295,
+          "value": 2.2044088176352727
+        },
+        {
+          "timestamp_ms": 1792374542383,
+          "value": 6.62650602409639
+        },
+        {
+          "timestamp_ms": 1792374542635,
+          "value": 7.799999999999995
+        },
+        {
+          "timestamp_ms": 1792374542883,
+          "value": 2.8000000000000025
+        },
+        {
+          "timestamp_ms": 1792374543271,
+          "value": 2.9940119760479056
+        },
+        {
+          "timestamp_ms": 1792374543384,
+          "value": 5.030181086519114
+        },
+        {
+          "timestamp_ms": 1792374543637,
+          "value": 2.8000000000000025
+        },
+        {
+          "timestamp_ms": 1792374543882,
+          "value": 8.704453441295545
+        },
+        {
+          "timestamp_ms": 1792374544283,
+          "value": 2.605210420841686
+        },
+        {
+          "timestamp_ms": 1792374544383,
+          "value": 8.399999999999997
+        },
+        {
+          "timestamp_ms": 1792374544639,
+          "value": 2.6000000000000023
+        },
+        {
+          "timestamp_ms": 1792374544883,
+          "value": 5.846774193548388
+        },
+        {
+          "timestamp_ms": 1792374545262,
+          "value": 5.189620758483038
+        },
+        {
+          "timestamp_ms": 1792374545383,
+          "value": 6.827309236947787
+        },
+        {
+          "timestamp_ms": 1792374545635,
+          "value": 2.9880478087649376
+        },
+        {
+          "timestamp_ms": 1792374545884,
+          "value": 3.2128514056224855
+        },
+        {
+          "timestamp_ms": 1792374546265,
+          "value": 2.0000000000000018
+        },
+        {
+          "timestamp_ms": 1792374546384,
+          "value": 4.225352112676061
+        },
+        {
+          "timestamp_ms": 1792374546635,
+          "value": 8.383233532934131
+        },
+        {
+          "timestamp_ms": 1792374546883,
+          "value": 5.645161290322576
+        },
+        {
+          "timestamp_ms": 1792374547239,
+          "value": 3.0000000000000027
+        },
+        {
+          "timestamp_ms": 1792374547384,
+          "value": 4.4088176352705455
+        },
+        {
+          "timestamp_ms": 1792374547635,
+          "value": 2.2044088176352727
+        },
+        {
+          "timestamp_ms": 1792374547883,
+          "value": 3.82293762575453
+        }
+      ],
+      "dds_host_identifier": "816a45bc53a340678fef0c971444ed45",
+      "host_id": "linux-agent-b",
+      "host_state": "Online",
+      "hostname": "dev",
+      "last_seen": "2026-10-19T08:49:07.883",
+      "metrics": {
+        "cpu_percent": 3.82293762575453,
+        "disk_free": 944375513088,
+        "disk_path": "/",
+        "disk_total": 1006450962432,
+        "disk_used": 62075449344,
+        "disks": [
+          {
+            "free": 944375513088,
+            "path": "/",
+            "total": 1006450962432,
+            "used": 62075449344,
+            "valid": true
+          },
+          {
+            "free": 944375513088,
+            "path": "/tmp",
+            "total": 1006450962432,
+            "used": 62075449344,
+            "valid": true
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "br-7e70ae54acd7",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 84,
+            "tx_bps": 0,
+            "tx_bytes": 409787
+          },
+          {
+            "name": "br-e44bc5e8d5e3",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 2240,
+            "tx_bps": 0,
+            "tx_bytes": 12298
+          },
+          {
+            "name": "docker0",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enp128s31f6",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enxae007ae2386e",
+            "rate_valid": true,
+            "rx_bps": 5356,
+            "rx_bytes": 102282502,
+            "tx_bps": 2176,
+            "tx_bytes": 31631224
+          },
+          {
+            "name": "veth06d0ccb",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 126,
+            "tx_bps": 0,
+            "tx_bytes": 414397
+          }
+        ],
+        "network_rx_bps": 5356,
+        "network_rx_bytes": 102284952,
+        "network_scope": "aggregate non-loopback interfaces",
+        "network_tx_bps": 2176,
+        "network_tx_bytes": 32467706,
+        "ram_available": 27091959808,
+        "ram_percent": 17.781133478953308,
+        "ram_total": 32951025664,
+        "ram_used": 5859065856
+      },
+      "metrics_state": "fresh",
+      "online": true,
+      "os": "Xubuntu 22.04.5 2026.08.28 LTS (Cubic 2026-08-28 09:50)",
+      "schema_version": 1,
+      "sequence": "209",
+      "session_id": "c7bd46e9-ce08-4285-8f9d-128192820f8d",
+      "time_sync": {
+        "checked_ms": 1792374546381,
+        "detail": "chronyc unavailable or daemon not reachable",
+        "offset_seconds": null,
+        "source": "",
+        "state": "unknown"
+      },
+      "timestamp_ms": 1792374547882,
+      "type": "telemetry"
+    },
+    {
+      "address": "",
+      "alert_count": 0,
+      "applications": [],
+      "cpu_history": [],
+      "host_id": "zz-awaiting-agent",
+      "host_state": "Unknown (no telemetry yet)",
+      "hostname": "zz-awaiting-agent",
+      "last_seen": "never",
+      "metrics": {},
+      "metrics_state": "unknown",
+      "online": false,
+      "os": "unknown",
+      "time_sync": {}
+    }
+  ],
+  "master_pid": 20060,
+  "status": "DDS telemetry domain 94 \u00b7 Task3/HostTelemetry/v1",
+  "ui": {
+    "application_id": "publisher",
+    "dashboard_loaded": true,
+    "dds_started": true,
+    "dds_workspace_count": 1,
+    "detail_tab": 3,
+    "height": 900,
+    "host_id": "linux-agent-a",
+    "resource_tab": 0,
+    "selection_retained": true,
+    "status_text": "Gi\u00e1m s\u00e1t t\u00e0i nguy\u00ean & truy\u1ec1n th\u00f4ng DDS",
+    "status_visible": true,
+    "title": "DDS Monitor",
+    "width": 1600,
+    "workspace": 2
+  },
+  "ui_steps": 37,
+  "window_count": 1
+}

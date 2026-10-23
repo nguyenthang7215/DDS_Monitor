@@ -1,0 +1,4 @@
+{
+  "corrupt_database_reproduced": "PASS",
+  "error": "Actual QML label hides the database error"
+}

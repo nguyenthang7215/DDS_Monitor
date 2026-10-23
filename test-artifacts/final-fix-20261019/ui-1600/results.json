@@ -1,0 +1,52 @@
+{
+  "default_fleet_overview": "PASS",
+  "real_agents_and_unknown_host": "PASS",
+  "mapped_application_and_flow": "PASS",
+  "network_list_layout": "PASS",
+  "three_tabs_selection_and_one_dds_workspace": "PASS",
+  "offline_stale": "PASS",
+  "offline_unverified_alert": "PASS",
+  "offline_ui_selected": "PASS",
+  "offline_event_page": "PASS",
+  "agent_recovery": "PASS",
+  "recovered_event_page": "PASS",
+  "three_desktop_screenshots": "PASS",
+  "resources_and_network_screenshots": "PASS",
+  "master_shutdown": "PASS",
+  "screenshot_integrity_and_dimensions": "PASS",
+  "sqlite_integrity": "PASS",
+  "qml_runtime_errors": "PASS",
+  "windows_and_physical_multi_host": "PENDING_EXTERNAL_TEST",
+  "process_exit_codes": [
+    {
+      "pid": 20060,
+      "executable": "dds_monitor",
+      "exit_code": 0
+    },
+    {
+      "pid": 20065,
+      "executable": "task3_agent",
+      "exit_code": 0
+    },
+    {
+      "pid": 20067,
+      "executable": "task3_agent",
+      "exit_code": 0
+    },
+    {
+      "pid": 20068,
+      "executable": "task3_probe",
+      "exit_code": 0
+    },
+    {
+      "pid": 20069,
+      "executable": "task3_probe",
+      "exit_code": 0
+    },
+    {
+      "pid": 20683,
+      "executable": "task3_agent",
+      "exit_code": 0
+    }
+  ]
+}
