@@ -22,9 +22,12 @@
 #ifndef NOMINMAX
 #define NOMINMAX
 #endif
+#include <winsock2.h>
+#include <ws2ipdef.h>
 #include <windows.h>
 #include <tlhelp32.h>
 #include <iphlpapi.h>
+#include <netioapi.h>
 #else
 #include <unistd.h>
 #include <signal.h>

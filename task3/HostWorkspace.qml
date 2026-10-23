@@ -323,7 +323,73 @@ ColumnLayout {
                         wrapMode: Text.Wrap;
                         bottomPadding: 8
                     }
-                    model: workspace.host.metrics?.interfaces || []
+                    property var interfaces: workspace.host.metrics?.interfaces || []
+                    property string selectedHostId: ui.selectedHostId
+                    property string modelHostId: ""
+                    model: ListModel {
+                        id: networkModel
+                        dynamicRoles: true
+                    }
+
+                    function syncInterfaces() {
+                        const hostChanged = modelHostId !== selectedHostId
+                        const rows = interfaces.slice().sort(function(a, b) {
+                            const left = String(a.name)
+                            const right = String(b.name)
+                            if (/^\d+$/.test(left) && /^\d+$/.test(right)) {
+                                const difference = Number(left) - Number(right)
+                                if (difference !== 0)
+                                    return difference
+                            }
+                            return left < right ? -1 : left > right ? 1 : 0
+                        })
+                        const oldY = contentY
+                        const anchorIndex = indexAt(1, contentY + 1)
+                        const anchor = anchorIndex >= 0 ? networkModel.get(anchorIndex).interfaceKey : ""
+                        const anchorItem = anchorIndex >= 0 ? itemAtIndex(anchorIndex) : null
+                        const anchorOffset = anchorItem ? contentY - anchorItem.y : 0
+                        let structureChanged = hostChanged
+                        if (hostChanged) {
+                            networkModel.clear()
+                            modelHostId = selectedHostId
+                        }
+                        for (let i = 0; i < rows.length; ++i) {
+                            const key = String(rows[i].name)
+                            let existing = i
+                            while (existing < networkModel.count && networkModel.get(existing).interfaceKey !== key)
+                                ++existing
+                            if (existing === networkModel.count) {
+                                networkModel.insert(i, {interfaceKey: key, modelData: rows[i]})
+                                structureChanged = true
+                            } else {
+                                if (existing !== i) {
+                                    networkModel.move(existing, i, 1)
+                                    structureChanged = true
+                                }
+                                networkModel.setProperty(i, "modelData", rows[i])
+                            }
+                        }
+                        if (networkModel.count > rows.length) {
+                            networkModel.remove(rows.length, networkModel.count - rows.length)
+                            structureChanged = true
+                        }
+                        if (structureChanged) {
+                            forceLayout()
+                            let restoredY = oldY
+                            for (let i = 0; !hostChanged && anchor && i < networkModel.count; ++i) {
+                                if (networkModel.get(i).interfaceKey === anchor) {
+                                    const item = itemAtIndex(i)
+                                    if (item)
+                                        restoredY = item.y + anchorOffset
+                                    break
+                                }
+                            }
+                            contentY = hostChanged ? originY : Math.max(originY, Math.min(restoredY, originY + Math.max(0, contentHeight - height)))
+                        }
+                    }
+                    onInterfacesChanged: syncInterfaces()
+                    onSelectedHostIdChanged: syncInterfaces()
+                    Component.onCompleted: syncInterfaces()
                     clip: true;
                     spacing: 6
                     ScrollBar.vertical: ScrollBar {}

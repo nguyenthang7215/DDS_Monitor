@@ -1,0 +1,837 @@
+{
+  "entities": [
+    {
+      "alive": true,
+      "details": "{\n  \"alias\": \"0\",\n  \"alive\": true,\n  \"discovery_source\": \"unknown\",\n  \"domain_id\": 0,\n  \"id\": 0,\n  \"kind\": \"domain\",\n  \"metatraffic\": false,\n  \"name\": \"0\",\n  \"status\": \"OK\"\n}",
+      "guid": "",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "0",
+      "kind": "Domain",
+      "mapping_state": "unknown",
+      "match_state": "not inferred from discovery",
+      "name": "0",
+      "pid": "",
+      "qos": ""
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Reader\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1\",\n  \"id\": 1,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7413\",\n    \"UDPv4:[127.0.0.1]:7412\",\n    \"UDPv4:[127.0.0.1]:7413\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Reader\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20068\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7412\",\n                  \"UDPv4:[172.20.10.2/28]:7412\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7412\",\n          \"UDPv4:[172.20.10.2]:7412\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7413\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7413\",\n                \"UDPv4:[172.20.10.2/28]:7413\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7413\",\n        \"UDPv4:[172.18.0.1]:7413\",\n        \"UDPv4:[172.20.10.2]:7413\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 0,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "1",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Reader",
+      "network_latency": [],
+      "pid": "20068",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20068\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7412\",\n                \"UDPv4:[172.20.10.2/28]:7412\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7412\",\n        \"UDPv4:[172.20.10.2]:7412\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7413\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7413\",\n              \"UDPv4:[172.20.10.2/28]:7413\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7413\",\n      \"UDPv4:[172.18.0.1]:7413\",\n      \"UDPv4:[172.20.10.2]:7413\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 0,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {}
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Reader\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1\",\n  \"id\": 9,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7417\",\n    \"UDPv4:[127.0.0.1]:7416\",\n    \"UDPv4:[127.0.0.1]:7417\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Reader\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20068\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7416\",\n                  \"UDPv4:[172.20.10.2/28]:7416\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7416\",\n          \"UDPv4:[172.20.10.2]:7416\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7417\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7417\",\n                \"UDPv4:[172.20.10.2/28]:7417\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7417\",\n        \"UDPv4:[172.18.0.1]:7417\",\n        \"UDPv4:[172.20.10.2]:7417\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 1,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "9",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Reader",
+      "network_latency": [],
+      "pid": "20068",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20068\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7416\",\n                \"UDPv4:[172.20.10.2/28]:7416\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7416\",\n        \"UDPv4:[172.20.10.2]:7416\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7417\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7417\",\n              \"UDPv4:[172.20.10.2/28]:7417\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7417\",\n      \"UDPv4:[172.18.0.1]:7417\",\n      \"UDPv4:[172.20.10.2]:7417\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 1,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {}
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Writer\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1\",\n  \"id\": 13,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7415\",\n    \"UDPv4:[127.0.0.1]:7414\",\n    \"UDPv4:[127.0.0.1]:7415\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Writer\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20069\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7414\",\n                  \"UDPv4:[172.20.10.2/28]:7414\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7414\",\n          \"UDPv4:[172.20.10.2]:7414\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7415\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7415\",\n                \"UDPv4:[172.20.10.2/28]:7415\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7415\",\n        \"UDPv4:[172.18.0.1]:7415\",\n        \"UDPv4:[172.20.10.2]:7415\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 1,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "13",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Writer",
+      "network_latency": [],
+      "pid": "20069",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20069\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7414\",\n                \"UDPv4:[172.20.10.2/28]:7414\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7414\",\n        \"UDPv4:[172.20.10.2]:7414\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7415\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7415\",\n              \"UDPv4:[172.20.10.2/28]:7415\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7415\",\n      \"UDPv4:[172.18.0.1]:7415\",\n      \"UDPv4:[172.20.10.2]:7415\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 1,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "11",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "11"
+      }
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "details": "{\n  \"alias\": \"Task3 Runtime Probe Writer\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1\",\n  \"id\": 18,\n  \"kind\": \"participant\",\n  \"locators\": [\n    \"SHM:[_]:7411\",\n    \"UDPv4:[127.0.0.1]:7410\",\n    \"UDPv4:[127.0.0.1]:7411\"\n  ],\n  \"metatraffic\": false,\n  \"name\": \"Task3 Runtime Probe Writer\",\n  \"original_domain\": 0,\n  \"qos\": {\n    \"lease_duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 20\n    },\n    \"properties\": [\n      {\n        \"name\": \"PARTICIPANT_TYPE\",\n        \"value\": \"SIMPLE\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.host\",\n        \"value\": \"816a45bc53a340678fef0c971444ed45\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.user\",\n        \"value\": \"dev\"\n      },\n      {\n        \"name\": \"fastdds.physical_data.process\",\n        \"value\": \"20069\"\n      }\n    ],\n    \"user_data\": \"\",\n    \"vendor_id\": [\n      1,\n      15\n    ],\n    \"wire_protocol_config\": {\n      \"builtin_attributes\": {\n        \"avoid_builtin_multicast\": \"true\",\n        \"discovery_config\": {\n          \"announcement_period\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 3\n          },\n          \"discoveryServer_client_sync_period\": {\n            \"nanoseconds\": 450000000,\n            \"seconds\": 0\n          },\n          \"discovery_protocol\": \"SIMPLE\",\n          \"discovery_servers\": [],\n          \"ignore_participant_flags\": \"NO_FILTER\",\n          \"initial_announcements\": {\n            \"count\": 5,\n            \"period\": {\n              \"nanoseconds\": 100000000,\n              \"seconds\": 0\n            }\n          },\n          \"lease_duration\": {\n            \"nanoseconds\": 0,\n            \"seconds\": 20\n          },\n          \"simple_edp_attributes\": {\n            \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n            \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n          },\n          \"static_edp_xml_config\": \"\",\n          \"use_simple_edp\": \"true\",\n          \"use_static_edp\": \"false\"\n        },\n        \"flow_controller\": \"\",\n        \"initial_peers\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_external_unicast_locators\": [\n          {\n            \"externality_index\": 0,\n            \"locators\": [\n              {\n                \"cost\": 1,\n                \"locators_with_mask\": [\n                  \"UDPv4:[172.18.0.1/16]:7410\",\n                  \"UDPv4:[172.20.10.2/28]:7410\"\n                ]\n              }\n            ]\n          }\n        ],\n        \"metatraffic_multicast_locators\": [\n          \"UDPv4:[239.255.0.1]:7400\"\n        ],\n        \"metatraffic_unicast_locators\": [\n          \"UDPv4:[172.18.0.1]:7410\",\n          \"UDPv4:[172.20.10.2]:7410\"\n        ],\n        \"mutation_tries\": 100,\n        \"network_configuration\": 1,\n        \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"reader_payload_size\": 512,\n        \"use_writer_liveliness_protocol\": \"true\",\n        \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n        \"writer_payload_size\": 512\n      },\n      \"default_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 0,\n              \"locators_with_mask\": [\n                \"SHM:[_]:7411\"\n              ]\n            },\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7411\",\n                \"UDPv4:[172.20.10.2/28]:7411\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"default_multicast_locators\": [],\n      \"default_unicast_locators\": [\n        \"SHM:[_]:7411\",\n        \"UDPv4:[172.18.0.1]:7411\",\n        \"UDPv4:[172.20.10.2]:7411\"\n      ],\n      \"easy_mode_ip\": \"\",\n      \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00\",\n      \"ignore_non_matching_locators\": \"false\",\n      \"participant_id\": 0,\n      \"port\": {\n        \"domain_id_gain\": 250,\n        \"offset_d0\": 0,\n        \"offset_d1\": 10,\n        \"offset_d2\": 1,\n        \"offset_d3\": 11,\n        \"offset_d4\": 2,\n        \"participant_id_gain\": 2,\n        \"port_base\": 7400\n      }\n    }\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "18",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Participant",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "not inferred from discovery",
+      "name": "Task3 Runtime Probe Writer",
+      "network_latency": [],
+      "pid": "20069",
+      "qos": "{\n  \"lease_duration\": {\n    \"nanoseconds\": 0,\n    \"seconds\": 20\n  },\n  \"properties\": [\n    {\n      \"name\": \"PARTICIPANT_TYPE\",\n      \"value\": \"SIMPLE\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.host\",\n      \"value\": \"816a45bc53a340678fef0c971444ed45\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.user\",\n      \"value\": \"dev\"\n    },\n    {\n      \"name\": \"fastdds.physical_data.process\",\n      \"value\": \"20069\"\n    }\n  ],\n  \"user_data\": \"\",\n  \"vendor_id\": [\n    1,\n    15\n  ],\n  \"wire_protocol_config\": {\n    \"builtin_attributes\": {\n      \"avoid_builtin_multicast\": \"true\",\n      \"discovery_config\": {\n        \"announcement_period\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 3\n        },\n        \"discoveryServer_client_sync_period\": {\n          \"nanoseconds\": 450000000,\n          \"seconds\": 0\n        },\n        \"discovery_protocol\": \"SIMPLE\",\n        \"discovery_servers\": [],\n        \"ignore_participant_flags\": \"NO_FILTER\",\n        \"initial_announcements\": {\n          \"count\": 5,\n          \"period\": {\n            \"nanoseconds\": 100000000,\n            \"seconds\": 0\n          }\n        },\n        \"lease_duration\": {\n          \"nanoseconds\": 0,\n          \"seconds\": 20\n        },\n        \"simple_edp_attributes\": {\n          \"use_PublicationReaderANDSubscriptionWriter\": \"true\",\n          \"use_PublicationWriterANDSubscriptionReader\": \"true\"\n        },\n        \"static_edp_xml_config\": \"\",\n        \"use_simple_edp\": \"true\",\n        \"use_static_edp\": \"false\"\n      },\n      \"flow_controller\": \"\",\n      \"initial_peers\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_external_unicast_locators\": [\n        {\n          \"externality_index\": 0,\n          \"locators\": [\n            {\n              \"cost\": 1,\n              \"locators_with_mask\": [\n                \"UDPv4:[172.18.0.1/16]:7410\",\n                \"UDPv4:[172.20.10.2/28]:7410\"\n              ]\n            }\n          ]\n        }\n      ],\n      \"metatraffic_multicast_locators\": [\n        \"UDPv4:[239.255.0.1]:7400\"\n      ],\n      \"metatraffic_unicast_locators\": [\n        \"UDPv4:[172.18.0.1]:7410\",\n        \"UDPv4:[172.20.10.2]:7410\"\n      ],\n      \"mutation_tries\": 100,\n      \"network_configuration\": 1,\n      \"reader_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"reader_payload_size\": 512,\n      \"use_writer_liveliness_protocol\": \"true\",\n      \"writer_history_memory_policy\": \"PREALLOCATED_WITH_REALLOC_MEMORY_MODE\",\n      \"writer_payload_size\": 512\n    },\n    \"default_external_unicast_locators\": [\n      {\n        \"externality_index\": 0,\n        \"locators\": [\n          {\n            \"cost\": 0,\n            \"locators_with_mask\": [\n              \"SHM:[_]:7411\"\n            ]\n          },\n          {\n            \"cost\": 1,\n            \"locators_with_mask\": [\n              \"UDPv4:[172.18.0.1/16]:7411\",\n              \"UDPv4:[172.20.10.2/28]:7411\"\n            ]\n          }\n        ]\n      }\n    ],\n    \"default_multicast_locators\": [],\n    \"default_unicast_locators\": [\n      \"SHM:[_]:7411\",\n      \"UDPv4:[172.18.0.1]:7411\",\n      \"UDPv4:[172.20.10.2]:7411\"\n    ],\n    \"easy_mode_ip\": \"\",\n    \"guid_prefix\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00\",\n    \"ignore_non_matching_locators\": \"false\",\n    \"participant_id\": 0,\n    \"port\": {\n      \"domain_id_gain\": 250,\n      \"offset_d0\": 0,\n      \"offset_d1\": 10,\n      \"offset_d2\": 1,\n      \"offset_d3\": 11,\n      \"offset_d4\": 2,\n      \"participant_id_gain\": 2,\n      \"port_base\": 7400\n    }\n  }\n}",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "11",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "11"
+      }
+    },
+    {
+      "alive": true,
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe\",\n  \"alive\": true,\n  \"data_type\": \"task3::TelemetryEnvelopeV1\",\n  \"discovery_source\": \"unknown\",\n  \"id\": 22,\n  \"kind\": \"topic\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe\",\n  \"status\": \"OK\"\n}",
+      "guid": "",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "22",
+      "kind": "Topic",
+      "mapping_state": "unknown",
+      "match_state": "not inferred from discovery",
+      "name": "Task3/RuntimeProbe",
+      "pid": "",
+      "qos": ""
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "connection_count": 0,
+      "connection_guids": [],
+      "connection_status_timestamp_ms": 0,
+      "data_state": "Active (runtime write counter)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3\",\n  \"id\": 52,\n  \"kind\": \"datawriter\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"durability_service\": {\n      \"history_depth\": 1,\n      \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n      \"max_instances\": -1,\n      \"max_samples\": -1,\n      \"max_samples_per_instance\": -1,\n      \"service_cleanup_delay\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 32,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"ownership_strength\": {\n      \"value\": 0\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"topic_data\": \"\",\n    \"user_data\": \"\"\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "52",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Writer",
+      "links": [
+        {
+          "latency_timestamp_ms": 1792374495977,
+          "latency_us": 171.971,
+          "reader_id": "24",
+          "relation": "latency measurements available"
+        },
+        {
+          "latency_timestamp_ms": 1792374495977,
+          "latency_us": 185.185,
+          "reader_id": "44",
+          "relation": "latency measurements available"
+        }
+      ],
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374495977,
+      "name": "Task3/RuntimeProbe_0.0.1.3",
+      "participant_ids": [
+        "13"
+      ],
+      "pid": "20069",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"durability_service\": {\n    \"history_depth\": 1,\n    \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n    \"max_instances\": -1,\n    \"max_samples\": -1,\n    \"max_samples_per_instance\": -1,\n    \"service_cleanup_delay\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 32,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"ownership_strength\": {\n    \"value\": 0\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"topic_data\": \"\",\n  \"user_data\": \"\"\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495766,
+          "value": 326676.9375
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 184.50743103027344
+        }
+      ],
+      "throughput_bps": 184.50743103027344,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 184.50743103027344,
+        "normalized_unit": "B/s",
+        "normalized_value": 184.50743103027344,
+        "raw_unit": "B/s",
+        "raw_value": 184.50743103027344
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "11",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "11"
+      }
+    },
+    {
+      "alive": true,
+      "application_id": "publisher",
+      "binding_source": "runtime_manifest",
+      "connection_count": 0,
+      "connection_guids": [],
+      "connection_status_timestamp_ms": 0,
+      "data_state": "Active (runtime write counter)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3\",\n  \"id\": 60,\n  \"kind\": \"datawriter\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.3\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"durability_service\": {\n      \"history_depth\": 1,\n      \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n      \"max_instances\": -1,\n      \"max_samples\": -1,\n      \"max_samples_per_instance\": -1,\n      \"service_cleanup_delay\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 32,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"ownership_strength\": {\n      \"value\": 0\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"topic_data\": \"\",\n    \"user_data\": \"\"\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "60",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Writer",
+      "links": [
+        {
+          "latency_timestamp_ms": 1792374495977,
+          "latency_us": 194.353,
+          "reader_id": "24",
+          "relation": "latency measurements available"
+        },
+        {
+          "latency_timestamp_ms": 1792374495977,
+          "latency_us": 197.224,
+          "reader_id": "44",
+          "relation": "latency measurements available"
+        }
+      ],
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374495977,
+      "name": "Task3/RuntimeProbe_0.0.1.3",
+      "participant_ids": [
+        "18"
+      ],
+      "pid": "20069",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"durability_service\": {\n    \"history_depth\": 1,\n    \"history_kind\": \"KEEP_LAST_HISTORY_QOS\",\n    \"max_instances\": -1,\n    \"max_samples\": -1,\n    \"max_samples_per_instance\": -1,\n    \"service_cleanup_delay\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 32,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"ownership_strength\": {\n    \"value\": 0\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"topic_data\": \"\",\n  \"user_data\": \"\"\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495766,
+          "value": 11007.453125
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 184.55392456054688
+        }
+      ],
+      "throughput_bps": 184.55392456054688,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 184.55392456054688,
+        "normalized_unit": "B/s",
+        "normalized_value": 184.55392456054688,
+        "raw_unit": "B/s",
+        "raw_value": 184.55392456054688
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {
+        "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "11",
+        "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "11"
+      }
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "connection_count": 0,
+      "connection_guids": [],
+      "connection_status_timestamp_ms": 0,
+      "data_state": "Active (measured statistics)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.4\",\n  \"id\": 24,\n  \"kind\": \"datareader\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 256,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"time_based_filter\": {\n      \"minimum_separation\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"topic_data\": \"\",\n    \"type_consistency\": {\n      \"force_type_validation\": \"false\",\n      \"ignore_member_names\": \"false\",\n      \"ignore_sequence_bounds\": \"true\",\n      \"ignore_string_bounds\": \"true\",\n      \"kind\": \"ALLOW_TYPE_COERCION\",\n      \"prevent_type_widening\": \"false\"\n    },\n    \"user_data\": \"\"\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.4",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "24",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Reader",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374495977,
+      "name": "Task3/RuntimeProbe_0.0.1.4",
+      "participant_ids": [
+        "9"
+      ],
+      "pid": "20068",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 256,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"time_based_filter\": {\n    \"minimum_separation\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"topic_data\": \"\",\n  \"type_consistency\": {\n    \"force_type_validation\": \"false\",\n    \"ignore_member_names\": \"false\",\n    \"ignore_sequence_bounds\": \"true\",\n    \"ignore_string_bounds\": \"true\",\n    \"kind\": \"ALLOW_TYPE_COERCION\",\n    \"prevent_type_widening\": \"false\"\n  },\n  \"user_data\": \"\"\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495955,
+          "value": 211.6449432373047
+        },
+        {
+          "timestamp_ms": 1792374495957,
+          "value": 16707.01953125
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 1964.13916015625
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 2346041
+        }
+      ],
+      "throughput_bps": 2346041,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 2346041,
+        "normalized_unit": "B/s",
+        "normalized_value": 2346041,
+        "raw_unit": "B/s",
+        "raw_value": 2346041
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {}
+    },
+    {
+      "alive": true,
+      "application_id": "subscriber",
+      "binding_source": "runtime_manifest",
+      "connection_count": 0,
+      "connection_guids": [],
+      "connection_status_timestamp_ms": 0,
+      "data_state": "Active (measured statistics)",
+      "details": "{\n  \"alias\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"alive\": true,\n  \"app_id\": \"UNKNOWN_APP\",\n  \"app_metadata\": \"\",\n  \"dds_vendor\": 1,\n  \"discovery_source\": \"discovery\",\n  \"guid\": \"01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.4\",\n  \"id\": 44,\n  \"kind\": \"datareader\",\n  \"metatraffic\": false,\n  \"name\": \"Task3/RuntimeProbe_0.0.1.4\",\n  \"qos\": {\n    \"data_sharing\": {\n      \"domain_ids\": [],\n      \"kind\": \"OFF\",\n      \"max_domains\": 0\n    },\n    \"deadline\": {\n      \"period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"destination_order\": {\n      \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n    },\n    \"disable_positive_acks\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"enabled\": \"false\"\n    },\n    \"durability\": {\n      \"kind\": \"VOLATILE_DURABILITY_QOS\"\n    },\n    \"group_data\": \"\",\n    \"history\": {\n      \"history_depth\": 256,\n      \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n    },\n    \"latency_budget\": {\n      \"duration\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"lifespan\": {\n      \"duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"liveliness\": {\n      \"announcement_period\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      },\n      \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n      \"lease_duration\": {\n        \"nanoseconds\": 4294967295,\n        \"seconds\": 2147483647\n      }\n    },\n    \"ownership\": {\n      \"kind\": \"SHARED_OWNERSHIP_QOS\"\n    },\n    \"partition\": [],\n    \"presentation\": {\n      \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n      \"coherent_access\": \"false\",\n      \"ordered_access\": \"false\"\n    },\n    \"reliability\": {\n      \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n      \"max_blocking_time\": {\n        \"nanoseconds\": 100000000,\n        \"seconds\": 0\n      }\n    },\n    \"representation\": [],\n    \"time_based_filter\": {\n      \"minimum_separation\": {\n        \"nanoseconds\": 0,\n        \"seconds\": 0\n      }\n    },\n    \"topic_data\": \"\",\n    \"type_consistency\": {\n      \"force_type_validation\": \"false\",\n      \"ignore_member_names\": \"false\",\n      \"ignore_sequence_bounds\": \"true\",\n      \"ignore_string_bounds\": \"true\",\n      \"kind\": \"ALLOW_TYPE_COERCION\",\n      \"prevent_type_widening\": \"false\"\n    },\n    \"user_data\": \"\"\n  },\n  \"status\": \"OK\"\n}",
+      "guid": "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.4",
+      "host_id": "linux-agent-a",
+      "hostname": "816a45bc53a340678fef0c971444ed45",
+      "id": "44",
+      "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+      "kind": "Reader",
+      "mapping_state": "mapped: explicit GUID binding",
+      "match_state": "Unknown",
+      "matching_detail": "connection status unavailable/stale",
+      "metric_fresh": true,
+      "metric_timestamp_ms": 1792374495977,
+      "name": "Task3/RuntimeProbe_0.0.1.4",
+      "participant_ids": [
+        "1"
+      ],
+      "pid": "20068",
+      "qos": "{\n  \"data_sharing\": {\n    \"domain_ids\": [],\n    \"kind\": \"OFF\",\n    \"max_domains\": 0\n  },\n  \"deadline\": {\n    \"period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"destination_order\": {\n    \"kind\": \"BY_RECEPTION_TIMESTAMP_DESTINATIONORDER_QOS\"\n  },\n  \"disable_positive_acks\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"enabled\": \"false\"\n  },\n  \"durability\": {\n    \"kind\": \"VOLATILE_DURABILITY_QOS\"\n  },\n  \"group_data\": \"\",\n  \"history\": {\n    \"history_depth\": 256,\n    \"kind\": \"KEEP_LAST_HISTORY_QOS\"\n  },\n  \"latency_budget\": {\n    \"duration\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"lifespan\": {\n    \"duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"liveliness\": {\n    \"announcement_period\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    },\n    \"kind\": \"AUTOMATIC_LIVELINESS_QOS\",\n    \"lease_duration\": {\n      \"nanoseconds\": 4294967295,\n      \"seconds\": 2147483647\n    }\n  },\n  \"ownership\": {\n    \"kind\": \"SHARED_OWNERSHIP_QOS\"\n  },\n  \"partition\": [],\n  \"presentation\": {\n    \"access_scope\": \"INSTANCE_PRESENTATION_QOS\",\n    \"coherent_access\": \"false\",\n    \"ordered_access\": \"false\"\n  },\n  \"reliability\": {\n    \"kind\": \"RELIABLE_RELIABILITY_QOS\",\n    \"max_blocking_time\": {\n      \"nanoseconds\": 100000000,\n      \"seconds\": 0\n    }\n  },\n  \"representation\": [],\n  \"time_based_filter\": {\n    \"minimum_separation\": {\n      \"nanoseconds\": 0,\n      \"seconds\": 0\n    }\n  },\n  \"topic_data\": \"\",\n  \"type_consistency\": {\n    \"force_type_validation\": \"false\",\n    \"ignore_member_names\": \"false\",\n    \"ignore_sequence_bounds\": \"true\",\n    \"ignore_string_bounds\": \"true\",\n    \"kind\": \"ALLOW_TYPE_COERCION\",\n    \"prevent_type_widening\": \"false\"\n  },\n  \"user_data\": \"\"\n}",
+      "samples": [
+        {
+          "timestamp_ms": 1792374495955,
+          "value": 208.62242126464844
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 1757.2886962890625
+        },
+        {
+          "timestamp_ms": 1792374495977,
+          "value": 1385761.25
+        }
+      ],
+      "throughput_bps": 1385761.25,
+      "throughput_measurement": {
+        "display_unit": "B/s",
+        "display_value": 1385761.25,
+        "normalized_unit": "B/s",
+        "normalized_value": 1385761.25,
+        "raw_unit": "B/s",
+        "raw_value": 1385761.25
+      },
+      "topic": "Task3/RuntimeProbe",
+      "writer_counts": {}
+    }
+  ],
+  "events": [
+    {
+      "alert_id": "99a23f47-eb5a-491a-9f0a-95eef348072f",
+      "kind": "process_stopped",
+      "message": "Configured process stopped",
+      "recovered_ms": null,
+      "rule_id": "linux-agent-a/missing-process/process",
+      "severity": "error",
+      "source": "linux-agent-a/missing-process",
+      "state": "Active",
+      "time": "2026-10-19T08:48:16.111",
+      "triggered_ms": 1792374496111,
+      "verification": "Verified by current Agent telemetry"
+    }
+  ],
+  "flows": [
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374495977,
+      "latency_us": 171.971,
+      "match_state": "Unknown",
+      "reader_id": "24",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 184.50743103027344,
+      "throughput_timestamp_ms": 1792374495977,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "52"
+    },
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374495977,
+      "latency_us": 185.185,
+      "match_state": "Unknown",
+      "reader_id": "44",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 184.50743103027344,
+      "throughput_timestamp_ms": 1792374495977,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "52"
+    },
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374495977,
+      "latency_us": 194.353,
+      "match_state": "Unknown",
+      "reader_id": "24",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 184.55392456054688,
+      "throughput_timestamp_ms": 1792374495977,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "60"
+    },
+    {
+      "confirmed": false,
+      "flow_state": "Active (runtime write counter)",
+      "latency_timestamp_ms": 1792374495977,
+      "latency_us": 197.224,
+      "match_state": "Unknown",
+      "reader_id": "44",
+      "source_alive": true,
+      "source_application": "publisher",
+      "source_host": "linux-agent-a",
+      "target_alive": true,
+      "target_application": "subscriber",
+      "target_host": "linux-agent-a",
+      "throughput_bps": 184.55392456054688,
+      "throughput_timestamp_ms": 1792374495977,
+      "topic": "Task3/RuntimeProbe",
+      "writer_id": "60"
+    }
+  ],
+  "hosts": [
+    {
+      "address": "DDS telemetry",
+      "alert_count": 1,
+      "applications": [
+        {
+          "application_id": "publisher",
+          "checked_ms": 1792374497877,
+          "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+          "instances": [
+            {
+              "binding_source": "runtime_manifest",
+              "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+              "participant_guids": [
+                "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1",
+                "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1"
+              ],
+              "pid": 20069,
+              "state": "running",
+              "writer_counts": {
+                "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "11",
+                "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "11"
+              }
+            }
+          ],
+          "participant_guids": [],
+          "pid": 20069,
+          "process_count": 1,
+          "process_name": "task3_probe",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "running"
+        },
+        {
+          "application_id": "subscriber",
+          "checked_ms": 1792374497879,
+          "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+          "instances": [
+            {
+              "binding_source": "runtime_manifest",
+              "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+              "participant_guids": [
+                "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1",
+                "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1"
+              ],
+              "pid": 20068,
+              "state": "running",
+              "writer_counts": {}
+            }
+          ],
+          "participant_guids": [],
+          "pid": 20068,
+          "process_count": 1,
+          "process_name": "task3_probe",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "running"
+        },
+        {
+          "application_id": "missing-process",
+          "checked_ms": 1792374497881,
+          "instance_id": "",
+          "instances": [],
+          "participant_guids": [],
+          "pid": 0,
+          "process_count": 0,
+          "process_name": "dds-ui-test-no-such-process",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "stopped"
+        }
+      ],
+      "collector_health": {
+        "cpu": "available",
+        "disk": "available",
+        "network": "available",
+        "ram": "available"
+      },
+      "cpu_history": [
+        {
+          "timestamp_ms": 1792374496111,
+          "value": 8.15217391304348
+        },
+        {
+          "timestamp_ms": 1792374496310,
+          "value": 13.819577735124755
+        },
+        {
+          "timestamp_ms": 1792374496573,
+          "value": 9.369024856596553
+        },
+        {
+          "timestamp_ms": 1792374496835,
+          "value": 6.118546845124284
+        },
+        {
+          "timestamp_ms": 1792374497158,
+          "value": 5.938697318007657
+        },
+        {
+          "timestamp_ms": 1792374497358,
+          "value": 4.761904761904767
+        },
+        {
+          "timestamp_ms": 1792374497620,
+          "value": 7.854406130268199
+        },
+        {
+          "timestamp_ms": 1792374497882,
+          "value": 4.770992366412219
+        }
+      ],
+      "dds_host_identifier": "816a45bc53a340678fef0c971444ed45",
+      "host_id": "linux-agent-a",
+      "host_state": "Online",
+      "hostname": "dev",
+      "last_seen": "2026-10-19T08:48:17.882",
+      "metrics": {
+        "cpu_percent": 4.770992366412219,
+        "disk_free": 944371159040,
+        "disk_path": "/",
+        "disk_total": 1006450962432,
+        "disk_used": 62079803392,
+        "disks": [
+          {
+            "free": 944371159040,
+            "path": "/",
+            "total": 1006450962432,
+            "used": 62079803392,
+            "valid": true
+          },
+          {
+            "free": 944371159040,
+            "path": "/tmp",
+            "total": 1006450962432,
+            "used": 62079803392,
+            "valid": true
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "br-7e70ae54acd7",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 84,
+            "tx_bps": 0,
+            "tx_bytes": 303841
+          },
+          {
+            "name": "br-e44bc5e8d5e3",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 2184,
+            "tx_bps": 0,
+            "tx_bytes": 12038
+          },
+          {
+            "name": "docker0",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enp128s31f6",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enxae007ae2386e",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 102047101,
+            "tx_bps": 0,
+            "tx_bytes": 31026952
+          },
+          {
+            "name": "veth06d0ccb",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 126,
+            "tx_bps": 0,
+            "tx_bytes": 308451
+          }
+        ],
+        "network_rx_bps": 0,
+        "network_rx_bytes": 102049495,
+        "network_scope": "aggregate non-loopback interfaces",
+        "network_tx_bps": 0,
+        "network_tx_bytes": 31651282,
+        "ram_available": 27024158720,
+        "ram_percent": 17.986896688546125,
+        "ram_total": 32951025664,
+        "ram_used": 5926866944
+      },
+      "metrics_state": "fresh",
+      "online": true,
+      "os": "Xubuntu 22.04.5 2026.08.28 LTS (Cubic 2026-08-28 09:50)",
+      "schema_version": 1,
+      "sequence": "9",
+      "session_id": "e3de8c4b-6d7d-4110-9a14-45890affc896",
+      "time_sync": {
+        "checked_ms": 1792374495759,
+        "detail": "chronyc unavailable or daemon not reachable",
+        "offset_seconds": null,
+        "source": "",
+        "state": "unknown"
+      },
+      "timestamp_ms": 1792374497874,
+      "type": "telemetry"
+    },
+    {
+      "address": "DDS telemetry",
+      "alert_count": 0,
+      "applications": [],
+      "collector_health": {
+        "cpu": "available",
+        "disk": "available",
+        "network": "available",
+        "ram": "available"
+      },
+      "cpu_history": [
+        {
+          "timestamp_ms": 1792374496121,
+          "value": 7.619047619047614
+        },
+        {
+          "timestamp_ms": 1792374496288,
+          "value": 14.176245210727966
+        },
+        {
+          "timestamp_ms": 1792374496549,
+          "value": 9.523809523809524
+        },
+        {
+          "timestamp_ms": 1792374496812,
+          "value": 5.374280230326301
+        },
+        {
+          "timestamp_ms": 1792374497154,
+          "value": 6.896551724137934
+        },
+        {
+          "timestamp_ms": 1792374497336,
+          "value": 4.007633587786263
+        },
+        {
+          "timestamp_ms": 1792374497599,
+          "value": 8.045977011494255
+        },
+        {
+          "timestamp_ms": 1792374497861,
+          "value": 4.588910133843216
+        }
+      ],
+      "dds_host_identifier": "816a45bc53a340678fef0c971444ed45",
+      "host_id": "linux-agent-b",
+      "host_state": "Online",
+      "hostname": "dev",
+      "last_seen": "2026-10-19T08:48:17.861",
+      "metrics": {
+        "cpu_percent": 4.588910133843216,
+        "disk_free": 944371159040,
+        "disk_path": "/",
+        "disk_total": 1006450962432,
+        "disk_used": 62079803392,
+        "disks": [
+          {
+            "free": 944371159040,
+            "path": "/",
+            "total": 1006450962432,
+            "used": 62079803392,
+            "valid": true
+          },
+          {
+            "free": 944371159040,
+            "path": "/tmp",
+            "total": 1006450962432,
+            "used": 62079803392,
+            "valid": true
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "br-7e70ae54acd7",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 84,
+            "tx_bps": 0,
+            "tx_bytes": 303841
+          },
+          {
+            "name": "br-e44bc5e8d5e3",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 2184,
+            "tx_bps": 0,
+            "tx_bytes": 12038
+          },
+          {
+            "name": "docker0",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enp128s31f6",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enxae007ae2386e",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 102047101,
+            "tx_bps": 0,
+            "tx_bytes": 31026952
+          },
+          {
+            "name": "veth06d0ccb",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 126,
+            "tx_bps": 0,
+            "tx_bytes": 308451
+          }
+        ],
+        "network_rx_bps": 0,
+        "network_rx_bytes": 102049495,
+        "network_scope": "aggregate non-loopback interfaces",
+        "network_tx_bps": 0,
+        "network_tx_bytes": 31651282,
+        "ram_available": 27024158720,
+        "ram_percent": 17.986896688546125,
+        "ram_total": 32951025664,
+        "ram_used": 5926866944
+      },
+      "metrics_state": "fresh",
+      "online": true,
+      "os": "Xubuntu 22.04.5 2026.08.28 LTS (Cubic 2026-08-28 09:50)",
+      "schema_version": 1,
+      "sequence": "9",
+      "session_id": "c7bd46e9-ce08-4285-8f9d-128192820f8d",
+      "time_sync": {
+        "checked_ms": 1792374495759,
+        "detail": "chronyc unavailable or daemon not reachable",
+        "offset_seconds": null,
+        "source": "",
+        "state": "unknown"
+      },
+      "timestamp_ms": 1792374497860,
+      "type": "telemetry"
+    },
+    {
+      "address": "",
+      "alert_count": 0,
+      "applications": [],
+      "cpu_history": [],
+      "host_id": "zz-awaiting-agent",
+      "host_state": "Unknown (no telemetry yet)",
+      "hostname": "zz-awaiting-agent",
+      "last_seen": "never",
+      "metrics": {},
+      "metrics_state": "unknown",
+      "online": false,
+      "os": "unknown",
+      "time_sync": {}
+    }
+  ],
+  "master_pid": 20060,
+  "status": "DDS telemetry domain 94 \u00b7 Task3/HostTelemetry/v1",
+  "ui": {
+    "application_id": "",
+    "dashboard_loaded": true,
+    "dds_started": true,
+    "dds_workspace_count": 1,
+    "detail_tab": 1,
+    "height": 900,
+    "host_id": "",
+    "resource_tab": 0,
+    "selection_retained": true,
+    "status_text": "Gi\u00e1m s\u00e1t t\u00e0i nguy\u00ean & truy\u1ec1n th\u00f4ng DDS",
+    "status_visible": true,
+    "title": "DDS Monitor",
+    "width": 1600,
+    "workspace": 0
+  },
+  "ui_steps": 1,
+  "window_count": 1
+}

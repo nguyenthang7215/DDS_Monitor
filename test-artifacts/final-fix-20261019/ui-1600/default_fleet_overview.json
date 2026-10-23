@@ -1,0 +1,391 @@
+{
+  "entities": [],
+  "events": [
+    {
+      "alert_id": "99a23f47-eb5a-491a-9f0a-95eef348072f",
+      "kind": "process_stopped",
+      "message": "Configured process stopped",
+      "recovered_ms": null,
+      "rule_id": "linux-agent-a/missing-process/process",
+      "severity": "error",
+      "source": "linux-agent-a/missing-process",
+      "state": "Active",
+      "time": "2026-10-19T08:48:16.111",
+      "triggered_ms": 1792374496111,
+      "verification": "Verified by current Agent telemetry"
+    }
+  ],
+  "flows": [],
+  "hosts": [
+    {
+      "address": "DDS telemetry",
+      "alert_count": 1,
+      "applications": [
+        {
+          "application_id": "publisher",
+          "checked_ms": 1792374496829,
+          "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+          "instances": [
+            {
+              "binding_source": "runtime_manifest",
+              "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+              "participant_guids": [
+                "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.c1",
+                "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.c1"
+              ],
+              "pid": 20069,
+              "state": "running",
+              "writer_counts": {
+                "01.0f.17.72.65.4e.b9.94.00.00.00.00|0.0.1.3": "6",
+                "01.0f.17.72.65.4e.b9.94.01.00.00.00|0.0.1.3": "6"
+              }
+            }
+          ],
+          "participant_guids": [],
+          "pid": 20069,
+          "process_count": 1,
+          "process_name": "task3_probe",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "running"
+        },
+        {
+          "application_id": "subscriber",
+          "checked_ms": 1792374496831,
+          "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+          "instances": [
+            {
+              "binding_source": "runtime_manifest",
+              "instance_id": "44943d99-f3a1-4e88-b7f0-95ba05b7ca98:183812",
+              "participant_guids": [
+                "01.0f.17.72.64.4e.0d.6a.00.00.00.00|0.0.1.c1",
+                "01.0f.17.72.64.4e.0d.6a.01.00.00.00|0.0.1.c1"
+              ],
+              "pid": 20068,
+              "state": "running",
+              "writer_counts": {}
+            }
+          ],
+          "participant_guids": [],
+          "pid": 20068,
+          "process_count": 1,
+          "process_name": "task3_probe",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "running"
+        },
+        {
+          "application_id": "missing-process",
+          "checked_ms": 1792374496834,
+          "instance_id": "",
+          "instances": [],
+          "participant_guids": [],
+          "pid": 0,
+          "process_count": 0,
+          "process_name": "dds-ui-test-no-such-process",
+          "service": "",
+          "service_state": "not_configured",
+          "state": "stopped"
+        }
+      ],
+      "collector_health": {
+        "cpu": "available",
+        "disk": "available",
+        "network": "available",
+        "ram": "available"
+      },
+      "cpu_history": [
+        {
+          "timestamp_ms": 1792374496111,
+          "value": 8.15217391304348
+        },
+        {
+          "timestamp_ms": 1792374496310,
+          "value": 13.819577735124755
+        },
+        {
+          "timestamp_ms": 1792374496573,
+          "value": 9.369024856596553
+        },
+        {
+          "timestamp_ms": 1792374496835,
+          "value": 6.118546845124284
+        }
+      ],
+      "dds_host_identifier": "816a45bc53a340678fef0c971444ed45",
+      "host_id": "linux-agent-a",
+      "host_state": "Online",
+      "hostname": "dev",
+      "last_seen": "2026-10-19T08:48:16.835",
+      "metrics": {
+        "cpu_percent": 6.118546845124284,
+        "disk_free": 944372191232,
+        "disk_path": "/",
+        "disk_total": 1006450962432,
+        "disk_used": 62078771200,
+        "disks": [
+          {
+            "free": 944372187136,
+            "path": "/",
+            "total": 1006450962432,
+            "used": 62078775296,
+            "valid": true
+          },
+          {
+            "free": 944372187136,
+            "path": "/tmp",
+            "total": 1006450962432,
+            "used": 62078775296,
+            "valid": true
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "br-7e70ae54acd7",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 84,
+            "tx_bps": 0,
+            "tx_bytes": 303841
+          },
+          {
+            "name": "br-e44bc5e8d5e3",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 2184,
+            "tx_bps": 0,
+            "tx_bytes": 12038
+          },
+          {
+            "name": "docker0",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enp128s31f6",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enxae007ae2386e",
+            "rate_valid": true,
+            "rx_bps": 7194.656488549618,
+            "rx_bytes": 102041145,
+            "tx_bps": 1404.5801526717557,
+            "tx_bytes": 31025936
+          },
+          {
+            "name": "veth06d0ccb",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 126,
+            "tx_bps": 0,
+            "tx_bytes": 308451
+          }
+        ],
+        "network_rx_bps": 7194.656488549618,
+        "network_rx_bytes": 102043539,
+        "network_scope": "aggregate non-loopback interfaces",
+        "network_tx_bps": 1404.5801526717557,
+        "network_tx_bytes": 31650266,
+        "ram_available": 27042291712,
+        "ram_percent": 17.931866559332846,
+        "ram_total": 32951025664,
+        "ram_used": 5908733952
+      },
+      "metrics_state": "fresh",
+      "online": true,
+      "os": "Xubuntu 22.04.5 2026.08.28 LTS (Cubic 2026-08-28 09:50)",
+      "schema_version": 1,
+      "sequence": "5",
+      "session_id": "e3de8c4b-6d7d-4110-9a14-45890affc896",
+      "time_sync": {
+        "checked_ms": 1792374495759,
+        "detail": "chronyc unavailable or daemon not reachable",
+        "offset_seconds": null,
+        "source": "",
+        "state": "unknown"
+      },
+      "timestamp_ms": 1792374496825,
+      "type": "telemetry"
+    },
+    {
+      "address": "DDS telemetry",
+      "alert_count": 0,
+      "applications": [],
+      "collector_health": {
+        "cpu": "available",
+        "disk": "available",
+        "network": "available",
+        "ram": "available"
+      },
+      "cpu_history": [
+        {
+          "timestamp_ms": 1792374496121,
+          "value": 7.619047619047614
+        },
+        {
+          "timestamp_ms": 1792374496288,
+          "value": 14.176245210727966
+        },
+        {
+          "timestamp_ms": 1792374496549,
+          "value": 9.523809523809524
+        },
+        {
+          "timestamp_ms": 1792374496812,
+          "value": 5.374280230326301
+        }
+      ],
+      "dds_host_identifier": "816a45bc53a340678fef0c971444ed45",
+      "host_id": "linux-agent-b",
+      "host_state": "Online",
+      "hostname": "dev",
+      "last_seen": "2026-10-19T08:48:16.812",
+      "metrics": {
+        "cpu_percent": 5.374280230326301,
+        "disk_free": 944372191232,
+        "disk_path": "/",
+        "disk_total": 1006450962432,
+        "disk_used": 62078771200,
+        "disks": [
+          {
+            "free": 944372191232,
+            "path": "/",
+            "total": 1006450962432,
+            "used": 62078771200,
+            "valid": true
+          },
+          {
+            "free": 944372191232,
+            "path": "/tmp",
+            "total": 1006450962432,
+            "used": 62078771200,
+            "valid": true
+          }
+        ],
+        "interfaces": [
+          {
+            "name": "br-7e70ae54acd7",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 84,
+            "tx_bps": 0,
+            "tx_bytes": 303841
+          },
+          {
+            "name": "br-e44bc5e8d5e3",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 2184,
+            "tx_bps": 0,
+            "tx_bytes": 12038
+          },
+          {
+            "name": "docker0",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enp128s31f6",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 0,
+            "tx_bps": 0,
+            "tx_bytes": 0
+          },
+          {
+            "name": "enxae007ae2386e",
+            "rate_valid": true,
+            "rx_bps": 7494.296577946768,
+            "rx_bytes": 102041145,
+            "tx_bps": 1399.2395437262358,
+            "tx_bytes": 31025936
+          },
+          {
+            "name": "veth06d0ccb",
+            "rate_valid": true,
+            "rx_bps": 0,
+            "rx_bytes": 126,
+            "tx_bps": 0,
+            "tx_bytes": 308451
+          }
+        ],
+        "network_rx_bps": 7494.296577946768,
+        "network_rx_bytes": 102043539,
+        "network_scope": "aggregate non-loopback interfaces",
+        "network_tx_bps": 1399.2395437262358,
+        "network_tx_bytes": 31650266,
+        "ram_available": 27042279424,
+        "ram_percent": 17.931903851040015,
+        "ram_total": 32951025664,
+        "ram_used": 5908746240
+      },
+      "metrics_state": "fresh",
+      "online": true,
+      "os": "Xubuntu 22.04.5 2026.08.28 LTS (Cubic 2026-08-28 09:50)",
+      "schema_version": 1,
+      "sequence": "5",
+      "session_id": "c7bd46e9-ce08-4285-8f9d-128192820f8d",
+      "time_sync": {
+        "checked_ms": 1792374495759,
+        "detail": "chronyc unavailable or daemon not reachable",
+        "offset_seconds": null,
+        "source": "",
+        "state": "unknown"
+      },
+      "timestamp_ms": 1792374496812,
+      "type": "telemetry"
+    },
+    {
+      "address": "",
+      "alert_count": 0,
+      "applications": [],
+      "cpu_history": [],
+      "host_id": "zz-awaiting-agent",
+      "host_state": "Unknown (no telemetry yet)",
+      "hostname": "zz-awaiting-agent",
+      "last_seen": "never",
+      "metrics": {},
+      "metrics_state": "unknown",
+      "online": false,
+      "os": "unknown",
+      "time_sync": {}
+    }
+  ],
+  "master_pid": 20060,
+  "status": "DDS telemetry domain 94 \u00b7 Task3/HostTelemetry/v1",
+  "ui": {
+    "application_id": "",
+    "dashboard_loaded": true,
+    "dds_started": true,
+    "dds_workspace_count": 1,
+    "detail_tab": 0,
+    "height": 900,
+    "host_id": "",
+    "network_view": {
+      "content_height": 25,
+      "count": 0,
+      "height": 0,
+      "width": 0
+    },
+    "resource_tab": 0,
+    "selection_retained": true,
+    "status_text": "Gi\u00e1m s\u00e1t t\u00e0i nguy\u00ean & truy\u1ec1n th\u00f4ng DDS",
+    "status_visible": true,
+    "title": "DDS Monitor",
+    "width": 1600,
+    "workspace": 0
+  },
+  "ui_steps": 0,
+  "window_count": 1
+}
