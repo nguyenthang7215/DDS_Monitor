@@ -3,10 +3,11 @@
 | Thông tin | Giá trị |
 | :--- | :--- |
 | Code gốc (upstream) | https://github.com/eProsima/DDS-Monitor · nhánh `main` · commit `94bbd6d` (*Document event charts and plot mode dropdown #318*) |
-| Code hiện tại | https://github.com/nguyenthang7215/DDS_Monitor · nhánh `main` · commit `22e3109` |
+| Code hiện tại | https://github.com/nguyenthang7215/DDS_Monitor · nhánh `main` · tính đến commit `a19a240` |
 | Ngày đối chiếu | 02/11/2026 |
 | Upstream có commit mới từ lúc tích hợp? | **Không**: `origin/main` vẫn là `94bbd6d` |
 | Tạo lại file này | `git diff 94bbd6d HEAD` (xem mục 6) |
+| Lần cập nhật | 02/11/2026 lần 1 (`22e3109`) · 02/11/2026 lần 2 (`a19a240`): thêm test GRAPH-01, QoS, kết quả stress P0; xóa 12 tài liệu lịch sử |
 
 ---
 
@@ -15,11 +16,13 @@
 | Nhóm | Số file | Ý nghĩa |
 | :--- | :---: | :--- |
 | ✏️ **File gốc bị sửa** | **11** | +231 / −14 dòng (trong đó `.gitignore` +41), chủ yếu ở điểm tích hợp. Chi tiết ở mục 2 và 3 |
-| ➕ File mới: mã nguồn Task 3 (`task3/`) | 56 | Agent, Master, UI QML, test, script, config |
-| ➕ File mới: tài liệu (`docs/task3/`, `TASK3_README.md`) | 25 | Requirements, kiến trúc, kết quả test, tiến độ |
-| ➕ File mới: bằng chứng test (`test-artifacts/`) | 48 | Log, JSON, ảnh, patch P0 |
+| ➕ File mới: mã nguồn Task 3 (`task3/`) | 59 | Agent, Master, UI QML, test, script, config |
+| ➕ File mới: tài liệu (`docs/task3/`, `TASK3_README.md`) | 14 | Requirements, kiến trúc, hướng dẫn chạy/E2E, tiến độ |
+| ➕ File mới: bằng chứng test (`test-artifacts/`) | 68 | Log, JSON, ảnh, patch P0 |
 | ➕ File mới: checkpoint di chuyển (`.task3-migration-checkpoints/`) | 23 | Bản lưu tài liệu trước khi tích hợp vào repo chính |
-| **Tổng** | **163** | `163 files changed, 32387 insertions(+), 14 deletions(-)` |
+| **Tổng** | **175** | `175 files changed, 33931 insertions(+), 14 deletions(-)` |
+
+> **Lưu ý GRAPH-01:** bản sửa 1 dòng cho `qml/DomainGraphLayout.qml` **chưa áp** vào code; chỉ nằm ở `test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch`. Khi áp, file này sẽ thành file gốc bị sửa thứ 12.
 
 > **Nguyên tắc đã giữ:** không sửa các file lõi của Domain Graph (`DomainGraphLayout.qml`, `TabLayout.qml`, `GraphConnection.qml`), `Controller.cpp`, và không sửa source thư viện eProsima (Fast DDS, Statistics Backend). Bản vá Backend chỉ nằm trong `test-artifacts/` dưới dạng file `.patch`, không được áp vào source.
 
@@ -703,7 +706,7 @@ index c60fc3c..aafa131 100644
 | `task3/scripts/build_task3_patched.sh` | 77 | Script build/chạy |
 | `task3/scripts/patched_runtime_common.sh` | 115 | Script build/chạy |
 | `task3/scripts/run_linux_agent_patched.sh` | 23 | Script build/chạy |
-| `task3/scripts/run_master_original.sh` | 69 | Script build/chạy |
+| `task3/scripts/run_master_original.sh` | 69 | Chạy Master với Statistics Backend 2.5.0 Original |
 | `task3/scripts/run_master_patched.sh` | 24 | Script build/chạy |
 | `task3/scripts/windows-time-status.ps1` | 15 | Script build/chạy |
 | `task3/tests/CoreTests.cpp` | 1234 | Kiểm thử |
@@ -711,8 +714,11 @@ index c60fc3c..aafa131 100644
 | `task3/tests/continuation_integration.py` | 145 | Kiểm thử |
 | `task3/tests/final_fix_ui_regression.py` | 74 | Kiểm thử |
 | `task3/tests/local_integration.py` | 150 | Kiểm thử |
-| `task3/tests/qml/NetworkScrollRunner.cpp` | 13 | Kiểm thử |
-| `task3/tests/qml/tst_NetworkScroll.qml` | 114 | Giao diện QML Task 3 |
+| `task3/tests/qml/NetworkScrollRunner.cpp` | 13 | Test QML |
+| `task3/tests/qml/graph/SpyHelper.qml` | 6 | Test tự động GRAPH-01 (Domain Graph gốc, offscreen) |
+| `task3/tests/qml/graph/tst_DomainGraphLoading.qml` | 122 | Test tự động GRAPH-01 (Domain Graph gốc, offscreen) |
+| `task3/tests/qml/tst_NetworkScroll.qml` | 114 | Test QML |
+| `task3/tests/qos_match_local.py` | 71 | Test QoS match/no-match HelloWorld (E2E-12) |
 | `task3/tests/runtime_library_verification.py` | 20 | Kiểm thử |
 | `task3/tests/ui_integration.py` | 198 | Kiểm thử |
 
@@ -720,37 +726,26 @@ index c60fc3c..aafa131 100644
 
 ## 5. Tài liệu và bằng chứng mới
 
-<details><summary>docs/task3/ (25 file)</summary>
+<details><summary>docs/task3/ (14 file)</summary>
 
 - `TASK3_README.md`
 - `docs/task3/ARCHITECTURE.md`
 - `docs/task3/BUILD_AND_RUN.md`
 - `docs/task3/COMMUNICATION.md`
 - `docs/task3/CONFIGURATION.md`
-- `docs/task3/CONTINUATION_CHECKPOINT.md`
 - `docs/task3/CRASH_ROOT_CAUSE_ANALYSIS.md`
 - `docs/task3/DATA_MODEL.md`
-- `docs/task3/DELIVERY_REPORT.md`
-- `docs/task3/FINAL_FIX_RESULTS.md`
-- `docs/task3/IMPLEMENTATION_PLAN.md`
-- `docs/task3/IMPLEMENTATION_STATUS.md`
 - `docs/task3/KNOWN_ISSUES.md`
 - `docs/task3/MASTER_LINUX_WINDOWS_E2E_TEST.md`
-- `docs/task3/POC_BASELINE.patch`
-- `docs/task3/PRE_TEST_READINESS.md`
 - `docs/task3/STATISTICS_UNITS.md`
-- `docs/task3/TASK3_IMPLEMENTATION_REVIEW_VI.md`
 - `docs/task3/TASK3_REQUIREMENTS.md`
-- `docs/task3/TEST_PLAN.md`
-- `docs/task3/TEST_RESULTS.md`
+- `docs/task3/THAY_DOI_SO_VOI_UPSTREAM.md`
 - `docs/task3/TIEN_DO_KIEM_THU.md`
 - `docs/task3/TIME_SYNC_SETUP.md`
-- `docs/task3/UI_6B_DELIVERY.md`
-- `docs/task3/UI_6C_DELIVERY.md`
 
 </details>
 
-<details><summary>test-artifacts/ (48 file)</summary>
+<details><summary>test-artifacts/ (68 file)</summary>
 
 - `test-artifacts/final-fix-20261019/continuation/qml-errors.json`
 - `test-artifacts/final-fix-20261019/continuation/results.json`
@@ -796,6 +791,26 @@ index c60fc3c..aafa131 100644
 - `test-artifacts/main-project-20261016/runtime-linkage.txt`
 - `test-artifacts/main-project-20261016/subscriber-restart/results.json`
 - `test-artifacts/main-project-20261016/subscriber-restart/runtime-library-maps.json`
+- `test-artifacts/original-20261102/README.md`
+- `test-artifacts/original-20261102/graph01/graph-three-hosts-fixed.png`
+- `test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch`
+- `test-artifacts/original-20261102/graph01/qmltest-fixed.txt`
+- `test-artifacts/original-20261102/graph01/qmltest-original.txt`
+- `test-artifacts/original-20261102/patched-publisher-30-run1.stdout`
+- `test-artifacts/original-20261102/patched-publisher-30-run1/result.json`
+- `test-artifacts/original-20261102/patched-publisher-30-run2.stdout`
+- `test-artifacts/original-20261102/patched-publisher-30-run2/result.json`
+- `test-artifacts/original-20261102/publisher-30-rerun.stdout`
+- `test-artifacts/original-20261102/publisher-30-rerun/crash-backtrace.txt`
+- `test-artifacts/original-20261102/publisher-30-rerun/result.json`
+- `test-artifacts/original-20261102/publisher-30.stdout`
+- `test-artifacts/original-20261102/publisher-30/result.json`
+- `test-artifacts/original-20261102/qos-local/result.json`
+- `test-artifacts/original-20261102/qos-profiles/both-best-effort.xml`
+- `test-artifacts/original-20261102/qos-profiles/compatible.xml`
+- `test-artifacts/original-20261102/qos-profiles/incompatible-writer.xml`
+- `test-artifacts/original-20261102/shutdown-check-1/result.json`
+- `test-artifacts/original-20261102/shutdown-check-2/result.json`
 - `test-artifacts/p0-crash-20261016/Fast-DDS-Statistics-Backend-2.5.0-database-queue-lifecycle.patch`
 - `test-artifacts/p0-crash-20261016/dds-monitor-gdb`
 - `test-artifacts/p0-crash-20261016/publisher_stop_restart_reproducer.py`
@@ -836,8 +851,7 @@ index c60fc3c..aafa131 100644
 ## 6. Lệnh tự kiểm tra
 
 ```bash
-git remote add origin https://github.com/eProsima/DDS-Monitor.git   # nếu chưa có
-git fetch origin main
+git fetch origin main                                # origin = eProsima/DDS-Monitor
 git diff --stat 94bbd6d HEAD                         # tổng quan
 git diff --name-status --diff-filter=M 94bbd6d HEAD  # chỉ file gốc bị sửa
 git diff 94bbd6d HEAD -- src/ qml/ include/ CMakeLists.txt   # diff code gốc
