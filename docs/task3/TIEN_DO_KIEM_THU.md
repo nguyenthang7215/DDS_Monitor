@@ -22,7 +22,7 @@
 4. [Chuẩn bị môi trường](#4-chuẩn-bị-môi-trường)
 5. [Sự cố đang xử lý](#5-sự-cố-đang-xử-lý)
 6. [Checklist kiểm thử E2E](#6-checklist-kiểm-thử-e2e)
-7. [Ma trận yêu cầu FR / NFR](#7-ma-trận-yêu-cầu-fr--nfr)
+7. [Ma trận yêu cầu FR / NFR / CON + đối chiếu đề bài](#7-ma-trận-yêu-cầu-fr--nfr)
 8. [Vấn đề còn mở](#8-vấn-đề-còn-mở)
 9. [Tài liệu cần sửa](#9-tài-liệu-cần-sửa)
 10. [Nhật ký kiểm thử](#10-nhật-ký-kiểm-thử)
@@ -285,6 +285,51 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 | [ ] | NFR-03 | Kịp thời | Timeout 5000 ms OK · chưa đo độ trễ |
 | [ ] | NFR-04 | Dễ quan sát | NET-01, GRAPH-02 · đánh giá lại với UI web |
 | [ ] | NFR-05 | Tương thích Linux–Windows | HelloWorld + Agent OK |
+
+### 7.3. Ràng buộc CON
+
+| Xong | CON | Nội dung | Cách chứng minh | Ghi chú |
+| :---: | :--- | :--- | :--- | :--- |
+| [x] | CON-01 | Master là Desktop Linux, C++ + Qt, mở rộng từ DDS Monitor | Source `task3/` + `main.cpp` | Áp dụng cả khi chuyển WebEngine |
+| [x] | CON-02 | Dùng Fast DDS + Statistics Backend | `ldd`, `/proc/<pid>/maps` | Backend 2.5.0 Original |
+| [ ] | CON-03 | Slave **Linux và Windows** | Windows ✅ · **Linux Slave chưa test trên máy riêng** | Xem 7.4 |
+| [ ] | CON-04 | Không Web Server · không Prometheus · không điều khiển Slave từ xa | `ss -ltnp` không có cổng HTTP; rà code không có lệnh start/stop từ xa | Cần lập biên bản, đặc biệt sau khi chuyển WebEngine |
+
+### 7.4. Đối chiếu với đề bài gốc (Task3_Require · Task3_continue)
+
+Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ sung:
+
+| Xong | Mã | Ý trong đề bài | Hiện trạng | Việc cần làm |
+| :---: | :--- | :--- | :--- | :--- |
+| [ ] | REQ-01 | **Slave Linux** gửi telemetry về Master (đề bài: Slave Linux *hoặc* Windows) | Mới test Agent Linux cục bộ cùng máy Master | Chạy `task3_agent` trên một máy Linux thứ 2, kiểm tra như E2E-06 → 10 |
+| [ ] | REQ-02 | **Nhiều Slave cùng lúc** (máy A, B, …) trên một màn hình | Mới 1 Slave | Chạy ≥ 2 Slave (Windows + Linux), kiểm tra danh sách, đèn, chọn máy |
+| [ ] | REQ-03 | **Trao đổi trong cùng một máy** (pm A1 ↔ A2 trong Slave A) | Mới test luồng giữa 2 máy (Linux → Windows) | Chạy Publisher + Subscriber cùng trên Windows, kiểm tra hiển thị luồng bên trong máy đó |
+| [ ] | REQ-04 | Hiển thị luồng **theo từng máy**: bên trong Slave thấy các phần mềm, thông lượng, có trao đổi được không, lỗi gì | Có topology Host → App → Writer → Topic → Reader (test Linux) | Kiểm tra trên 2 máy thật; áp dụng cho cả UI WebEngine |
+| [ ] | REQ-05 | **Đồng bộ giờ khi Slave khởi động** (dịch vụ tự chạy khi boot, tự đồng bộ lại khi có mạng) | Có template `task3/config/time-sync/` | Gộp vào E2E-23, 24, 26: reboot Windows → kiểm tra w32time tự chạy và đồng bộ |
+| [ ] | REQ-06 | Phân biệt: **dịch vụ đang chạy / có nguồn thời gian / đã đồng bộ**; offset không có thì hiện "chưa có dữ liệu", không hiện 0 | Code có `time_sync.state` + offset `null` | Kiểm tra trên UI khi NTP chưa cấu hình (E2E-21, 22) |
+| [ ] | REQ-07 | Phát hiện **ngừng truyền dữ liệu** (Writer còn sống nhưng không gửi) | Có rule `dds_no_data` (test Linux) | E2E-18 với `hello_world_topic` dạng periodic |
+| [ ] | REQ-08 | Phát hiện **mất kết nối DDS** (Reader/Writer hết matched) | Chưa có ca riêng | Tắt Subscriber / rút mạng → kiểm tra trạng thái Unmatched + cảnh báo |
+| [ ] | REQ-09 | Phát hiện **hoạt động bất thường** (ngưỡng throughput, CPU…) | Có hysteresis throughput (unit test) | Chốt ngưỡng cụ thể rồi test thật |
+| [ ] | REQ-10 | Hiển thị **QoS liên quan**: Reliability, History, Durability, Deadline, Liveliness | Màn DDS gốc có QoS | Chụp màn QoS của Writer/Reader HelloWorld; ghép vào E2E-12 |
+| [ ] | REQ-11 | **Network Latency** và **Physical Data** (Host/User/Process) | Chưa ghi nhận riêng | Kiểm tra trong E2E-14; ghi đơn vị |
+| [ ] | REQ-12 | Kiểm tra **tương thích phiên bản** Fast DDS / dependency giữa Linux và Windows (NFR-05) | Linux 3.6.1; Windows chưa ghi phiên bản | Ghi phiên bản Fast DDS/Fast CDR trên Windows vào E2E-01 |
+| [ ] | REQ-13 | Hiển thị Slave **"Chưa xác định"** khi chưa nhận bản tin đầu tiên | Code có Unknown | Mở Master trước khi chạy Agent → chụp màn hình |
+| [ ] | REQ-14 | Chạy **ổn định liên tục** trong thời gian dài | Mới test ngắn (~2 phút cục bộ) | Chạy 2 máy ≥ thời gian đã chốt ở 7.5 |
+
+### 7.5. Thông số cần chốt trước khi nghiệm thu
+
+> Theo Task3_continue mục 2.2: các thông số này phải thống nhất **trước** khi kiểm thử; hiện chưa chốt.
+
+| Xong | Thông số | Giá trị mặc định trong code | Giá trị chốt |
+| :---: | :--- | :--- | :--- |
+| [ ] | Số Slave mục tiêu | Tối đa 512 host (giới hạn code) | |
+| [ ] | Chu kỳ lấy mẫu Agent | `interval_ms` = 1000 ms | |
+| [ ] | Timeout Online → Offline | `TASK3_TIMEOUT_MS` = 5000 ms | |
+| [ ] | Độ trễ cập nhật UI chấp nhận được | — | |
+| [ ] | Độ lệch thời gian cho phép (offset NTP) | — | |
+| [ ] | Thời gian chạy liên tục để nghiệm thu | — | |
+| [ ] | Ngưỡng cảnh báo (CPU, throughput, No Data deadline) | `flow-rules.json`: 1500 ms / 15000 ms | |
+| [ ] | Thời hạn lưu sự kiện SQLite | Retention mặc định **tắt** | |
 
 ---
 
