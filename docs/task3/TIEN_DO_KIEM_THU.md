@@ -38,14 +38,14 @@
 | Trạng thái | Số ca | Tỷ lệ | Các ca |
 | :--- | :---: | :---: | :--- |
 | ✅ PASS | 3 | 12 % | 03 · 06 · 10 |
-| 🟡 PARTIAL | 12 | 46 % | 01 · 02 · 04 · 05 · 07 · 08 · 09 · 11 · 14 · 16 · 17 · 21 |
-| ⬜ NOT RUN | 8 | 31 % | 12 · 13 · 15 · 18 · 19 · 20 · 22 · 25 |
+| 🟡 PARTIAL | 13 | 50 % | 01 · 02 · 04 · 05 · 07 · 08 · 09 · 11 · 12 · 14 · 16 · 17 · 21 |
+| ⬜ NOT RUN | 7 | 27 % | 13 · 15 · 18 · 19 · 20 · 22 · 25 |
 | ⛔ BLOCKED | 3 | 11 % | 23 · 24 · 26 |
 
 ```
 PASS     ███░░░░░░░░░░░░░░░░░░░░░░░   3/26
-PARTIAL  ████████████░░░░░░░░░░░░░░  12/26
-NOT RUN  ████████░░░░░░░░░░░░░░░░░░   8/26
+PARTIAL  █████████████░░░░░░░░░░░░░  13/26
+NOT RUN  ███████░░░░░░░░░░░░░░░░░░░   7/26
 BLOCKED  ███░░░░░░░░░░░░░░░░░░░░░░░   3/26
 ```
 
@@ -58,7 +58,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 ### 1.3. Tóm tắt một dòng
 
-> Nguyên mẫu đã chạy trên 2 máy thật (telemetry, Online/Offline, process, cảnh báo, DDS HelloWorld cross-OS). Đã tìm ra nguyên nhân lỗi Graph. **Có yêu cầu mới chuyển UI sang Qt WebEngine** — cần chốt phạm vi trước khi tiếp tục sửa UI QML.
+> Nguyên mẫu đã chạy trên 2 máy thật (telemetry, Online/Offline, process, cảnh báo, DDS HelloWorld cross-OS). GRAPH-01 đã có bản sửa 1 dòng (test tự động 6/6), chờ áp. **P0 tái hiện lại với Backend Original** (Patched ổn định). Đã chốt chuyển **UI Task 3 sang Qt WebEngine, giống hệt UI QML hiện tại**; chờ cài module WebEngine.
 
 ---
 
