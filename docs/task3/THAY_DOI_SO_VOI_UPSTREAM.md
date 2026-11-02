@@ -3,11 +3,12 @@
 | Thông tin | Giá trị |
 | :--- | :--- |
 | Code gốc (upstream) | https://github.com/eProsima/DDS-Monitor · nhánh `main` · commit `94bbd6d` (*Document event charts and plot mode dropdown #318*) |
-| Code hiện tại | https://github.com/nguyenthang7215/DDS_Monitor · nhánh `main` · tính đến commit `a19a240` |
+| Code hiện tại | https://github.com/nguyenthang7215/DDS_Monitor · nhánh `main` · tính đến commit `748c8d7` |
 | Ngày đối chiếu | 02/11/2026 |
 | Upstream có commit mới từ lúc tích hợp? | **Không**: `origin/main` vẫn là `94bbd6d` |
 | Tạo lại file này | `git diff 94bbd6d HEAD` (xem mục 6) |
-| Lần cập nhật | 02/11/2026 lần 1 (`22e3109`) · 02/11/2026 lần 2 (`a19a240`): thêm test GRAPH-01, QoS, kết quả stress P0; xóa 12 tài liệu lịch sử |
+| Nhánh | `feature/webengine-ui` (UI Task 3 chạy trên Qt WebEngine; cần **Qt ≥ 6.8**) |
+| Lần cập nhật | 02/11/2026 lần 1 (`22e3109`) · lần 2 (`a19a240`): test GRAPH-01, QoS, stress P0 · lần 3 (`748c8d7`): **UI Task 3 chuyển sang Qt WebEngine** |
 
 ---
 
@@ -15,12 +16,12 @@
 
 | Nhóm | Số file | Ý nghĩa |
 | :--- | :---: | :--- |
-| ✏️ **File gốc bị sửa** | **11** | +231 / −14 dòng (trong đó `.gitignore` +41), chủ yếu ở điểm tích hợp. Chi tiết ở mục 2 và 3 |
-| ➕ File mới: mã nguồn Task 3 (`task3/`) | 59 | Agent, Master, UI QML, test, script, config |
+| ✏️ **File gốc bị sửa** | **11** | +232 / −14 dòng (trong đó `.gitignore` +41), chủ yếu ở điểm tích hợp. Chi tiết ở mục 2 và 3 |
+| ➕ File mới: mã nguồn Task 3 (`task3/`) | 64 | Agent, Master, UI QML, test, script, config |
 | ➕ File mới: tài liệu (`docs/task3/`, `TASK3_README.md`) | 14 | Requirements, kiến trúc, hướng dẫn chạy/E2E, tiến độ |
-| ➕ File mới: bằng chứng test (`test-artifacts/`) | 68 | Log, JSON, ảnh, patch P0 |
+| ➕ File mới: bằng chứng test (`test-artifacts/`) | 140 | Log, JSON, ảnh, patch P0 |
 | ➕ File mới: checkpoint di chuyển (`.task3-migration-checkpoints/`) | 23 | Bản lưu tài liệu trước khi tích hợp vào repo chính |
-| **Tổng** | **175** | `175 files changed, 33931 insertions(+), 14 deletions(-)` |
+| **Tổng** | **252** | `252 files changed, 38908 insertions(+), 14 deletions(-)` |
 
 > **Lưu ý GRAPH-01:** bản sửa 1 dòng cho `qml/DomainGraphLayout.qml` **chưa áp** vào code; chỉ nằm ở `test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch`. Khi áp, file này sẽ thành file gốc bị sửa thứ 12.
 
@@ -28,13 +29,25 @@
 
 ---
 
+## 1b. Giao diện Task 3 trên Qt WebEngine (nhánh `feature/webengine-ui`)
+
+| Phần | File | Ghi chú |
+| :--- | :--- | :--- |
+| Trang web (mới) | `task3/web/index.html`, `style.css`, `app.js` | HTML/CSS/JS thuần, không thư viện ngoài, nạp từ `qrc:/task3/web/` |
+| Vỏ QML (mới) | `task3/WebDashboard.qml` | `WebEngineView` + `WebChannel`; giữ API của `Dashboard.qml` (`selectedHostId`, `chooseHost()`, `openDdsWorkspace`…) |
+| Khởi tạo | `task3/Dashboard.cpp/.h` | `prepareWebEngine()`; biến `TASK3_UI` chọn trang web/QML |
+| Build | `task3/CMakeLists.txt` | Link `Qt6::WebEngineQuick`, `Qt6::WebChannelQuick` (Qt ≥ 6.8) |
+| Test (mới) | `task3/tests/DashboardPreview.cpp` | Dựng trang QML hoặc Web từ snapshot để so sánh ảnh, bấm thử |
+| Code gốc bị đụng thêm | `src/main.cpp` (+1 dòng), `qml/main.qml` (1 dòng `source`) | Không đổi màn DDS chuyên sâu |
+| Bản QML cũ | `task3/Dashboard.qml`, `HostWorkspace.qml`, `FlowDetails.qml`, `EventHistoryView.qml` | Giữ lại để so sánh (`TASK3_UI=qml`) |
+
 ## 2. File gốc bị sửa: giải thích
 
 | # | File | +/− | Thay đổi | Lý do | Rủi ro / ghi chú |
 | :---: | :--- | :---: | :--- | :--- | :--- |
-| 1 | `src/main.cpp` | +4 | Gọi `task3::installShutdownHandler()` và `task3::installDashboard(engine)` | **Điểm cắm** module Task 3 vào ứng dụng gốc | Thấp |
+| 1 | `src/main.cpp` | +5 | Gọi `task3::prepareWebEngine()` (trước `QApplication`), `task3::installShutdownHandler()` và `task3::installDashboard(engine)` | **Điểm cắm** module Task 3; Qt WebEngine phải khởi tạo trước `QApplication` | Thấp |
 | 2 | `CMakeLists.txt` | +6 | `add_subdirectory(task3)` và tùy chọn `TASK3_BUILD_TESTS` | Build module Task 3 cùng DDS Monitor | Thấp |
-| 3 | `qml/main.qml` | +132/−9 | Thêm thanh chọn 3 workspace (*Giám sát hệ thống · DDS chuyên sâu · Cảnh báo & lịch sử*), `Loader` nạp `Dashboard.qml`, ẩn/hiện màn gốc theo tab, hàm `task3Exercise()` phục vụ test UI tự động | Gộp UI Task 3 và UI gốc vào **một cửa sổ** | Trung bình: đây là file UI chính. Màn DDS gốc vẫn giữ nguyên, chỉ bọc thêm |
+| 3 | `qml/main.qml` | +132/−9 | Thêm thanh chọn 3 workspace (*Giám sát hệ thống · DDS chuyên sâu · Cảnh báo & lịch sử*), `Loader` nạp trang Task 3 (`WebDashboard.qml` mặc định, `Dashboard.qml` khi `TASK3_UI=qml`), ẩn/hiện màn gốc theo tab, hàm `task3Exercise()` phục vụ test UI tự động | Gộp UI Task 3 và UI gốc vào **một cửa sổ** | Trung bình: đây là file UI chính. Màn DDS gốc vẫn giữ nguyên, chỉ bọc thêm |
 | 4 | `src/backend/SyncBackendConnection.cpp` | ±3 | `DDS_MONITOR_APP` → `FASTDDS_MONITOR_APP` (3 chỗ) | Header Statistics Backend 2.5.0 chỉ có tên `FASTDDS_MONITOR_APP`, không đổi thì **không build được** | Thấp: chỉ đổi tên hằng |
 | 5 | `src/Engine.cpp` | +7 | Với chart kiểu `NONE` (raw), đọc lại cả cửa sổ hiển thị thay vì chỉ đọc từ lần trước | Sửa lỗi Dynamic Chart **bỏ sót mẫu đến muộn** | Trung bình: nhánh aggregate/cumulative chưa sửa |
 | 6 | `src/statistics/dynamic/DynamicDataChartBox.cpp` | +15/−1 | Series raw dùng `handleSnapshot()` (thay cả dữ liệu) thay vì nối thêm điểm | Đi kèm #5, tránh điểm trùng | Trung bình |
@@ -269,7 +282,7 @@ index c5a70a2..a9c4afd 100644
 
 ```diff
 diff --git a/qml/main.qml b/qml/main.qml
-index 9dd88b4..1a1088a 100644
+index 9dd88b4..a541ccf 100644
 --- a/qml/main.qml
 +++ b/qml/main.qml
 @@ -25,6 +25,7 @@ import Theme 1.0
@@ -436,7 +449,7 @@ index 9dd88b4..1a1088a 100644
 +        anchors.fill: parent
 +        active: mainApplicationView.task3Ready
 +        visible: mainApplicationView.task3Page
-+        source: "qrc:/task3/Dashboard.qml"
++        source: mainApplicationView.task3Ready ? task3DashboardSource : ""
 +    }
 +    Binding {
 +        target: task3Loader.item
@@ -537,14 +550,14 @@ index 8092fc8..c0ec648 100644
 
 ### `src/main.cpp`
 
-<details><summary>Xem diff (+4 / −0)</summary>
+<details><summary>Xem diff (+5 / −0)</summary>
 
 ```diff
 diff --git a/src/main.cpp b/src/main.cpp
-index a90aeef..ca3c362 100644
+index a90aeef..e5f03f7 100644
 --- a/src/main.cpp
 +++ b/src/main.cpp
-@@ -25,6 +25,8 @@
+@@ -25,13 +25,17 @@
  #include <QQuickStyle>
  
  #include <dds_monitor/Engine.h>
@@ -553,15 +566,16 @@ index a90aeef..ca3c362 100644
  #include <dds_monitor/io/ClipboardHandler.h>
  
  int main(
-@@ -32,6 +34,7 @@ int main(
+         int argc,
          char* argv[])
  {
++    task3::prepareWebEngine();
      QApplication app(argc, argv);
 +    task3::installShutdownHandler();
      app.setWindowIcon(QIcon(":/resources/images/eprosima_logo.ico"));
      app.setOrganizationName("eProsima");
      app.setOrganizationDomain("eprosima.com");
-@@ -54,6 +57,7 @@ int main(
+@@ -54,6 +58,7 @@ int main(
          return -1;
      }
      window->show();
@@ -664,11 +678,11 @@ index c60fc3c..aafa131 100644
 | :--- | ---: | :--- |
 | `task3/AlertStore.cpp` | 434 | SQLite Active/Recovered |
 | `task3/AlertStore.h` | 52 | SQLite Active/Recovered |
-| `task3/CMakeLists.txt` | 41 | Build |
+| `task3/CMakeLists.txt` | 51 | Build |
 | `task3/Collectors.cpp` | 521 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
 | `task3/Collectors.h` | 38 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
-| `task3/Dashboard.cpp` | 169 | Đăng ký model/UI Task 3 |
-| `task3/Dashboard.h` | 6 | Đăng ký model/UI Task 3 |
+| `task3/Dashboard.cpp` | 178 | Đăng ký model/UI Task 3 |
+| `task3/Dashboard.h` | 8 | Đăng ký model/UI Task 3 |
 | `task3/Dashboard.qml` | 462 | Giao diện QML Task 3 (trang chính) |
 | `task3/DdsBridge.cpp` | 232 | Đọc Statistics Backend |
 | `task3/DdsBridge.h` | 23 | Đọc Statistics Backend |
@@ -691,6 +705,7 @@ index c60fc3c..aafa131 100644
 | `task3/Shutdown.h` | 21 | Thoát an toàn |
 | `task3/Telemetry.idl` | 8 | Kiểu DDS TelemetryEnvelopeV1 |
 | `task3/Units.h` | 22 | Đơn vị, chuỗi thời gian |
+| `task3/WebDashboard.qml` | 107 | Vỏ QML: WebEngineView + WebChannel |
 | `task3/agent/CMakeLists.txt` | 15 | Build |
 | `task3/agent_main.cpp` | 83 | Chương trình Agent (Slave) |
 | `task3/config/flow-rules.json` | 4 | Cấu hình mẫu |
@@ -710,6 +725,7 @@ index c60fc3c..aafa131 100644
 | `task3/scripts/run_master_patched.sh` | 24 | Script build/chạy |
 | `task3/scripts/windows-time-status.ps1` | 15 | Script build/chạy |
 | `task3/tests/CoreTests.cpp` | 1234 | Kiểm thử |
+| `task3/tests/DashboardPreview.cpp` | 141 | So sánh ảnh / bấm thử trang QML và Web |
 | `task3/tests/RuntimeProbe.cpp` | 69 | Kiểm thử |
 | `task3/tests/continuation_integration.py` | 145 | Kiểm thử |
 | `task3/tests/final_fix_ui_regression.py` | 74 | Kiểm thử |
@@ -721,6 +737,9 @@ index c60fc3c..aafa131 100644
 | `task3/tests/qos_match_local.py` | 71 | Test QoS match/no-match HelloWorld (E2E-12) |
 | `task3/tests/runtime_library_verification.py` | 20 | Kiểm thử |
 | `task3/tests/ui_integration.py` | 198 | Kiểm thử |
+| `task3/web/app.js` | 362 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
+| `task3/web/index.html` | 95 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
+| `task3/web/style.css` | 204 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
 
 ---
 
@@ -745,7 +764,7 @@ index c60fc3c..aafa131 100644
 
 </details>
 
-<details><summary>test-artifacts/ (68 file)</summary>
+<details><summary>test-artifacts/ (140 file)</summary>
 
 - `test-artifacts/final-fix-20261019/continuation/qml-errors.json`
 - `test-artifacts/final-fix-20261019/continuation/results.json`
@@ -811,10 +830,82 @@ index c60fc3c..aafa131 100644
 - `test-artifacts/original-20261102/qos-profiles/incompatible-writer.xml`
 - `test-artifacts/original-20261102/shutdown-check-1/result.json`
 - `test-artifacts/original-20261102/shutdown-check-2/result.json`
+- `test-artifacts/original-20261102b/README.md`
+- `test-artifacts/original-20261102b/continuation-rerun.stdout`
+- `test-artifacts/original-20261102b/continuation.stdout`
+- `test-artifacts/original-20261102b/continuation/qml-errors.json`
+- `test-artifacts/original-20261102b/continuation/results.json`
+- `test-artifacts/original-20261102b/continuation/runtime-library-maps.json`
+- `test-artifacts/original-20261102b/ctest-release.stdout`
+- `test-artifacts/original-20261102b/local-rerun.stdout`
+- `test-artifacts/original-20261102b/local.stdout`
+- `test-artifacts/original-20261102b/local/results.json`
+- `test-artifacts/original-20261102b/local/runtime-library-maps.json`
+- `test-artifacts/original-20261102b/publisher-30-run1.stdout`
+- `test-artifacts/original-20261102b/publisher-30-run1/crash-backtrace.txt`
+- `test-artifacts/original-20261102b/publisher-30-run1/result.json`
+- `test-artifacts/original-20261102b/publisher-30-run2.stdout`
+- `test-artifacts/original-20261102b/publisher-30-run2/crash-backtrace.txt`
+- `test-artifacts/original-20261102b/publisher-30-run2/result.json`
+- `test-artifacts/original-20261102b/publisher-30-run3.stdout`
+- `test-artifacts/original-20261102b/publisher-30-run3/result.json`
+- `test-artifacts/original-20261102b/publisher-30-run4.stdout`
+- `test-artifacts/original-20261102b/publisher-30-run4/crash-backtrace.txt`
+- `test-artifacts/original-20261102b/publisher-30-run4/result.json`
+- `test-artifacts/original-20261102b/publisher-30-run5.stdout`
+- `test-artifacts/original-20261102b/publisher-30-run5/crash-backtrace.txt`
+- `test-artifacts/original-20261102b/publisher-30-run5/result.json`
+- `test-artifacts/original-20261102b/run_all.sh`
+- `test-artifacts/original-20261102b/run_integration.sh`
+- `test-artifacts/original-20261102b/subscriber-restart.stdout`
+- `test-artifacts/original-20261102b/subscriber-restart/results.json`
+- `test-artifacts/original-20261102b/subscriber-restart/runtime-library-maps.json`
+- `test-artifacts/original-20261102b/summary.txt`
 - `test-artifacts/p0-crash-20261016/Fast-DDS-Statistics-Backend-2.5.0-database-queue-lifecycle.patch`
 - `test-artifacts/p0-crash-20261016/dds-monitor-gdb`
 - `test-artifacts/p0-crash-20261016/publisher_stop_restart_reproducer.py`
 - `test-artifacts/p0-crash-20261016/subscriber_restart_regression.py`
+- `test-artifacts/patched-20261102/README.md`
+- `test-artifacts/patched-20261102/continuation.stdout`
+- `test-artifacts/patched-20261102/continuation/qml-errors.json`
+- `test-artifacts/patched-20261102/continuation/results.json`
+- `test-artifacts/patched-20261102/continuation/runtime-library-maps.json`
+- `test-artifacts/patched-20261102/ctest-release.stdout`
+- `test-artifacts/patched-20261102/local.stdout`
+- `test-artifacts/patched-20261102/local/results.json`
+- `test-artifacts/patched-20261102/local/runtime-library-maps.json`
+- `test-artifacts/patched-20261102/publisher-30-run1.stdout`
+- `test-artifacts/patched-20261102/publisher-30-run1/result.json`
+- `test-artifacts/patched-20261102/publisher-30-run2.stdout`
+- `test-artifacts/patched-20261102/publisher-30-run2/result.json`
+- `test-artifacts/patched-20261102/publisher-30-run3.stdout`
+- `test-artifacts/patched-20261102/publisher-30-run3/result.json`
+- `test-artifacts/patched-20261102/publisher-30-run4.stdout`
+- `test-artifacts/patched-20261102/publisher-30-run4/result.json`
+- `test-artifacts/patched-20261102/publisher-30-run5.stdout`
+- `test-artifacts/patched-20261102/publisher-30-run5/result.json`
+- `test-artifacts/patched-20261102/run_all.sh`
+- `test-artifacts/patched-20261102/subscriber-restart.stdout`
+- `test-artifacts/patched-20261102/subscriber-restart/results.json`
+- `test-artifacts/patched-20261102/subscriber-restart/runtime-library-maps.json`
+- `test-artifacts/patched-20261102/summary.txt`
+- `test-artifacts/qt683-20261102/README.md`
+- `test-artifacts/qt683-20261102/ctest-release.stdout`
+- `test-artifacts/qt683-20261102/graph-qml.stdout`
+- `test-artifacts/qt683-20261102/local.stdout`
+- `test-artifacts/qt683-20261102/run_all.sh`
+- `test-artifacts/qt683-20261102/summary.txt`
+- `test-artifacts/webengine-20261102/README.md`
+- `test-artifacts/webengine-20261102/compare_qml_web.sh`
+- `test-artifacts/webengine-20261102/pixel-diff.txt`
+- `test-artifacts/webengine-20261102/shots/apps-pair.png`
+- `test-artifacts/webengine-20261102/shots/events-pair.png`
+- `test-artifacts/webengine-20261102/shots/flows-pair.png`
+- `test-artifacts/webengine-20261102/shots/network-pair.png`
+- `test-artifacts/webengine-20261102/shots/offline-pair.png`
+- `test-artifacts/webengine-20261102/shots/overview-pair.png`
+- `test-artifacts/webengine-20261102/shots/resources-pair.png`
+- `test-artifacts/webengine-20261102/shots/time-pair.png`
 
 </details>
 
