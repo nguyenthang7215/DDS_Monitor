@@ -6,6 +6,8 @@
 | Source | `/home/dev/DDS-Monitor` · HEAD `44e1337` |
 | Linux Master | `172.20.10.2/28` · Xubuntu 22.04 · Qt 6.7.2 |
 | Windows Slave | `172.20.10.3/28` · `windows-slave-a` |
+| Linux Slave | Agent chạy **trên chính máy Master** · `linux-slave-a` (`task3/config/linux-agent.json`) |
+| Giới hạn | Chỉ **2 thiết bị vật lý** (Linux + Windows); Slave thứ 2 trở đi là mô phỏng |
 | Backend vận hành | Fast DDS Statistics Backend **2.5.0 Original** |
 
 **Ký hiệu:** ✅ PASS · 🟡 PARTIAL · ⬜ NOT RUN · ⛔ BLOCKED · ❌ FAIL · 🔴 ưu tiên cao · 🟠 trung bình · ⚪ thấp
@@ -280,7 +282,7 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 
 | Xong | NFR | Nội dung | Ghi chú |
 | :---: | :--- | :--- | :--- |
-| [ ] | NFR-01 | Mở rộng nhiều Slave | Chưa test tải |
+| [ ] | NFR-01 | Mở rộng nhiều Slave | Chỉ có 2 máy → test 2–3 Slave (thật + mô phỏng); quy mô lớn dựa trên unit test tải tổng hợp (128 host), ghi rõ là mô phỏng |
 | [ ] | NFR-02 | Ổn định, phục hồi | Agent recovery OK · P0 còn mở |
 | [ ] | NFR-03 | Kịp thời | Timeout 5000 ms OK · chưa đo độ trễ |
 | [ ] | NFR-04 | Dễ quan sát | NET-01, GRAPH-02 · đánh giá lại với UI web |
@@ -292,18 +294,20 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 | :---: | :--- | :--- | :--- | :--- |
 | [x] | CON-01 | Master là Desktop Linux, C++ + Qt, mở rộng từ DDS Monitor | Source `task3/` + `main.cpp` | Áp dụng cả khi chuyển WebEngine |
 | [x] | CON-02 | Dùng Fast DDS + Statistics Backend | `ldd`, `/proc/<pid>/maps` | Backend 2.5.0 Original |
-| [ ] | CON-03 | Slave **Linux và Windows** | Windows ✅ · **Linux Slave chưa test trên máy riêng** | Xem 7.4 |
+| [ ] | CON-03 | Slave **Linux và Windows** | Windows ✅ · Linux: chạy Agent Linux ngay trên máy Master (xem 7.4) | Giới hạn 2 thiết bị |
 | [ ] | CON-04 | Không Web Server · không Prometheus · không điều khiển Slave từ xa | `ss -ltnp` không có cổng HTTP; rà code không có lệnh start/stop từ xa | Cần lập biên bản, đặc biệt sau khi chuyển WebEngine |
 
 ### 7.4. Đối chiếu với đề bài gốc (Task3_Require · Task3_continue)
 
 Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ sung:
 
-| Xong | Mã | Ý trong đề bài | Hiện trạng | Việc cần làm |
+> ⚠️ **Giới hạn thiết bị:** chỉ có **2 máy** — Linux (Master) và Windows (Slave). Các ý cần thêm máy được làm theo cách thay thế bên dưới và **ghi rõ giới hạn** trong báo cáo; không ghi là đã test trên máy Linux Slave riêng hay nhiều máy vật lý.
+
+| Xong | Mã | Ý trong đề bài | Hiện trạng | Cách test với 2 máy |
 | :---: | :--- | :--- | :--- | :--- |
-| [ ] | REQ-01 | **Slave Linux** gửi telemetry về Master (đề bài: Slave Linux *hoặc* Windows) | Mới test Agent Linux cục bộ cùng máy Master | Chạy `task3_agent` trên một máy Linux thứ 2, kiểm tra như E2E-06 → 10 |
-| [ ] | REQ-02 | **Nhiều Slave cùng lúc** (máy A, B, …) trên một màn hình | Mới 1 Slave | Chạy ≥ 2 Slave (Windows + Linux), kiểm tra danh sách, đèn, chọn máy |
-| [ ] | REQ-03 | **Trao đổi trong cùng một máy** (pm A1 ↔ A2 trong Slave A) | Mới test luồng giữa 2 máy (Linux → Windows) | Chạy Publisher + Subscriber cùng trên Windows, kiểm tra hiển thị luồng bên trong máy đó |
+| [ ] | REQ-01 | **Slave Linux** gửi telemetry về Master | Agent Linux đã chạy cục bộ (test Linux) | Chạy `bash task3/scripts/run_linux_agent_patched.sh` (hoặc agent với `linux-agent.json`, `host_id` riêng) **ngay trên máy Master** → Master đồng thời là Linux Slave. Kiểm tra như E2E-06 → 10. *Giới hạn: không có mạng thật giữa Master và Linux Slave.* |
+| [ ] | REQ-02 | **Nhiều Slave cùng lúc** (máy A, B, …) | Mới 1 Slave | Slave A = Windows, Slave B = Agent Linux trên máy Master → 2 Slave trên một màn hình. Có thể chạy thêm 1 Agent trên Windows với `host_id` khác để mô phỏng Slave C. *Giới hạn: Slave mô phỏng dùng chung phần cứng.* |
+| [ ] | REQ-03 | **Trao đổi trong cùng một máy** (pm A1 ↔ A2 trong Slave A) | Mới test Linux → Windows | Chạy HelloWorld **Publisher + Subscriber cùng trên Windows** → kiểm tra luồng bên trong `windows-slave-a`. Không cần máy thứ 3. |
 | [ ] | REQ-04 | Hiển thị luồng **theo từng máy**: bên trong Slave thấy các phần mềm, thông lượng, có trao đổi được không, lỗi gì | Có topology Host → App → Writer → Topic → Reader (test Linux) | Kiểm tra trên 2 máy thật; áp dụng cho cả UI WebEngine |
 | [ ] | REQ-05 | **Đồng bộ giờ khi Slave khởi động** (dịch vụ tự chạy khi boot, tự đồng bộ lại khi có mạng) | Có template `task3/config/time-sync/` | Gộp vào E2E-23, 24, 26: reboot Windows → kiểm tra w32time tự chạy và đồng bộ |
 | [ ] | REQ-06 | Phân biệt: **dịch vụ đang chạy / có nguồn thời gian / đã đồng bộ**; offset không có thì hiện "chưa có dữ liệu", không hiện 0 | Code có `time_sync.state` + offset `null` | Kiểm tra trên UI khi NTP chưa cấu hình (E2E-21, 22) |
