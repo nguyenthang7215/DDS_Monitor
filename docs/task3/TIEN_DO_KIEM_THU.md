@@ -6,8 +6,8 @@
 | Source | `/home/dev/DDS-Monitor` · HEAD `44e1337` |
 | Linux Master | `172.20.10.2/28` · Xubuntu 22.04 · Qt 6.7.2 |
 | Windows Slave | `172.20.10.3/28` · `windows-slave-a` |
-| Linux Slave | Agent chạy **trên chính máy Master** · `linux-slave-a` (`task3/config/linux-agent.json`) |
-| Giới hạn | Chỉ **2 thiết bị vật lý** (Linux + Windows); Slave thứ 2 trở đi là mô phỏng |
+| Mục tiêu thiết kế | **Nhiều Slave** (Linux và Windows) |
+| Phạm vi test thực tế | **2 thiết bị**: Linux chỉ làm Master · Windows làm Slave |
 | Backend vận hành | Fast DDS Statistics Backend **2.5.0 Original** |
 
 **Ký hiệu:** ✅ PASS · 🟡 PARTIAL · ⬜ NOT RUN · ⛔ BLOCKED · ❌ FAIL · 🔴 ưu tiên cao · 🟠 trung bình · ⚪ thấp
@@ -294,19 +294,19 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 | :---: | :--- | :--- | :--- | :--- |
 | [x] | CON-01 | Master là Desktop Linux, C++ + Qt, mở rộng từ DDS Monitor | Source `task3/` + `main.cpp` | Áp dụng cả khi chuyển WebEngine |
 | [x] | CON-02 | Dùng Fast DDS + Statistics Backend | `ldd`, `/proc/<pid>/maps` | Backend 2.5.0 Original |
-| [ ] | CON-03 | Slave **Linux và Windows** | Windows ✅ · Linux: chạy Agent Linux ngay trên máy Master (xem 7.4) | Giới hạn 2 thiết bị |
+| [ ] | CON-03 | Slave **Linux và Windows** | Windows ✅ test thật · Linux Slave: code + test cục bộ, chưa có máy để test thật | Giới hạn 2 thiết bị |
 | [ ] | CON-04 | Không Web Server · không Prometheus · không điều khiển Slave từ xa | `ss -ltnp` không có cổng HTTP; rà code không có lệnh start/stop từ xa | Cần lập biên bản, đặc biệt sau khi chuyển WebEngine |
 
 ### 7.4. Đối chiếu với đề bài gốc (Task3_Require · Task3_continue)
 
 Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ sung:
 
-> ⚠️ **Giới hạn thiết bị:** chỉ có **2 máy** — Linux (Master) và Windows (Slave). Các ý cần thêm máy được làm theo cách thay thế bên dưới và **ghi rõ giới hạn** trong báo cáo; không ghi là đã test trên máy Linux Slave riêng hay nhiều máy vật lý.
+> ⚠️ **Mục tiêu và phạm vi test:** hệ thống thiết kế cho **nhiều Slave** (Linux và Windows). Thực tế chỉ có **2 máy**: Linux **chỉ làm Master**, Windows làm Slave. Báo cáo ghi rõ giới hạn này; không ghi là đã test trên Linux Slave hay nhiều máy vật lý.
 
 | Xong | Mã | Ý trong đề bài | Hiện trạng | Cách test với 2 máy |
 | :---: | :--- | :--- | :--- | :--- |
-| [ ] | REQ-01 | **Slave Linux** gửi telemetry về Master | Agent Linux đã chạy cục bộ (test Linux) | Chạy `bash task3/scripts/run_linux_agent_patched.sh` (hoặc agent với `linux-agent.json`, `host_id` riêng) **ngay trên máy Master** → Master đồng thời là Linux Slave. Kiểm tra như E2E-06 → 10. *Giới hạn: không có mạng thật giữa Master và Linux Slave.* |
-| [ ] | REQ-02 | **Nhiều Slave cùng lúc** (máy A, B, …) | Mới 1 Slave | Slave A = Windows, Slave B = Agent Linux trên máy Master → 2 Slave trên một màn hình. Có thể chạy thêm 1 Agent trên Windows với `host_id` khác để mô phỏng Slave C. *Giới hạn: Slave mô phỏng dùng chung phần cứng.* |
+| [ ] | REQ-01 | **Slave Linux** gửi telemetry về Master | Có code Linux collector + test cục bộ trên Linux | **Chưa test thật** (không có máy Linux Slave). Ghi là giới hạn; làm khi có thêm máy. |
+| [ ] | REQ-02 | **Nhiều Slave cùng lúc** (máy A, B, …) | Mới 1 Slave thật | *Tùy chọn mở rộng:* chạy thêm 1 Agent trên Windows với `host_id` khác (vd. `windows-slave-b`) → kiểm tra 2 Slave trên một màn hình, đèn, chọn máy. Ghi rõ là **mô phỏng**, dùng chung phần cứng. |
 | [ ] | REQ-03 | **Trao đổi trong cùng một máy** (pm A1 ↔ A2 trong Slave A) | Mới test Linux → Windows | Chạy HelloWorld **Publisher + Subscriber cùng trên Windows** → kiểm tra luồng bên trong `windows-slave-a`. Không cần máy thứ 3. |
 | [ ] | REQ-04 | Hiển thị luồng **theo từng máy**: bên trong Slave thấy các phần mềm, thông lượng, có trao đổi được không, lỗi gì | Có topology Host → App → Writer → Topic → Reader (test Linux) | Kiểm tra trên 2 máy thật; áp dụng cho cả UI WebEngine |
 | [ ] | REQ-05 | **Đồng bộ giờ khi Slave khởi động** (dịch vụ tự chạy khi boot, tự đồng bộ lại khi có mạng) | Có template `task3/config/time-sync/` | Gộp vào E2E-23, 24, 26: reboot Windows → kiểm tra w32time tự chạy và đồng bộ |
