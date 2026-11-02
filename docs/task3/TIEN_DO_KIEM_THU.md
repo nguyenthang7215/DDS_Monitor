@@ -65,6 +65,8 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 ## 2. ⚠️ Yêu cầu mới: chuyển giao diện sang Qt WebEngine
 
 > **Ghi nhận 02/11/2026:** được yêu cầu chuyển giao diện từ **Qt/QML + C++** sang dạng **Qt WebEngine** (HTML/CSS/JS hiển thị trong cửa sổ Desktop, C++ làm backend).
+>
+> ✅ **Đã chốt 02/11/2026:** dùng **Qt WebEngine** cho **UI Task 3**, giao diện **giống hệt bản QML + C++ hiện tại**. Màn DDS chuyên sâu gốc (Explorer, QoS, Domain Graph, Charts) **giữ QML**. Module WebEngine sẽ được cài sau trên máy Master.
 
 ### 2.1. Hiểu đúng yêu cầu
 
@@ -90,7 +92,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | [ ] | UI-EQ-04 | Giữ **cùng thao tác**: chọn Host, chọn luồng, chuyển tab giữ lựa chọn, cuộn danh sách Network không nhảy, Load Older | Chạy lại E2E-20 và thao tác cuộn |
 | [ ] | UI-EQ-05 | Giữ **cùng đơn vị và định dạng số** (MiB, %, B/s, µs, giờ ISO) | So số liệu cùng một snapshot |
 | [ ] | UI-EQ-06 | Dữ liệu cập nhật **realtime như QML** (theo chu kỳ telemetry, không phải bấm reload) | Quan sát Last Seen tăng mỗi giây |
-| [ ] | UI-EQ-07 | Màn **DDS chuyên sâu** (Explorer, QoS, Domain Graph, Charts) hiển thị tương đương bản gốc eProsima | Theo câu trả lời 2.2 |
+| [ ] | UI-EQ-07 | Màn **DDS chuyên sâu** (Explorer, QoS, Domain Graph, Charts) vẫn hoạt động như cũ khi chuyển tab giữa trang web Task 3 và màn QML gốc | Màn này **giữ QML**, không chuyển |
 | [ ] | UI-EQ-08 | Chạy **offline hoàn toàn** (không CDN, không cổng HTTP) | `ss -ltnp` không có cổng mới của `dds_monitor` |
 | [ ] | UI-EQ-09 | Hiệu năng không kém QML: mở app, chuyển tab, cập nhật không giật | Đo thời gian mở, CPU của Master |
 
@@ -100,11 +102,12 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 | Xong | Câu hỏi | Trả lời |
 | :---: | :--- | :--- |
-| [ ] | Chuyển **toàn bộ** UI (cả màn DDS gốc của eProsima) hay chỉ **phần mở rộng Task 3**? | |
-| [ ] | Domain Graph gốc (`DomainGraphLayout.qml`) giữ QML hay vẽ lại bằng web? | |
+| [x] | Chuyển **toàn bộ** UI (cả màn DDS gốc của eProsima) hay chỉ **phần mở rộng Task 3**? | **Chỉ UI Task 3** (Giám sát hệ thống, Cảnh báo & lịch sử, luồng/topology Task 3). Chốt 02/11 |
+| [x] | Domain Graph gốc (`DomainGraphLayout.qml`) giữ QML hay vẽ lại bằng web? | **Giữ QML gốc** (màn DDS chuyên sâu không chuyển) → vẫn cần sửa GRAPH-01 |
 | [ ] | Có được dùng thư viện JS bên ngoài (vd. ECharts, Cytoscape.js, D3) không? Đóng gói offline? | |
 | [ ] | Hạn hoàn thành? Có cần giữ song song bản QML để so sánh không? | |
-| [ ] | Qt WebEngine có sẵn trong Qt 6.7.2 trên máy Master không? (cần module `qtwebengine`) | |
+| [x] | Có dùng Qt WebEngine không? Máy đã có module chưa? | **Dùng WebEngine.** Máy Master **chưa có** module → người thực hiện sẽ cài sau |
+| [x] | Giao diện mục tiêu? | **Giống hệt UI QML + C++ Task 3 hiện tại** (xem 2.1b) |
 
 ### 2.3. Kế hoạch chuyển đổi (đề xuất)
 
@@ -114,10 +117,10 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | [ ] | W-02 | PoC: cửa sổ `QWebEngineView` nạp `qrc:/web/index.html`, gọi được 1 hàm C++ | |
 | [ ] | W-03 | Expose `MonitoringCore` qua `QWebChannel` (hosts, events, flows, status) | Tái dùng Q_PROPERTY sẵn có |
 | [ ] | W-04 | Trang **Giám sát hệ thống**: danh sách Slave, đèn xanh/đỏ, CPU/RAM/Disk/Network | Thay `Dashboard.qml`, `HostWorkspace.qml` |
-| [ ] | W-05 | Trang **Luồng DDS / Topology**: Host → App → Writer → Topic → Reader | Thay `FlowDetails.qml`; cơ hội tránh lỗi GRAPH-01 |
+| [ ] | W-05 | Trang **Luồng DDS / Topology** của Task 3: Host → App → Writer → Topic → Reader | Thay `FlowDetails.qml` (không phải Domain Graph gốc) |
 | [ ] | W-06 | Trang **Cảnh báo & lịch sử**: Active/Recovered, Load Older | Thay `EventHistoryView.qml` |
 | [ ] | W-07 | Biểu đồ CPU / Throughput / Latency (ghi đơn vị, cửa sổ thời gian) | |
-| [ ] | W-08 | Quyết định cách tích hợp với màn DDS gốc (tab QML giữ lại hay thay) | Theo câu trả lời 2.2 |
+| [ ] | W-08 | Tích hợp: tab Task 3 dùng `QWebEngineView`, tab **DDS chuyên sâu giữ QML gốc** trong cùng một cửa sổ | Đã chốt 02/11 |
 | [ ] | W-09 | Đóng gói offline (không tải CDN), kiểm tra không mở cổng mạng | Chứng minh CON-04 |
 | [ ] | W-10 | Chạy lại E2E-06 → E2E-11, E2E-20 trên UI mới | Kết quả QML cũ không tự chuyển sang |
 | [ ] | W-11 | Cập nhật báo cáo / Chương 5 (kiến trúc UI, hình chụp mới) | |
@@ -126,7 +129,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 | Việc | Ảnh hưởng |
 | :--- | :--- |
-| GRAPH-01 (lỗi QML Graph) | Nếu Graph được vẽ lại bằng web → sửa QML có thể không cần. **Chốt 2.2 trước khi sửa.** |
+| GRAPH-01 (lỗi QML Graph) | Domain Graph **giữ QML** → **vẫn phải sửa** (bản sửa 1 dòng đã có, mục 5.1) |
 | E2E-20 (ba tab, giữ lựa chọn) | Phải test lại trên UI web |
 | NET-01, P0-BACKEND, NTP, QoS | **Không ảnh hưởng** — thuộc Agent / Backend / OS, vẫn làm tiếp |
 | Kết quả PASS cũ (E2E-06, 10) | Phần dữ liệu vẫn đúng; phần hiển thị cần chụp lại trên UI mới |
@@ -137,7 +140,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 | # | Việc | Ưu tiên | Lý do |
 | :---: | :--- | :---: | :--- |
-| 1 | Chốt phạm vi chuyển WebEngine (mục 2.2) | 🔴 | Quyết định có sửa QML Graph hay không |
+| 1 | Cài Qt WebEngine + WebChannel cho Qt 6.7.2 (W-01) | 🔴 | Đã chốt dùng WebEngine; chặn toàn bộ việc chuyển UI |
 | 2 | Quyết định Backend Original / Patched sau kết quả P0 ngày 02/11 | 🔴 | Original đã crash lại |
 | 3 | E2E-12 trên 2 máy (Linux Pub ↔ Windows Sub) | 🟠 | Cục bộ đã PASS |
 | 4 | PoC WebEngine (W-01 → W-03) | 🟠 | Đánh giá khả thi sớm |
@@ -197,7 +200,8 @@ Graph có ≥ 2 host (Linux Publisher + Windows Subscriber)
 | [x] | Xác định nguyên nhân | Xem sơ đồ trên · 02/11 |
 | [x] | Tái hiện tự động, không cần GUI | `qmltestrunner` offscreen · 02/11 |
 | [x] | Thử và kiểm chứng bản sửa | `cacheBuffer`, `displayMargin`, `highlightFollowsCurrentItem` **không** sửa được; `width` sửa được · ảnh `graph01/graph-three-hosts-fixed.png` |
-| [ ] | **Chờ quyết định WebEngine** (mục 2.2) + phê duyệt sửa code gốc | Bản sửa chỉ 1 dòng, rủi ro thấp |
+| [x] | Quyết định WebEngine (mục 2.2) | 02/11: Domain Graph giữ QML → cần áp bản sửa |
+| [ ] | Phê duyệt sửa code gốc QML | Bản sửa chỉ 1 dòng, rủi ro thấp |
 | [ ] | Áp patch, build lại Master | `git apply test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch` |
 | [ ] | Kiểm tra trên GUI thật: Refresh ≥ 10 lần (Linux Pub + Windows Sub) | |
 | [ ] | Stop/restart Subscriber rồi Refresh | |
