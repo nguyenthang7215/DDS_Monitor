@@ -223,8 +223,9 @@ Chạy lại test: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/q
 | patched run1, run2 | Patched | ✅ 30/30 · 30/30 | Thoát sạch, không SIGSEGV |
 | **đợt b** run1–5 (máy rảnh, chạy tuần tự) | Original | ❌ **4/5 crash** | Crash ở chu kỳ 26, 24, 7, 20; run3 đủ 30/30 nhưng treo khi thoát. 3 crash trong `DatabaseQueue` (P0); 1 crash trong Fast DDS `DataReaderHistory::writer_not_alive` (khác vị trí, chưa phân tích) |
 | đợt b · subscriber-restart | Original | ✅ 6/6 | Thoát sạch |
+| **patched-20261102** run1–5 (máy rảnh, cùng kịch bản đợt b) | Patched | ✅ **5/5 · 150/150 chu kỳ** | Thoát sạch, 0 SIGSEGV · CTest, local 14/14, continuation 15/15, subscriber 6/6 cũng PASS |
 
-> **Kết luận:** lỗi P0 **vẫn còn và xảy ra thường xuyên** ở Backend 2.5.0 Original: tổng **5/9 lượt Original crash** khi Publisher stop/restart (đợt b, máy rảnh: 4/5), **0/2 lượt Patched**. Subscriber restart không gây crash. Nếu tiếp tục dùng Original theo quyết định chủ dự án thì phải ghi đây là **rủi ro chấp nhận**: Master có thể crash khi ứng dụng DDS khởi động lại nhiều lần.
+> **Kết luận:** lỗi P0 **vẫn còn và xảy ra thường xuyên** ở Backend 2.5.0 Original: tổng **5/9 lượt Original crash** khi Publisher stop/restart (đợt b, máy rảnh: 4/5), **0/7 lượt Patched** (7 lượt × 30 chu kỳ = 210 chu kỳ không crash). Subscriber restart không gây crash. Nếu tiếp tục dùng Original theo quyết định chủ dự án thì phải ghi đây là **rủi ro chấp nhận**: Master có thể crash khi ứng dụng DDS khởi động lại nhiều lần.
 > Bằng chứng: `test-artifacts/original-20261102/` và `test-artifacts/original-20261102b/` (`summary.txt`, `publisher-30-run*/crash-backtrace.txt`).
 > **Khuyến nghị:** chuyển sang Backend **Patched** cho vận hành, hoặc ghi rõ trong báo cáo rằng Original crash khoảng 4/5 lượt stress.
 
@@ -232,7 +233,7 @@ Chạy lại test: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/q
 | :---: | :--- | :--- |
 | [x] | Tái hiện với bản chưa vá (lịch sử) | Crash chu kỳ 12/30 · patched 30/30 |
 | [x] | Stress ≥ 30 chu kỳ Publisher với **Original** | 02/11 · crash 1/4 lượt · treo khi thoát 1/4 |
-| [x] | So sánh cùng kịch bản với **Patched** | 02/11 · 2/2 PASS |
+| [x] | So sánh cùng kịch bản với **Patched** | 02/11 · 7/7 PASS (gồm bộ hồi quy đầy đủ `test-artifacts/patched-20261102/`) |
 | [x] | Stress Subscriber restart với Original | 02/11 · PASS 6/6 |
 | [x] | Chạy thêm ≥ 5 lượt Original khi máy rảnh | 02/11 · 4/5 crash |
 | [ ] | Phân tích crash khác vị trí (`DataReaderHistory::writer_not_alive`, đợt b run5) | Có thể cùng nguồn gốc bộ nhớ bị hỏng, chưa xác nhận |
@@ -382,7 +383,7 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | :---: | :--- | :--- | :---: | :--- |
 | [ ] | UI-WEB | Chuyển UI sang Qt WebEngine | 🔴 | Yêu cầu mới 02/11 · mục 2 |
 | [ ] | GRAPH-01 | `Loading Graph` không đóng | 🔴 | Đã sửa được trong test (1 dòng `width`) · chờ phê duyệt áp vào code gốc |
-| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | 02/11: Original crash **5/9** lượt (máy rảnh 4/5); Patched 2/2 PASS · **cần quyết định** |
+| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | 02/11: Original crash **5/9** lượt; **Patched 7/7 PASS** · cần quyết định |
 | [ ] | TIME-01 | NTP Master–Windows | 🔴 | Cần quyền |
 | [ ] | STAT-01 | Độ chính xác Throughput / Latency | 🟠 | |
 | [ ] | GRAPH-02 | Writer/Reader không rõ trong viewport | 🟠 | Có thể liên quan GRAPH-01 |
@@ -421,4 +422,5 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | 02/11/2026 | E2E-12 QoS cục bộ Linux | ✅ 3/3 | `test-artifacts/original-20261102/qos-local/result.json` | Claude |
 | 02/11/2026 | P0 stress Original vs Patched | Original: crash 1/4, treo thoát 1/4 · Patched 2/2 PASS | `test-artifacts/original-20261102/` | Claude |
 | 02/11/2026 | Hồi quy Linux với Original (đợt b) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 4/5 crash** | `test-artifacts/original-20261102b/` | Claude |
+| 02/11/2026 | Hồi quy Linux với Patched (cùng kịch bản) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 5/5 PASS** | `test-artifacts/patched-20261102/` | Claude |
 | | | | | |

@@ -1,0 +1,8 @@
+Internal ctest changing into directory: /home/dev/DDS-Monitor/.task3-deps/task3-builds/20261023T043556Z-72913/release
+Test project /home/dev/DDS-Monitor/.task3-deps/task3-builds/20261023T043556Z-72913/release
+    Start 1: task3_core
+1/1 Test #1: task3_core .......................   Passed    9.79 sec
+
+100% tests passed, 0 tests failed out of 1
+
+Total Test time (real) =   9.79 sec

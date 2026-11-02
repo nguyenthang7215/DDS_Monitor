@@ -1,0 +1,10 @@
+ctest-release rc=0 10s
+local rc=0 17s
+continuation rc=0 90s
+subscriber-restart rc=0 5s
+publisher-30-run1 rc=0 99s
+publisher-30-run2 rc=0 99s
+publisher-30-run3 rc=0 99s
+publisher-30-run4 rc=0 99s
+publisher-30-run5 rc=0 99s
+DONE
