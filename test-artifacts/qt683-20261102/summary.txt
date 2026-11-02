@@ -1,0 +1,8 @@
+ctest-release rc=0 10s
+graph-qml rc=0 1s
+local rc=1 1s
+continuation rc=1 0s
+subscriber-restart rc=1 1s
+publisher-30-run1 rc=1 1s
+publisher-30-run2 rc=1 1s
+DONE

@@ -113,7 +113,9 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 | Xong | Bước | Mô tả | Ghi chú |
 | :---: | :--- | :--- | :--- |
-| [x] | W-01 | Cài Qt có WebEngine + WebChannel | 02/11: **Qt 6.8.3** có WebEngineCore/Widgets/Quick, WebChannel, Charts, Sql, QuickTest. Qt 6.7.2 vẫn không có → cần build lại DDS Monitor với 6.8.3 |
+| [ ] | W-01 | Cài Qt có WebEngine + WebChannel | 02/11: **Qt 6.8.3** có WebEngine, WebChannel, Charts, Sql, QuickTest. ⚠️ **Còn thiếu module `Qt5Compat`** (màn DDS gốc `MainStartView.qml` dùng `Qt5Compat.GraphicalEffects`) → cài thêm qua MaintenanceTool: *Qt 6.8.3 → Qt 5 Compatibility Module* |
+| [x] | W-02 | PoC `QWebEngineView` + `QWebChannel` gọi C++ ↔ JS | 02/11: PASS trên Qt 6.8.3, kể cả khi bật sandbox |
+| [ ] | W-02b | Build DDS Monitor bằng Qt 6.8.3 và chạy hồi quy | 02/11: **build PASS** (`.task3-deps/qt683-builds/release`), CTest PASS, Graph QML 6/6; Master **không khởi động** do thiếu `Qt5Compat` → chờ cài module rồi chạy lại `test-artifacts/qt683-20261102/run_all.sh` |
 | [ ] | W-02 | PoC: cửa sổ `QWebEngineView` nạp `qrc:/web/index.html`, gọi được 1 hàm C++ | |
 | [ ] | W-03 | Expose `MonitoringCore` qua `QWebChannel` (hosts, events, flows, status) | Tái dùng Q_PROPERTY sẵn có |
 | [ ] | W-04 | Trang **Giám sát hệ thống**: danh sách Slave, đèn xanh/đỏ, CPU/RAM/Disk/Network | Thay `Dashboard.qml`, `HostWorkspace.qml` |
@@ -162,6 +164,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | [x] | File QoS thử nghiệm | `/home/dev/dds-e2e/qos/compatible.xml`, `incompatible-writer.xml` | Dùng cho E2E-12 |
 | [ ] | Baseline: SHA binary, commit, `ldd`, IP, firewall | — | Cho E2E-01 |
 | [x] | Module Qt WebEngine | `~/Qt/6.8.3/gcc_64` | Cài 02/11 |
+| [ ] | Module **Qt5Compat** cho Qt 6.8.3 | MaintenanceTool | Thiếu → Master build 6.8.3 không mở được |
 
 ---
 
@@ -191,7 +194,10 @@ Graph có ≥ 2 host (Linux Publisher + Windows Subscriber)
 | 2 host (Linux Pub + Windows Sub) | ❌ | ✅ |
 | 3 host, 1 process có 2 participant, 6 endpoint (đủ 6 kết nối) | ❌ | ✅ |
 | Refresh 10 lần liên tiếp với 2 host | ❌ | ✅ |
-| **Tổng** | **3/6** | **6/6** |
+| **Tổng (Qt 6.7.2)** | **3/6** | **6/6** |
+| **Tổng (Qt 6.8.3)** | **6/6** | **6/6** |
+
+> **Phát hiện 02/11:** lỗi **phụ thuộc phiên bản Qt**. Trên Qt 6.7.2, ListView chiều rộng 0 hủy delegate khi đổi `currentIndex`; trên **Qt 6.8.3 không xảy ra**. Khi chuyển Master sang Qt 6.8.3 (bắt buộc cho WebEngine), GRAPH-01 hết mà **không cần sửa code gốc**. Bản sửa 1 dòng vẫn chạy đúng trên cả hai bản Qt, có thể giữ làm phòng ngừa.
 
 | Xong | Bước | Ghi chú |
 | :---: | :--- | :--- |
@@ -383,7 +389,7 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | Xong | Mã | Vấn đề | Ưu tiên | Ghi chú |
 | :---: | :--- | :--- | :---: | :--- |
 | [ ] | UI-WEB | Chuyển UI sang Qt WebEngine | 🔴 | Yêu cầu mới 02/11 · mục 2 |
-| [ ] | GRAPH-01 | `Loading Graph` không đóng | 🔴 | Đã sửa được trong test (1 dòng `width`) · chờ phê duyệt áp vào code gốc |
+| [ ] | GRAPH-01 | `Loading Graph` không đóng | 🟠 | Chỉ xảy ra với Qt 6.7.2; **hết trên Qt 6.8.3** (test 6/6). Đóng khi Master chuyển sang 6.8.3 và test GUI thật |
 | [x] | P0-BACKEND | Crash lifecycle với Original | ✅ | 02/11: Original crash 5/9; **Patched 7/7 PASS** · **chốt dùng Patched** |
 | [ ] | TIME-01 | NTP Master–Windows | 🔴 | Cần quyền |
 | [ ] | STAT-01 | Độ chính xác Throughput / Latency | 🟠 | |
@@ -424,5 +430,6 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | 02/11/2026 | P0 stress Original vs Patched | Original: crash 1/4, treo thoát 1/4 · Patched 2/2 PASS | `test-artifacts/original-20261102/` | Claude |
 | 02/11/2026 | Hồi quy Linux với Original (đợt b) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 4/5 crash** | `test-artifacts/original-20261102b/` | Claude |
 | 02/11/2026 | Chốt dùng Backend Patched · cài Qt 6.8.3 (WebEngine) | Quyết định | — | Thắng |
+| 02/11/2026 | Build + hồi quy Qt 6.8.3 | Build ✅ · CTest ✅ · Graph QML 6/6 (cả code gốc) · Master ❌ thiếu Qt5Compat | `test-artifacts/qt683-20261102/` | Claude |
 | 02/11/2026 | Hồi quy Linux với Patched (cùng kịch bản) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 5/5 PASS** | `test-artifacts/patched-20261102/` | Claude |
 | | | | | |
