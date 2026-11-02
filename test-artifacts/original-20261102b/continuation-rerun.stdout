@@ -1,0 +1,19 @@
+{
+  "runtime_mapping_multiple_participants": "PASS",
+  "topology_application_routes": "PASS",
+  "fresh_connection_list_matching": "PASS",
+  "alive_writer_no_data": "PASS",
+  "stopped_run_unmapped": "PASS",
+  "restart_guid_remapping": "PASS",
+  "runtime_counter_recovery": "PASS",
+  "agent_offline": "PASS",
+  "agent_restart_identity_recovery": "PASS",
+  "master_restart_live_agent": "PASS",
+  "single_window_navigation_resize": "PASS",
+  "local_long_run": "PASS",
+  "master_graceful_shutdown": "PASS",
+  "sqlite_integrity": "PASS",
+  "persisted_event_rows": 11,
+  "qml_runtime_errors": "PASS",
+  "physical_windows_ntp": "PENDING_EXTERNAL_TEST"
+}

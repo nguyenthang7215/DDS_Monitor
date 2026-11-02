@@ -1,0 +1,6 @@
+Thread 1472 "dds.udp.7400" received signal SIGSEGV, Segmentation fault.
+Thread 1472 (Thread 0x7fffed428640 (LWP 109036) "dds.udp.7400"):
+#0  0x00007ffff597c83f in eprosima::statistics_backend::database::DatabaseQueue<std::shared_ptr<eprosima::fastdds::statistics::Data> >::run() () from /home/dev/dds-e2e/backend-original-install/lib/libfastdds_statistics_backend.so.2
+#1  0x00007ffff3edc253 in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+#2  0x00007ffff3a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
+#3  0x00007ffff3b268e0 in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:81

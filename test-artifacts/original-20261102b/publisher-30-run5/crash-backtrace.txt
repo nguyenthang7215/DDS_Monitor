@@ -1,0 +1,8 @@
+Thread 41 "dds.udp.7414" received signal SIGSEGV, Segmentation fault.
+Thread 41 (Thread 0x7fff4affd640 (LWP 111385) "dds.udp.7414"):
+#0  0x00007ffff4df13e0 in eprosima::fastdds::dds::detail::DataReaderHistory::writer_not_alive(eprosima::fastdds::rtps::GUID_t const&) () from /home/dev/dds-deps/install/lib/libfastdds.so.3.6
+#1  0x00007ffff4ddcef9 in eprosima::fastdds::dds::DataReaderImpl::update_subscription_matched_status(eprosima::fastdds::rtps::MatchingInfo const&) () from /home/dev/dds-deps/install/lib/libfastdds.so.3.6
+#2  0x00007ffff4ddcf52 in eprosima::fastdds::dds::DataReaderImpl::InnerDataReaderListener::on_reader_matched(eprosima::fastdds::rtps::RTPSReader*, eprosima::fastdds::rtps::MatchingInfo const&) () from /home/dev/dds-deps/install/lib/libfastdds.so.3.6
+#3  0x00007ffff50e39aa in eprosima::fastdds::rtps::EDP::unpairWriterProxy(eprosima::fastdds::rtps::GUID_t const&, eprosima::fastdds::rtps::GUID_t const&, bool) () from /home/dev/dds-deps/install/lib/libfastdds.so.3.6
+#4  0x00007ffff51187fe in eprosima::fastdds::rtps::PDP::removeWriterProxyData(eprosima::fastdds::rtps::GUID_t const&) () from /home/dev/dds-deps/install/lib/libfastdds.so.3.6
+#5  0x00007ffff5103235 in eprosima::fastdds::rtps::EDPSimplePUBListener::on_new_cache_change_added(eprosima::fastdds::rtps::RTPSReader*, eprosima::fastdds::rtps::CacheChange_t const*) () from /home/dev/dds-deps/install/lib/libfastdds.so.3.6

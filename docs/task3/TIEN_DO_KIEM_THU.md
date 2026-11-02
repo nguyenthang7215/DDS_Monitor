@@ -141,7 +141,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | # | Việc | Ưu tiên | Lý do |
 | :---: | :--- | :---: | :--- |
 | 1 | Cài Qt WebEngine + WebChannel cho Qt 6.7.2 (W-01) | 🔴 | Đã chốt dùng WebEngine; chặn toàn bộ việc chuyển UI |
-| 2 | Quyết định Backend Original / Patched sau kết quả P0 ngày 02/11 | 🔴 | Original đã crash lại |
+| 2 | Quyết định Backend Original / Patched sau kết quả P0 ngày 02/11 | 🔴 | Original crash 4/5 lượt khi máy rảnh |
 | 3 | E2E-12 trên 2 máy (Linux Pub ↔ Windows Sub) | 🟠 | Cục bộ đã PASS |
 | 4 | PoC WebEngine (W-01 → W-03) | 🟠 | Đánh giá khả thi sớm |
 | 5 | E2E-13 GUID, E2E-14 Throughput/Latency | 🟠 | FR-10, FR-13 |
@@ -221,17 +221,21 @@ Chạy lại test: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/q
 | shutdown-check-1, 2 | Original | ✅ 3/3 · 3/3 | Thoát sạch |
 | publisher-30-rerun | Original | ❌ **SIGSEGV chu kỳ 2** | `DatabaseDataQueue::process_sample()` → `DatabaseQueue::run()` · trùng chữ ký P0 cũ · chạy song song với test QML (máy có tải) |
 | patched run1, run2 | Patched | ✅ 30/30 · 30/30 | Thoát sạch, không SIGSEGV |
+| **đợt b** run1–5 (máy rảnh, chạy tuần tự) | Original | ❌ **4/5 crash** | Crash ở chu kỳ 26, 24, 7, 20; run3 đủ 30/30 nhưng treo khi thoát. 3 crash trong `DatabaseQueue` (P0); 1 crash trong Fast DDS `DataReaderHistory::writer_not_alive` (khác vị trí, chưa phân tích) |
+| đợt b · subscriber-restart | Original | ✅ 6/6 | Thoát sạch |
 
-> **Kết luận:** lỗi P0 **vẫn còn** ở Backend 2.5.0 Original (tái hiện 1/4 lượt Original, 0/2 lượt Patched). Nếu tiếp tục dùng Original theo quyết định chủ dự án thì phải ghi đây là **rủi ro chấp nhận**: Master có thể crash khi ứng dụng DDS khởi động lại nhiều lần.
-> Bằng chứng: `test-artifacts/original-20261102/` (README, `publisher-30-rerun/crash-backtrace.txt`).
+> **Kết luận:** lỗi P0 **vẫn còn và xảy ra thường xuyên** ở Backend 2.5.0 Original: tổng **5/9 lượt Original crash** khi Publisher stop/restart (đợt b, máy rảnh: 4/5), **0/2 lượt Patched**. Subscriber restart không gây crash. Nếu tiếp tục dùng Original theo quyết định chủ dự án thì phải ghi đây là **rủi ro chấp nhận**: Master có thể crash khi ứng dụng DDS khởi động lại nhiều lần.
+> Bằng chứng: `test-artifacts/original-20261102/` và `test-artifacts/original-20261102b/` (`summary.txt`, `publisher-30-run*/crash-backtrace.txt`).
+> **Khuyến nghị:** chuyển sang Backend **Patched** cho vận hành, hoặc ghi rõ trong báo cáo rằng Original crash khoảng 4/5 lượt stress.
 
 | Xong | Bước | Ghi chú |
 | :---: | :--- | :--- |
 | [x] | Tái hiện với bản chưa vá (lịch sử) | Crash chu kỳ 12/30 · patched 30/30 |
 | [x] | Stress ≥ 30 chu kỳ Publisher với **Original** | 02/11 · crash 1/4 lượt · treo khi thoát 1/4 |
 | [x] | So sánh cùng kịch bản với **Patched** | 02/11 · 2/2 PASS |
-| [ ] | Stress Subscriber restart với Original | `subscriber_restart_regression.py` |
-| [ ] | Chạy thêm ≥ 5 lượt Original khi máy rảnh (không chạy song song việc khác) để ước lượng tần suất | |
+| [x] | Stress Subscriber restart với Original | 02/11 · PASS 6/6 |
+| [x] | Chạy thêm ≥ 5 lượt Original khi máy rảnh | 02/11 · 4/5 crash |
+| [ ] | Phân tích crash khác vị trí (`DataReaderHistory::writer_not_alive`, đợt b run5) | Có thể cùng nguồn gốc bộ nhớ bị hỏng, chưa xác nhận |
 | [ ] | **Quyết định của chủ dự án:** giữ Original (chấp nhận rủi ro) hay chuyển Patched | Cần ghi vào báo cáo |
 
 ---
@@ -246,7 +250,7 @@ Chạy lại test: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/q
 | [ ] | E2E-02 | Multicast, firewall | 🟡 | Ping OK, DDS chạy | Biên bản UDP/locator |
 | [x] | E2E-03 | Build Windows Agent | ✅ | Release build + chạy | — |
 | [ ] | E2E-04 | `--once`, collector | 🟡 | JSON đúng | NET-01 |
-| [ ] | E2E-05 | Master build, CTest | 🟡 | Linkage xác minh | CTest với Original |
+| [ ] | E2E-05 | Master build, CTest | 🟡 | 02/11 với Original: CTest PASS · local integration 14/14 · continuation 15/15 · Graph QML test (bản sửa) 6/6 | Gom phiếu nghiệm thu build/CTest cuối |
 
 ### 6.2. Giám sát máy (Agent)
 
@@ -378,7 +382,7 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | :---: | :--- | :--- | :---: | :--- |
 | [ ] | UI-WEB | Chuyển UI sang Qt WebEngine | 🔴 | Yêu cầu mới 02/11 · mục 2 |
 | [ ] | GRAPH-01 | `Loading Graph` không đóng | 🔴 | Đã sửa được trong test (1 dòng `width`) · chờ phê duyệt áp vào code gốc |
-| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | 02/11 **tái hiện lại** SIGSEGV với Original; Patched 2/2 PASS · cần quyết định |
+| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | 02/11: Original crash **5/9** lượt (máy rảnh 4/5); Patched 2/2 PASS · **cần quyết định** |
 | [ ] | TIME-01 | NTP Master–Windows | 🔴 | Cần quyền |
 | [ ] | STAT-01 | Độ chính xác Throughput / Latency | 🟠 | |
 | [ ] | GRAPH-02 | Writer/Reader không rõ trong viewport | 🟠 | Có thể liên quan GRAPH-01 |
@@ -394,6 +398,9 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | Xong | Việc | Ghi chú |
 | :---: | :--- | :--- |
 | [ ] | Bỏ mô tả **HMAC-SHA256 / `TASK3_KEY`** (báo cáo mục 8.4, 14.2; Chương 5 dòng 150) | Code không có HMAC |
+| [ ] | Chương 5 dòng 154: bỏ "chữ ký" khỏi bước kiểm tra snapshot | Thực tế: `DdsTransport` kiểm tra kích thước; `MonitoringCore` giải mã JSON + kiểm tra schema (`Protocol.cpp`); `Registry` kiểm tra `session_id`/`sequence` |
+| [ ] | Hình 5.5 (`images/chuong_5/hinh_5_05_trinh_tu_telemetry.puml`): bỏ bước "ký HMAC-SHA256" và "chữ ký"; sửa bước kiểm tra schema thuộc `MonitoringCore` | Cần xuất lại PNG |
+| [ ] | `_build_docx/build.py` dòng 171: bỏ thuật ngữ HMAC khỏi bảng ký hiệu nếu không còn dùng | |
 | [ ] | Chương 5: `HostTelemetry/v1` → `Task3/HostTelemetry/v1` | |
 | [ ] | `TASK3_README.md`: thêm `run_master_original.sh` | |
 | [ ] | `KNOWN_ISSUES.md` mục 1: Windows Agent đã build/chạy | |
@@ -413,4 +420,5 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | 02/11/2026 | GRAPH-01 test tự động + bản sửa | Gốc 3/6 · sửa 6/6 | `test-artifacts/original-20261102/graph01/` | Claude |
 | 02/11/2026 | E2E-12 QoS cục bộ Linux | ✅ 3/3 | `test-artifacts/original-20261102/qos-local/result.json` | Claude |
 | 02/11/2026 | P0 stress Original vs Patched | Original: crash 1/4, treo thoát 1/4 · Patched 2/2 PASS | `test-artifacts/original-20261102/` | Claude |
+| 02/11/2026 | Hồi quy Linux với Original (đợt b) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 4/5 crash** | `test-artifacts/original-20261102b/` | Claude |
 | | | | | |

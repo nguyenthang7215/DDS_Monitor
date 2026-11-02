@@ -1,0 +1,49 @@
+{
+  "requested_cycles": 30,
+  "completed_cycles": 6,
+  "cycles": [
+    {
+      "cycle": 1,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 2,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 3,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 4,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 5,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 6,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 7,
+      "publisher_exit": 0,
+      "master_alive_after_stop": false
+    }
+  ],
+  "runtime_backend_map": {
+    "pid": 110647,
+    "library": "/home/dev/dds-e2e/backend-original-install/lib/libfastdds_statistics_backend.so.2.5.0",
+    "verified": true
+  },
+  "status": "FAIL",
+  "error": "Master/GDB exited after Publisher stop on cycle 7: 255",
+  "master_gdb_exit": 255
+}

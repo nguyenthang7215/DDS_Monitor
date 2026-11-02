@@ -1,0 +1,7 @@
+Thread 465 "dds.udp.7414" received signal SIGSEGV, Segmentation fault.
+Thread 465 (Thread 0x7fff3d5fb640 (LWP 111308) "dds.udp.7414"):
+#0  0x00007ffff58c9c6a in eprosima::statistics_backend::database::DatabaseDataQueue<eprosima::fastdds::statistics::Data>::process_sample() () from /home/dev/dds-e2e/backend-original-install/lib/libfastdds_statistics_backend.so.2
+#1  0x00007ffff597c125 in eprosima::statistics_backend::database::DatabaseQueue<std::shared_ptr<eprosima::fastdds::statistics::Data> >::consume_all(std::unique_lock<std::mutex>&) () from /home/dev/dds-e2e/backend-original-install/lib/libfastdds_statistics_backend.so.2
+#2  0x00007ffff597c2ae in eprosima::statistics_backend::database::DatabaseQueue<std::shared_ptr<eprosima::fastdds::statistics::Data> >::run() () from /home/dev/dds-e2e/backend-original-install/lib/libfastdds_statistics_backend.so.2
+#3  0x00007ffff3edc253 in ?? () from /lib/x86_64-linux-gnu/libstdc++.so.6
+#4  0x00007ffff3a94a83 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:442
