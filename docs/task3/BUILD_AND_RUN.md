@@ -71,7 +71,7 @@ Terminal 4: dùng lại các lệnh `export` trên rồi chạy:
 
 Trong Master mở `DDS entities & data flow` và DDS nâng cao để xem Discovery, Throughput, Latency. Cảnh báo chỉ xuất hiện khi có rule và bằng chứng đầu vào phù hợp; Hello World chưa instrument không tự cung cấp mọi liên kết `application_id`/Writer counter. Không diễn giải thiếu dữ liệu thành `Matched` hoặc `No Data` nếu chưa đủ bằng chứng.
 
-Để kiểm tra Writer im lặng, GUID mapping và No Data có instrumentation, dùng `task3/config/runtime-agent.json` và `task3_probe` theo ví dụ trong `PRE_TEST_READINESS.md` hoặc chạy continuation integration.
+Để kiểm tra Writer im lặng, GUID mapping và No Data có instrumentation, dùng `task3/config/runtime-agent.json` và `task3_probe` hoặc chạy continuation integration (`task3/tests/continuation_integration.py`).
 
 ## Shutdown và SQLite
 

@@ -930,7 +930,7 @@ Khi một ca bị `BLOCKED`, ghi chính xác điều kiện còn thiếu và ch�
 ## 8. Nguồn repository đã đối chiếu
 
 - `docs/task3/TASK3_REQUIREMENTS.md` — FR-01–FR-15 và NFR.
-- `docs/task3/BUILD_AND_RUN.md`, `docs/task3/CONFIGURATION.md`, `docs/task3/TEST_PLAN.md`, `docs/task3/PRE_TEST_READINESS.md`.
+- `docs/task3/BUILD_AND_RUN.md`, `docs/task3/CONFIGURATION.md`.
 - `task3/scripts/build-windows.ps1`, `task3/agent/CMakeLists.txt`, `task3/scripts/build_task3_patched.sh`, `task3/scripts/run_master_patched.sh`, `task3/scripts/patched_runtime_common.sh`.
 - `task3/agent_main.cpp`, `task3/Collectors.cpp`, `task3/DdsTransport.cpp`, `task3/Protocol.cpp`, `task3/RuntimeIdentity.cpp`, `task3/MonitoringCore.cpp`, `task3/AlertStore.cpp`, `task3/Dashboard.qml`, `task3/HostWorkspace.qml`, `task3/FlowDetails.qml`, `task3/EventHistoryView.qml`.
 - Tests already present (not executed while preparing this guide): `task3/tests/CoreTests.cpp`, `local_integration.py`, `continuation_integration.py`, `ui_integration.py`, `runtime_library_verification.py`.
