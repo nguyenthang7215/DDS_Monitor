@@ -8,7 +8,7 @@
 | Windows Slave | `172.20.10.3/28` · `windows-slave-a` |
 | Mục tiêu thiết kế | **Nhiều Slave** (Linux và Windows) |
 | Phạm vi test thực tế | **2 thiết bị**: Linux chỉ làm Master · Windows làm Slave |
-| Backend vận hành | Fast DDS Statistics Backend **2.5.0 Original** |
+| Backend vận hành | Fast DDS Statistics Backend **2.5.0 Patched** (chốt 02/11/2026 sau stress test P0) |
 
 **Ký hiệu:** ✅ PASS · 🟡 PARTIAL · ⬜ NOT RUN · ⛔ BLOCKED · ❌ FAIL · 🔴 ưu tiên cao · 🟠 trung bình · ⚪ thấp
 
@@ -106,14 +106,14 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | [x] | Domain Graph gốc (`DomainGraphLayout.qml`) giữ QML hay vẽ lại bằng web? | **Giữ QML gốc** (màn DDS chuyên sâu không chuyển) → vẫn cần sửa GRAPH-01 |
 | [ ] | Có được dùng thư viện JS bên ngoài (vd. ECharts, Cytoscape.js, D3) không? Đóng gói offline? | |
 | [ ] | Hạn hoàn thành? Có cần giữ song song bản QML để so sánh không? | |
-| [x] | Có dùng Qt WebEngine không? Máy đã có module chưa? | **Dùng WebEngine.** Máy Master **chưa có** module → người thực hiện sẽ cài sau |
+| [x] | Có dùng Qt WebEngine không? Máy đã có module chưa? | **Dùng WebEngine.** 02/11: đã cài **Qt 6.8.3** (`/home/dev/Qt/6.8.3/gcc_64`) có WebEngine + WebChannel |
 | [x] | Giao diện mục tiêu? | **Giống hệt UI QML + C++ Task 3 hiện tại** (xem 2.1b) |
 
 ### 2.3. Kế hoạch chuyển đổi (đề xuất)
 
 | Xong | Bước | Mô tả | Ghi chú |
 | :---: | :--- | :--- | :--- |
-| [ ] | W-01 | Cài module Qt WebEngine + WebChannel cho Qt 6.7.2 | 02/11: **chưa có** trong `~/Qt/6.7.2/gcc_64/lib` → cài qua Qt Maintenance Tool |
+| [x] | W-01 | Cài Qt có WebEngine + WebChannel | 02/11: **Qt 6.8.3** có WebEngineCore/Widgets/Quick, WebChannel, Charts, Sql, QuickTest. Qt 6.7.2 vẫn không có → cần build lại DDS Monitor với 6.8.3 |
 | [ ] | W-02 | PoC: cửa sổ `QWebEngineView` nạp `qrc:/web/index.html`, gọi được 1 hàm C++ | |
 | [ ] | W-03 | Expose `MonitoringCore` qua `QWebChannel` (hosts, events, flows, status) | Tái dùng Q_PROPERTY sẵn có |
 | [ ] | W-04 | Trang **Giám sát hệ thống**: danh sách Slave, đèn xanh/đỏ, CPU/RAM/Disk/Network | Thay `Dashboard.qml`, `HostWorkspace.qml` |
@@ -141,7 +141,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | # | Việc | Ưu tiên | Lý do |
 | :---: | :--- | :---: | :--- |
 | 1 | Cài Qt WebEngine + WebChannel cho Qt 6.7.2 (W-01) | 🔴 | Đã chốt dùng WebEngine; chặn toàn bộ việc chuyển UI |
-| 2 | Quyết định Backend Original / Patched sau kết quả P0 ngày 02/11 | 🔴 | Original crash 4/5 lượt khi máy rảnh |
+| 2 | ~~Quyết định Backend Original / Patched~~ | ✅ | **Đã chốt Patched** 02/11 |
 | 3 | E2E-12 trên 2 máy (Linux Pub ↔ Windows Sub) | 🟠 | Cục bộ đã PASS |
 | 4 | PoC WebEngine (W-01 → W-03) | 🟠 | Đánh giá khả thi sớm |
 | 5 | E2E-13 GUID, E2E-14 Throughput/Latency | 🟠 | FR-10, FR-13 |
@@ -161,7 +161,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | [x] | HelloWorld Linux Pub / Windows Sub | `/home/dev/dds-tests/hello_world/build/hello_world` | Bật `FASTDDS_STATISTICS` |
 | [x] | File QoS thử nghiệm | `/home/dev/dds-e2e/qos/compatible.xml`, `incompatible-writer.xml` | Dùng cho E2E-12 |
 | [ ] | Baseline: SHA binary, commit, `ldd`, IP, firewall | — | Cho E2E-01 |
-| [ ] | Module Qt WebEngine | `~/Qt/6.7.2/gcc_64` | Cho W-01 |
+| [x] | Module Qt WebEngine | `~/Qt/6.8.3/gcc_64` | Cài 02/11 |
 
 ---
 
@@ -237,7 +237,8 @@ Chạy lại test: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/q
 | [x] | Stress Subscriber restart với Original | 02/11 · PASS 6/6 |
 | [x] | Chạy thêm ≥ 5 lượt Original khi máy rảnh | 02/11 · 4/5 crash |
 | [ ] | Phân tích crash khác vị trí (`DataReaderHistory::writer_not_alive`, đợt b run5) | Có thể cùng nguồn gốc bộ nhớ bị hỏng, chưa xác nhận |
-| [ ] | **Quyết định của chủ dự án:** giữ Original (chấp nhận rủi ro) hay chuyển Patched | Cần ghi vào báo cáo |
+| [x] | **Quyết định của chủ dự án** | 02/11: **dùng Patched** (chạy `run_master_patched.sh`). Cần ghi vào báo cáo |
+| [ ] | Kiểm tra lại với máy Windows khi chạy Patched (E2E-11) | |
 
 ---
 
@@ -383,7 +384,7 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | :---: | :--- | :--- | :---: | :--- |
 | [ ] | UI-WEB | Chuyển UI sang Qt WebEngine | 🔴 | Yêu cầu mới 02/11 · mục 2 |
 | [ ] | GRAPH-01 | `Loading Graph` không đóng | 🔴 | Đã sửa được trong test (1 dòng `width`) · chờ phê duyệt áp vào code gốc |
-| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | 02/11: Original crash **5/9** lượt; **Patched 7/7 PASS** · cần quyết định |
+| [x] | P0-BACKEND | Crash lifecycle với Original | ✅ | 02/11: Original crash 5/9; **Patched 7/7 PASS** · **chốt dùng Patched** |
 | [ ] | TIME-01 | NTP Master–Windows | 🔴 | Cần quyền |
 | [ ] | STAT-01 | Độ chính xác Throughput / Latency | 🟠 | |
 | [ ] | GRAPH-02 | Writer/Reader không rõ trong viewport | 🟠 | Có thể liên quan GRAPH-01 |
@@ -422,5 +423,6 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | 02/11/2026 | E2E-12 QoS cục bộ Linux | ✅ 3/3 | `test-artifacts/original-20261102/qos-local/result.json` | Claude |
 | 02/11/2026 | P0 stress Original vs Patched | Original: crash 1/4, treo thoát 1/4 · Patched 2/2 PASS | `test-artifacts/original-20261102/` | Claude |
 | 02/11/2026 | Hồi quy Linux với Original (đợt b) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 4/5 crash** | `test-artifacts/original-20261102b/` | Claude |
+| 02/11/2026 | Chốt dùng Backend Patched · cài Qt 6.8.3 (WebEngine) | Quyết định | — | Thắng |
 | 02/11/2026 | Hồi quy Linux với Patched (cùng kịch bản) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 5/5 PASS** | `test-artifacts/patched-20261102/` | Claude |
 | | | | | |
