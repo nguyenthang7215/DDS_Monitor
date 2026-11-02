@@ -58,7 +58,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 ### 1.3. Tóm tắt một dòng
 
-> Nguyên mẫu đã chạy trên 2 máy thật (telemetry, Online/Offline, process, cảnh báo, DDS HelloWorld cross-OS). GRAPH-01 đã có bản sửa 1 dòng (test tự động 6/6), chờ áp. **P0 tái hiện lại với Backend Original** (Patched ổn định). Đã chốt chuyển **UI Task 3 sang Qt WebEngine, giống hệt UI QML hiện tại**; chờ cài module WebEngine.
+> Nguyên mẫu đã chạy trên 2 máy thật (telemetry, Online/Offline, process, cảnh báo, DDS HelloWorld cross-OS). GRAPH-01 đã có bản sửa 1 dòng (test tự động 6/6), chờ áp. **P0 tái hiện lại với Backend Original** (Patched ổn định). UI Task 3 **đã chuyển sang Qt WebEngine** trên nhánh `feature/webengine-ui` (so với QML 2.4–4.4 % pixel khác, tương tác PASS); chờ cài **Qt5Compat** để chạy app thật.
 
 ---
 
@@ -86,11 +86,11 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 | Xong | Mã | Tiêu chí tương đương | Cách kiểm |
 | :---: | :--- | :--- | :--- |
-| [ ] | UI-EQ-01 | Giữ **cùng bố cục**: một cửa sổ, ba tab *Giám sát hệ thống* · *DDS chuyên sâu* · *Cảnh báo & lịch sử* | Chụp ảnh QML vs Web cùng kích thước 1600×900, đặt cạnh nhau |
-| [ ] | UI-EQ-02 | Giữ **cùng thông tin** trên từng màn: Host, đèn xanh/đỏ + nhãn chữ, Last Seen, CPU/RAM/Disk/Network, ứng dụng, luồng, đồng bộ giờ | Checklist từng trường so với `Dashboard.qml`, `HostWorkspace.qml` |
-| [ ] | UI-EQ-03 | Giữ **cùng màu sắc, biểu tượng, nhãn trạng thái** (Online · Fresh, Offline · Stale, Unknown, Active, Recovered, Not verified) | So `Theme` QML với CSS |
-| [ ] | UI-EQ-04 | Giữ **cùng thao tác**: chọn Host, chọn luồng, chuyển tab giữ lựa chọn, cuộn danh sách Network không nhảy, Load Older | Chạy lại E2E-20 và thao tác cuộn |
-| [ ] | UI-EQ-05 | Giữ **cùng đơn vị và định dạng số** (MiB, %, B/s, µs, giờ ISO) | So số liệu cùng một snapshot |
+| [x] | UI-EQ-01 | Giữ **cùng bố cục**: một cửa sổ, ba tab *Giám sát hệ thống* · *DDS chuyên sâu* · *Cảnh báo & lịch sử* | 02/11: 8 trang so sánh cùng dữ liệu, bố cục trùng · `test-artifacts/webengine-20261102/` |
+| [x] | UI-EQ-02 | Giữ **cùng thông tin** trên từng màn: Host, đèn xanh/đỏ + nhãn chữ, Last Seen, CPU/RAM/Disk/Network, ứng dụng, luồng, đồng bộ giờ | 02/11: cùng trường, cùng chữ (sao từ QML) · ảnh so sánh |
+| [x] | UI-EQ-03 | Giữ **cùng màu sắc, biểu tượng, nhãn trạng thái** (Online · Fresh, Offline · Stale, Unknown, Active, Recovered, Not verified) | 02/11: màu lấy từ `Theme.qml`, nhãn giống QML |
+| [x] | UI-EQ-04 | Giữ **cùng thao tác**: chọn Host, chọn luồng, chuyển tab giữ lựa chọn, cuộn danh sách Network không nhảy, Load Older | 02/11: test bấm tự động PASS (host, app, tab, luồng, Tất cả Slave, DDS chuyên sâu). Network giữ vị trí cuộn. **Còn:** thử tay trên app thật |
+| [x] | UI-EQ-05 | Giữ **cùng đơn vị và định dạng số** (MiB, %, B/s, µs, giờ ISO) | 02/11: dùng lại đúng hàm định dạng QML (MiB, %, B/s, µs, dd/MM/yyyy HH:mm:ss) |
 | [ ] | UI-EQ-06 | Dữ liệu cập nhật **realtime như QML** (theo chu kỳ telemetry, không phải bấm reload) | Quan sát Last Seen tăng mỗi giây |
 | [ ] | UI-EQ-07 | Màn **DDS chuyên sâu** (Explorer, QoS, Domain Graph, Charts) vẫn hoạt động như cũ khi chuyển tab giữa trang web Task 3 và màn QML gốc | Màn này **giữ QML**, không chuyển |
 | [ ] | UI-EQ-08 | Chạy **offline hoàn toàn** (không CDN, không cổng HTTP) | `ss -ltnp` không có cổng mới của `dds_monitor` |
@@ -117,15 +117,36 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | [x] | W-02 | PoC `QWebEngineView` + `QWebChannel` gọi C++ ↔ JS | 02/11: PASS trên Qt 6.8.3, kể cả khi bật sandbox |
 | [ ] | W-02b | Build DDS Monitor bằng Qt 6.8.3 và chạy hồi quy | 02/11: **build PASS** (`.task3-deps/qt683-builds/release`), CTest PASS, Graph QML 6/6; Master **không khởi động** do thiếu `Qt5Compat` → chờ cài module rồi chạy lại `test-artifacts/qt683-20261102/run_all.sh` |
 | [ ] | W-02 | PoC: cửa sổ `QWebEngineView` nạp `qrc:/web/index.html`, gọi được 1 hàm C++ | |
-| [ ] | W-03 | Expose `MonitoringCore` qua `QWebChannel` (hosts, events, flows, status) | Tái dùng Q_PROPERTY sẵn có |
-| [ ] | W-04 | Trang **Giám sát hệ thống**: danh sách Slave, đèn xanh/đỏ, CPU/RAM/Disk/Network | Thay `Dashboard.qml`, `HostWorkspace.qml` |
-| [ ] | W-05 | Trang **Luồng DDS / Topology** của Task 3: Host → App → Writer → Topic → Reader | Thay `FlowDetails.qml` (không phải Domain Graph gốc) |
-| [ ] | W-06 | Trang **Cảnh báo & lịch sử**: Active/Recovered, Load Older | Thay `EventHistoryView.qml` |
-| [ ] | W-07 | Biểu đồ CPU / Throughput / Latency (ghi đơn vị, cửa sổ thời gian) | |
-| [ ] | W-08 | Tích hợp: tab Task 3 dùng `QWebEngineView`, tab **DDS chuyên sâu giữ QML gốc** trong cùng một cửa sổ | Đã chốt 02/11 |
-| [ ] | W-09 | Đóng gói offline (không tải CDN), kiểm tra không mở cổng mạng | Chứng minh CON-04 |
-| [ ] | W-10 | Chạy lại E2E-06 → E2E-11, E2E-20 trên UI mới | Kết quả QML cũ không tự chuyển sang |
+| [x] | W-03 | Expose `MonitoringCore` qua `QWebChannel` (hosts, events, flows, entities, status) | 02/11: `WebDashboard.qml` đăng ký `core` = task3Core và `ui` = trạng thái chọn; không đổi C++ của MonitoringCore |
+| [x] | W-04 | Trang **Giám sát hệ thống** (tổng quan, Slave, tài nguyên, ứng dụng, đồng bộ giờ) | 02/11: `task3/web/` thay `Dashboard.qml`, `HostWorkspace.qml` · ảnh so sánh `test-artifacts/webengine-20261102/` |
+| [x] | W-05 | Trang **Luồng DDS** của Task 3 | 02/11: thay `FlowDetails.qml` · 4.37 % pixel khác |
+| [x] | W-06 | Trang **Cảnh báo & lịch sử** (lọc, tìm, Load Older) | 02/11: thay `EventHistoryView.qml` · 4.36 % pixel khác |
+| [x] | W-07 | Biểu đồ CPU 120 mẫu (SVG, không thư viện ngoài) | 02/11: cùng trục 0–100, tiêu đề, màu `#0895cd` |
+| [x] | W-08 | Tích hợp: tab Task 3 dùng WebEngine, **DDS chuyên sâu giữ QML gốc** | 02/11: `main.qml` chỉ đổi `source` của Loader; `TASK3_UI=qml` quay lại bản QML |
+| [ ] | W-09 | Đóng gói offline, không mở cổng mạng | Trang nạp từ `qrc:/task3/web/`, chặn điều hướng ra ngoài, không thư viện CDN. **Còn:** kiểm `ss -ltnp` khi chạy app thật |
+| [ ] | W-10 | Chạy lại E2E-06 → E2E-11, E2E-20 trên UI mới | Chờ cài `Qt5Compat` và máy Windows |
 | [ ] | W-11 | Cập nhật báo cáo / Chương 5 (kiến trúc UI, hình chụp mới) | |
+
+### 2.3b. 📍 Trạng thái hiện tại (02/11/2026) và cách test tiếp
+
+- **Đã làm** trên nhánh `feature/webengine-ui`: UI Task 3 (Tổng quan, Slave, Tài nguyên, Ứng dụng, Luồng DDS, Đồng bộ giờ, Cảnh báo & lịch sử) viết lại bằng HTML/CSS/JS trong `task3/web/`, chạy trong `WebEngineView` của `task3/WebDashboard.qml`, nhận dữ liệu từ `MonitoringCore` qua `QWebChannel`. Màn DDS chuyên sâu gốc giữ QML.
+- **Đã kiểm (tự động, Linux, offscreen):** build Qt 6.8.3 PASS · CTest PASS · 8 trang so với QML cùng dữ liệu: 2.4–4.4 % pixel khác (chủ yếu khử răng cưa chữ) · bấm host/app/tab/luồng/"Tất cả Slave"/"DDS chuyên sâu" đổi đúng trạng thái QML · `hostNetworkMetrics` vẫn có cho `ui_integration.py`.
+- **Chưa kiểm:** chạy `dds_monitor` đầy đủ (thiếu **Qt5Compat** cho Qt 6.8.3), dữ liệu live từ Agent, máy Windows, cổng mạng (`ss -ltnp`), hiệu năng.
+- **Bản QML cũ vẫn giữ:** chạy với `TASK3_UI=qml` để so sánh; xóa khi nghiệm thu xong bản web.
+
+**Các bước test tiếp:**
+
+```bash
+# 1. Cài Qt5Compat cho Qt 6.8.3 (MaintenanceTool), rồi build lại (mặc định giờ dùng Qt 6.8.3)
+git checkout feature/webengine-ui
+bash task3/scripts/build_task3_patched.sh --jobs 4
+# 2. Chạy Master (UI web là mặc định; TASK3_UI=qml để xem bản cũ)
+bash task3/scripts/run_master_patched.sh
+# 3. So sánh ảnh QML/Web không cần app đầy đủ
+bash test-artifacts/webengine-20261102/compare_qml_web.sh
+# 4. Kiểm không mở cổng mạng khi app đang chạy
+ss -ltnp | grep dds_monitor
+```
 
 ### 2.4. Ảnh hưởng tới các việc khác
 
@@ -145,7 +166,7 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | 1 | Cài Qt WebEngine + WebChannel cho Qt 6.7.2 (W-01) | 🔴 | Đã chốt dùng WebEngine; chặn toàn bộ việc chuyển UI |
 | 2 | ~~Quyết định Backend Original / Patched~~ | ✅ | **Đã chốt Patched** 02/11 |
 | 3 | E2E-12 trên 2 máy (Linux Pub ↔ Windows Sub) | 🟠 | Cục bộ đã PASS |
-| 4 | PoC WebEngine (W-01 → W-03) | 🟠 | Đánh giá khả thi sớm |
+| 4 | Cài `Qt5Compat` cho Qt 6.8.3 rồi chạy app thật với UI WebEngine (W-10) | 🔴 | UI web đã xong trên nhánh `feature/webengine-ui` |
 | 5 | E2E-13 GUID, E2E-14 Throughput/Latency | 🟠 | FR-10, FR-13 |
 | 6 | NTP (E2E-22 → 24) | 🟠 | Cần quyền quản trị |
 
@@ -430,6 +451,7 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | 02/11/2026 | P0 stress Original vs Patched | Original: crash 1/4, treo thoát 1/4 · Patched 2/2 PASS | `test-artifacts/original-20261102/` | Claude |
 | 02/11/2026 | Hồi quy Linux với Original (đợt b) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 4/5 crash** | `test-artifacts/original-20261102b/` | Claude |
 | 02/11/2026 | Chốt dùng Backend Patched · cài Qt 6.8.3 (WebEngine) | Quyết định | — | Thắng |
+| 02/11/2026 | UI Task 3 chuyển sang Qt WebEngine (nhánh `feature/webengine-ui`) | So với QML 2.4–4.4 % pixel khác · tương tác PASS · CTest PASS | `test-artifacts/webengine-20261102/` | Claude |
 | 02/11/2026 | Build + hồi quy Qt 6.8.3 | Build ✅ · CTest ✅ · Graph QML 6/6 (cả code gốc) · Master ❌ thiếu Qt5Compat | `test-artifacts/qt683-20261102/` | Claude |
 | 02/11/2026 | Hồi quy Linux với Patched (cùng kịch bản) | CTest ✅ · local 14/14 · continuation 15/15 · subscriber 6/6 · **publisher 5/5 PASS** | `test-artifacts/patched-20261102/` | Claude |
 | | | | | |

@@ -196,7 +196,7 @@ ApplicationWindow {
         anchors.fill: parent
         active: mainApplicationView.task3Ready
         visible: mainApplicationView.task3Page
-        source: "qrc:/task3/Dashboard.qml"
+        source: mainApplicationView.task3Ready ? task3DashboardSource : ""
     }
     Binding {
         target: task3Loader.item

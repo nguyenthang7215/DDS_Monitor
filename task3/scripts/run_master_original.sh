@@ -8,7 +8,7 @@ task3_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 original_prefix="$(realpath -m "${TASK3_ORIGINAL_BACKEND_PREFIX:-/home/dev/dds-e2e/backend-original-install}")"
 patched_prefix="$(realpath -m "${TASK3_PATCHED_BACKEND_PREFIX:-$task3_root/.task3-deps/fastdds-statistics-backend-2.5.0-patched}")"
 dds_prefix="$(realpath -m "${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}")"
-qt_prefix="$(realpath -m "${TASK3_QT_PREFIX:-/home/dev/Qt/6.7.2/gcc_64}")"
+qt_prefix="$(realpath -m "${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}")"
 backend_lib="$original_prefix/lib/libfastdds_statistics_backend.so.2.5.0"
 
 die() {

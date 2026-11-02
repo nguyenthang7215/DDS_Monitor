@@ -3,7 +3,7 @@ set -euo pipefail
 
 task3_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 backend_script="$task3_root/task3/scripts/build_statistics_backend_patched.sh"
-qt_prefix="${TASK3_QT_PREFIX:-/home/dev/Qt/6.7.2/gcc_64}"
+qt_prefix="${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}"
 dds_prefix="${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}"
 backend_prefix="${TASK3_PATCHED_BACKEND_PREFIX:-$task3_root/.task3-deps/fastdds-statistics-backend-2.5.0-patched}"
 jobs="${TASK3_BUILD_JOBS:-4}"

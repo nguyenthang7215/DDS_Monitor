@@ -1,0 +1,95 @@
+<!doctype html>
+<!-- SPDX-License-Identifier: GPL-3.0-or-later -->
+<!-- Task 3 dashboard rendered by Qt WebEngine; data comes from MonitoringCore through QWebChannel. -->
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>DDS Monitor</title>
+<link rel="stylesheet" href="style.css">
+<script src="qrc:///qtwebchannel/qwebchannel.js"></script>
+<script src="app.js" defer></script>
+</head>
+<body>
+<div id="systemView" class="split">
+    <aside id="leftPanel" class="frame">
+        <div class="panel-title">SLAVE &amp; APPLICATION</div>
+        <input id="hostSearch" class="text-field" placeholder="Tìm tên máy / Host ID" autocomplete="off">
+        <button id="allHosts" class="button wide pre" data-action="allHosts"></button>
+        <div id="hostList" class="scroll"></div>
+        <div class="note">Trạng thái Slave dựa trên phản hồi Agent.</div>
+    </aside>
+    <div id="leftHandle" class="handle-h"></div>
+    <main id="rightArea">
+        <section id="overview" class="column gap12">
+            <div class="row">
+                <div class="grow">
+                    <div class="h24">Tổng quan hệ thống</div>
+                    <div class="muted">Chọn một Slave để xem tài nguyên, ứng dụng và các luồng DDS.</div>
+                </div>
+                <button class="button" data-action="openDds" data-entity="">Mở DDS chuyên sâu</button>
+            </div>
+            <div id="statCards" class="row gap12"></div>
+            <div class="frame fill flush">
+                <div id="fleet" class="scroll both"></div>
+            </div>
+        </section>
+        <section id="hostWorkspace" class="column gap12">
+            <div id="hostHeader" class="frame pad14"></div>
+            <div id="hostTabs" class="tab-bar"></div>
+            <div id="pageResources" class="page column gap8">
+                <div class="row gap12 metric-cards">
+                    <div class="frame card grow1" id="cpuCard"></div>
+                    <div class="frame card grow1" id="ramCard"></div>
+                </div>
+                <div id="cpuChart" class="chart"></div>
+                <div id="resourceTabs" class="tab-bar"></div>
+                <div id="disks" class="scroll list fill"></div>
+                <div id="network" class="scroll list fill"></div>
+            </div>
+            <div id="pageApps" class="page split">
+                <div id="appList" class="scroll list"></div>
+                <div id="appHandle" class="handle-h dark"></div>
+                <div id="appDetail" class="scroll grow"></div>
+            </div>
+            <div id="pageFlows" class="page column gap12">
+                <div class="row">
+                    <label id="appScopeLabel" class="check grow" title="">
+                        <input id="appScope" type="checkbox" checked><span class="box"></span><span id="appScopeText" class="ellipsis"></span>
+                    </label>
+                    <button class="button" data-action="openDdsFlow">DDS chuyên sâu</button>
+                </div>
+                <div class="note">Discovery, matching và hoạt động dữ liệu là các bằng chứng riêng. Chỉ vẽ mũi tên khi matching được xác nhận.</div>
+                <div class="split vertical fill">
+                    <div id="flowList" class="scroll list fill"></div>
+                    <div id="flowHandle" class="handle-v dark"></div>
+                    <div id="flowInspector" class="frame pad14 scroll"></div>
+                </div>
+            </div>
+            <div id="pageTime" class="page scroll"></div>
+        </section>
+    </main>
+</div>
+<div id="eventsView" class="column gap14">
+    <div class="row">
+        <div class="grow">
+            <div class="h24">Cảnh báo &amp; lịch sử</div>
+            <div class="muted">Theo dõi cảnh báo đang tồn tại và các sự kiện đã khôi phục</div>
+        </div>
+        <button class="button" data-action="openDds" data-entity="">Cảnh báo DDS gốc</button>
+    </div>
+    <div class="row gap8">
+        <input id="eventSearch" class="text-field grow" placeholder="Tìm đối tượng / điều kiện trong dữ liệu đã tải" autocomplete="off">
+        <select id="eventFilter" class="combo"><option>Tất cả</option><option>Active</option><option>Recovered</option></select>
+    </div>
+    <div id="eventCount" class="note"></div>
+    <div class="frame fill flush events-frame">
+        <div class="table-head"><span class="grow">TRẠNG THÁI / ĐỐI TƯỢNG / ĐIỀU KIỆN</span><span class="time-col small13">THỜI ĐIỂM · GIỜ MÁY MASTER</span></div>
+        <div id="eventList" class="scroll fill"></div>
+    </div>
+    <div class="row">
+        <div class="note grow">Active vẫn được giữ khi chưa có bằng chứng Recovery; Agent Offline có thể khiến trạng thái chưa thể xác minh.</div>
+        <button id="loadOlder" class="button" data-action="loadOlder">Tải lịch sử cũ hơn</button>
+    </div>
+</div>
+</body>
+</html>

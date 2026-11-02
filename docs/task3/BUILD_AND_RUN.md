@@ -57,7 +57,7 @@ Terminal 3 — Subscriber:
 cd /home/dev/DDS-Monitor
 export TASK3_PATCHED_BACKEND_PREFIX="$PWD/.task3-deps/fastdds-statistics-backend-2.5.0-patched"
 export DDS_PREFIX=/home/dev/dds-deps/install
-export QT_PREFIX=/home/dev/Qt/6.7.2/gcc_64
+export QT_PREFIX=/home/dev/Qt/6.8.3/gcc_64
 export LD_LIBRARY_PATH="$TASK3_PATCHED_BACKEND_PREFIX/lib:$DDS_PREFIX/lib:$QT_PREFIX/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 export FASTDDS_STATISTICS="HISTORY_LATENCY_TOPIC;NETWORK_LATENCY_TOPIC;PUBLICATION_THROUGHPUT_TOPIC;SUBSCRIPTION_THROUGHPUT_TOPIC;PHYSICAL_DATA_TOPIC;DISCOVERY_TOPIC;MONITOR_SERVICE_TOPIC"
 /home/dev/dds-tests/hello_world/build/hello_world subscriber
@@ -90,7 +90,7 @@ Các bài integration dùng UDP; nếu sandbox từ chối socket (`Operation no
 ```bash
 cd /home/dev/DDS-Monitor
 export TASK3_PATCHED_BACKEND_PREFIX="$PWD/.task3-deps/fastdds-statistics-backend-2.5.0-patched"
-export LD_LIBRARY_PATH="$TASK3_PATCHED_BACKEND_PREFIX/lib:/home/dev/dds-deps/install/lib:/home/dev/Qt/6.7.2/gcc_64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+export LD_LIBRARY_PATH="$TASK3_PATCHED_BACKEND_PREFIX/lib:/home/dev/dds-deps/install/lib:/home/dev/Qt/6.8.3/gcc_64/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 TASK3_BUILD_ROOT="$(<.task3-deps/task3-builds/LATEST)"
 python3 task3/tests/local_integration.py --build "$TASK3_BUILD_ROOT/release" --hello-world /home/dev/dds-tests/hello_world/build/hello_world --output test-artifacts/manual-local
 python3 task3/tests/continuation_integration.py --build "$TASK3_BUILD_ROOT/release" --output test-artifacts/manual-continuation --duration 60

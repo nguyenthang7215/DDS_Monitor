@@ -21,10 +21,12 @@ if(WIN32)
     add_custom_command(TARGET task3_agent POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/scripts/windows-time-status.ps1 $<TARGET_FILE_DIR:task3_agent>)
 endif()
+find_package(Qt6 6.8 REQUIRED COMPONENTS WebEngineQuick WebChannelQuick)
 target_sources(dds_monitor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Dashboard.cpp)
-target_link_libraries(dds_monitor PRIVATE task3_core)
+target_link_libraries(dds_monitor PRIVATE task3_core Qt6::WebEngineQuick Qt6::WebChannelQuick)
 qt_add_resources(dds_monitor task3_dashboard PREFIX /task3 FILES
-    Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml)
+    Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml
+    WebDashboard.qml web/index.html web/style.css web/app.js)
 if(TASK3_BUILD_TESTS)
 find_package(Qt6 REQUIRED COMPONENTS Test)
 add_executable(task3_tests tests/CoreTests.cpp)
@@ -37,5 +39,13 @@ target_sources(task3_tests PRIVATE ../src/statistics/DataModel.cpp ../src/statis
 target_include_directories(task3_tests PRIVATE ../include)
 target_link_libraries(task3_tests PRIVATE Qt6::Charts)
 add_test(NAME task3_core COMMAND task3_tests)
+# Renders Dashboard.qml or WebDashboard.qml from a recorded snapshot for side-by-side screenshots.
+find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
+add_executable(task3_dashboard_preview tests/DashboardPreview.cpp)
+target_link_libraries(task3_dashboard_preview PRIVATE Qt6::Widgets Qt6::Quick Qt6::QuickControls2
+    Qt6::WebEngineQuick Qt6::WebChannelQuick)
+qt_add_resources(task3_dashboard_preview task3_dashboard_preview PREFIX /task3 FILES
+    Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml
+    WebDashboard.qml web/index.html web/style.css web/app.js)
 set_tests_properties(task3_core PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
 endif()

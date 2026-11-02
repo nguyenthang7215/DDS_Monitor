@@ -7,7 +7,7 @@ task3_expected_patch_sha="83019a4479ec8b05cdab0a2d0e97461d9e3d386bcda865ba5f89fb
 task3_patch_file="$task3_root/test-artifacts/p0-crash-20261016/Fast-DDS-Statistics-Backend-2.5.0-database-queue-lifecycle.patch"
 task3_patched_prefix="$(realpath -m "${TASK3_PATCHED_BACKEND_PREFIX:-$task3_root/.task3-deps/fastdds-statistics-backend-$task3_expected_version-patched}")"
 task3_dds_prefix="$(realpath -m "${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}")"
-task3_qt_prefix="$(realpath -m "${TASK3_QT_PREFIX:-/home/dev/Qt/6.7.2/gcc_64}")"
+task3_qt_prefix="$(realpath -m "${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}")"
 
 task3_die() {
     printf 'Task 3 runtime check failed: %s\n' "$*" >&2

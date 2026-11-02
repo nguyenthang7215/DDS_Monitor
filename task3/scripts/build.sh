@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 task3_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
-task3_qt="${TASK3_QT_PREFIX:-/home/dev/Qt/6.7.2/gcc_64}"
+task3_qt="${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}"
 task3_dds="${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}"
 cmake -S "$task3_root" -B "$task3_root/build" -DCMAKE_BUILD_TYPE=Debug -DCMAKE_PREFIX_PATH="$task3_qt;$task3_dds"
 cmake --build "$task3_root/build" -j "${TASK3_BUILD_JOBS:-4}"

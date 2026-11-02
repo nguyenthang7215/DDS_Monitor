@@ -33,6 +33,7 @@ int main(
         int argc,
         char* argv[])
 {
+    task3::prepareWebEngine();
     QApplication app(argc, argv);
     task3::installShutdownHandler();
     app.setWindowIcon(QIcon(":/resources/images/eprosima_logo.ico"));

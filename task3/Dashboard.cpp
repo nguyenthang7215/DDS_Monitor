@@ -13,7 +13,11 @@
 #include <QSaveFile>
 #include <QCoreApplication>
 #include <QQuickWindow>
+#include <QtWebEngineQuick/qtwebenginequickglobal.h>
 namespace task3 {
+void prepareWebEngine() {
+    QtWebEngineQuick::initialize();
+}
 void installDashboard(Engine& engine) {
     const auto dataDir = qEnvironmentVariable(
         "TASK3_DATA_DIR",
@@ -42,6 +46,11 @@ void installDashboard(Engine& engine) {
                          core->stop();
                      });
     engine.rootContext()->setContextProperty("task3Core", core);
+    // TASK3_UI=qml keeps the previous Qt Quick dashboard available for side-by-side comparison.
+    engine.rootContext()->setContextProperty(
+        "task3DashboardSource",
+        qEnvironmentVariable("TASK3_UI") == "qml" ? "qrc:/task3/Dashboard.qml"
+                                                   : "qrc:/task3/WebDashboard.qml");
     engine.rootContext()->setContextProperty(
         "task3StartupTab",
         qBound(0, qEnvironmentVariableIntValue("TASK3_UI_TAB"), 3));
