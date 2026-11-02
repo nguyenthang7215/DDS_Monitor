@@ -1,0 +1,28 @@
+{
+  "requested_cycles": 3,
+  "completed_cycles": 3,
+  "cycles": [
+    {
+      "cycle": 1,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 2,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    },
+    {
+      "cycle": 3,
+      "publisher_exit": 0,
+      "master_alive_after_stop": true
+    }
+  ],
+  "runtime_backend_map": {
+    "pid": 85929,
+    "library": "/home/dev/dds-e2e/backend-original-install/lib/libfastdds_statistics_backend.so.2.5.0",
+    "verified": true
+  },
+  "status": "PASS",
+  "master_gdb_exit": 0
+}

@@ -1,0 +1,10 @@
+--- a/qml/DomainGraphLayout.qml
++++ b/qml/DomainGraphLayout.qml
+@@ -513,6 +513,7 @@
+             ListView
+             {
+                 id: hostsList
++                width: entity_box_width_
+                 model: domainGraphLayout.model ? domainGraphLayout.model["hosts"] : undefined
+                 anchors.top: parent.top
+                 anchors.left: parent.left; anchors.leftMargin: elements_spacing_

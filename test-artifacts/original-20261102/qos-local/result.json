@@ -1,0 +1,42 @@
+{
+  "status": "PASS",
+  "window_s": 8.0,
+  "cases": [
+    {
+      "case": "compatible",
+      "profile": "/home/dev/DDS-Monitor/test-artifacts/original-20261102/qos-profiles/compatible.xml",
+      "expect": "match",
+      "observed": {
+        "publisher_matched": true,
+        "subscriber_matched": true,
+        "sent": 79,
+        "received": 79
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "writer_best_effort_reader_reliable",
+      "profile": "/home/dev/DDS-Monitor/test-artifacts/original-20261102/qos-profiles/incompatible-writer.xml",
+      "expect": "nomatch",
+      "observed": {
+        "publisher_matched": false,
+        "subscriber_matched": false,
+        "sent": 0,
+        "received": 0
+      },
+      "status": "PASS"
+    },
+    {
+      "case": "both_best_effort",
+      "profile": "/home/dev/DDS-Monitor/test-artifacts/original-20261102/qos-profiles/both-best-effort.xml",
+      "expect": "match",
+      "observed": {
+        "publisher_matched": true,
+        "subscriber_matched": true,
+        "sent": 79,
+        "received": 79
+      },
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,7 @@
+PASS   : qmltestrunner::DomainGraphLoading::initTestCase()
+PASS   : qmltestrunner::DomainGraphLoading::test_singleParticipantInitializes()
+FAIL!  : qmltestrunner::DomainGraphLoading::test_threeHostsSeveralParticipantsInitialize() 'wait for signal initialized' returned FALSE. ()
+FAIL!  : qmltestrunner::DomainGraphLoading::test_twoHostsInitialize() 'wait for signal initialized' returned FALSE. ()
+FAIL!  : qmltestrunner::DomainGraphLoading::test_twoHostsRefreshRepeatedly() 'Refresh 1 initialized' returned FALSE. ()
+PASS   : qmltestrunner::DomainGraphLoading::cleanupTestCase()
+Totals: 3 passed, 3 failed, 0 skipped, 0 blacklisted, 9211ms

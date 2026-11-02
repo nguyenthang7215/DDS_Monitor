@@ -1,0 +1,7 @@
+PASS   : qmltestrunner::DomainGraphLoading::initTestCase()
+PASS   : qmltestrunner::DomainGraphLoading::test_singleParticipantInitializes()
+PASS   : qmltestrunner::DomainGraphLoading::test_threeHostsSeveralParticipantsInitialize()
+PASS   : qmltestrunner::DomainGraphLoading::test_twoHostsInitialize()
+PASS   : qmltestrunner::DomainGraphLoading::test_twoHostsRefreshRepeatedly()
+PASS   : qmltestrunner::DomainGraphLoading::cleanupTestCase()
+Totals: 6 passed, 0 failed, 0 skipped, 0 blacklisted, 689ms

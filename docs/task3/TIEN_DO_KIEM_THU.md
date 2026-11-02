@@ -138,8 +138,8 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 | # | Việc | Ưu tiên | Lý do |
 | :---: | :--- | :---: | :--- |
 | 1 | Chốt phạm vi chuyển WebEngine (mục 2.2) | 🔴 | Quyết định có sửa QML Graph hay không |
-| 2 | Stress P0-BACKEND với Backend Original | 🔴 | Rủi ro crash, độc lập với UI |
-| 3 | E2E-12 QoS MATCH / NO MATCH | 🟠 | XML đã sẵn sàng |
+| 2 | Quyết định Backend Original / Patched sau kết quả P0 ngày 02/11 | 🔴 | Original đã crash lại |
+| 3 | E2E-12 trên 2 máy (Linux Pub ↔ Windows Sub) | 🟠 | Cục bộ đã PASS |
 | 4 | PoC WebEngine (W-01 → W-03) | 🟠 | Đánh giá khả thi sớm |
 | 5 | E2E-13 GUID, E2E-14 Throughput/Latency | 🟠 | FR-10, FR-13 |
 | 6 | NTP (E2E-22 → 24) | 🟠 | Cần quyền quản trị |
@@ -166,38 +166,69 @@ BLOCKED  ███░░░░░░░░░░░░░░░░░░░░�
 
 ### 5.1. 🔴 GRAPH-01 — Hộp thoại `Loading Graph` không đóng
 
-**Nguyên nhân (từ log 26/10, 8/9 lượt kẹt):**
+**Nguyên nhân (xác nhận 02/11 bằng test tự động + stack trace):**
 
 ```
-Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
-  → ListView lồng nhau chỉ giữ delegate đang hiển thị
-  → duyệt bằng currentIndex làm delegate participant kia bị hủy
-  → record_connections_ chỉ tới 1 listener
+Graph có ≥ 2 host (Linux Publisher + Windows Subscriber)
+  → hostsList (ListView ngoài cùng) không có width → width = 0
+  → mỗi lần resize() đặt hostsList.currentIndex = c, ListView chỉ giữ currentItem,
+    hủy delegate host còn lại (cả cây user/process/participant/endpoint bên trong)
+  → record_connections_ chỉ tới listener của 1 participant
   → endpoint còn lại kẹt trong pending_connections_
   → không gọi stop_timer() / endpoints_updated_() → không initialized()
-  → safety_timer gọi load_model() lặp lại cùng kết quả
+  → safety_timer gọi load_model() lặp lại cùng kết quả → Loading Graph không đóng
 ```
+
+**Bản sửa đề xuất (1 dòng, chưa áp vào code gốc):** thêm `width: entity_box_width_` cho `hostsList` trong `qml/DomainGraphLayout.qml`
+→ `test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch`
+
+| Kết quả test tự động (`task3/tests/qml/graph/tst_DomainGraphLoading.qml`) | Code gốc | Có bản sửa |
+| :--- | :---: | :---: |
+| 1 host / 1 participant | ✅ | ✅ |
+| 2 host (Linux Pub + Windows Sub) | ❌ | ✅ |
+| 3 host, 1 process có 2 participant, 6 endpoint (đủ 6 kết nối) | ❌ | ✅ |
+| Refresh 10 lần liên tiếp với 2 host | ❌ | ✅ |
+| **Tổng** | **3/6** | **6/6** |
 
 | Xong | Bước | Ghi chú |
 | :---: | :--- | :--- |
 | [x] | Thêm log chẩn đoán vào bản diagnostic | `graph01-diagnostic/graph01-logs.diff` |
 | [x] | Thu log lỗi thật | `/home/dev/dds-e2e/graph01-data.*/monitor.log` |
-| [x] | Xác định nguyên nhân | Xem sơ đồ trên |
-| [ ] | **Chờ quyết định WebEngine** (mục 2.2) | Nếu giữ Graph QML → làm tiếp các bước dưới |
-| [ ] | Phê duyệt sửa code gốc QML | Change control |
-| [ ] | Sửa thử: `cacheBuffer` lớn hoặc `Column` + `Repeater` | Không dùng timer cưỡng bức đóng dialog |
-| [ ] | Refresh ≥ 10 lần với 2 participant | Kỳ vọng `initialized.emit connections` mỗi lần |
+| [x] | Xác định nguyên nhân | Xem sơ đồ trên · 02/11 |
+| [x] | Tái hiện tự động, không cần GUI | `qmltestrunner` offscreen · 02/11 |
+| [x] | Thử và kiểm chứng bản sửa | `cacheBuffer`, `displayMargin`, `highlightFollowsCurrentItem` **không** sửa được; `width` sửa được · ảnh `graph01/graph-three-hosts-fixed.png` |
+| [ ] | **Chờ quyết định WebEngine** (mục 2.2) + phê duyệt sửa code gốc | Bản sửa chỉ 1 dòng, rủi ro thấp |
+| [ ] | Áp patch, build lại Master | `git apply test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch` |
+| [ ] | Kiểm tra trên GUI thật: Refresh ≥ 10 lần (Linux Pub + Windows Sub) | |
 | [ ] | Stop/restart Subscriber rồi Refresh | |
-| [ ] | Writer/Reader hiện đúng trong viewport (GRAPH-02) | |
+| [ ] | Writer/Reader hiện đúng trong viewport (GRAPH-02) | Test tự động đã thấy đủ 6 endpoint hiển thị; có thể GRAPH-02 cùng nguyên nhân |
+
+Chạy lại test: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/qml/graph -import imports` (tại thư mục gốc repo).
 
 ### 5.2. 🔴 P0-BACKEND — Crash khi Publisher stop/restart
 
 | Xong | Bước | Ghi chú |
 | :---: | :--- | :--- |
+**Kết quả stress 02/11 (Linux, offscreen, GDB, 30 chu kỳ Publisher stop/restart, dwell 2 s):**
+
+| Lượt | Backend | Kết quả | Ghi chú |
+| :--- | :--- | :---: | :--- |
+| publisher-30 | Original | 🟡 30/30 | Master **không thoát** trong 25 s sau SIGTERM → bị kill (`-9`) |
+| shutdown-check-1, 2 | Original | ✅ 3/3 · 3/3 | Thoát sạch |
+| publisher-30-rerun | Original | ❌ **SIGSEGV chu kỳ 2** | `DatabaseDataQueue::process_sample()` → `DatabaseQueue::run()` · trùng chữ ký P0 cũ · chạy song song với test QML (máy có tải) |
+| patched run1, run2 | Patched | ✅ 30/30 · 30/30 | Thoát sạch, không SIGSEGV |
+
+> **Kết luận:** lỗi P0 **vẫn còn** ở Backend 2.5.0 Original (tái hiện 1/4 lượt Original, 0/2 lượt Patched). Nếu tiếp tục dùng Original theo quyết định chủ dự án thì phải ghi đây là **rủi ro chấp nhận**: Master có thể crash khi ứng dụng DDS khởi động lại nhiều lần.
+> Bằng chứng: `test-artifacts/original-20261102/` (README, `publisher-30-rerun/crash-backtrace.txt`).
+
+| Xong | Bước | Ghi chú |
+| :---: | :--- | :--- |
 | [x] | Tái hiện với bản chưa vá (lịch sử) | Crash chu kỳ 12/30 · patched 30/30 |
-| [ ] | Stress ≥ 30 chu kỳ Publisher với **Original** | `test-artifacts/p0-crash-20261016/publisher_stop_restart_reproducer.py` |
+| [x] | Stress ≥ 30 chu kỳ Publisher với **Original** | 02/11 · crash 1/4 lượt · treo khi thoát 1/4 |
+| [x] | So sánh cùng kịch bản với **Patched** | 02/11 · 2/2 PASS |
 | [ ] | Stress Subscriber restart với Original | `subscriber_restart_regression.py` |
-| [ ] | Kết luận giữ Original hay dùng Patched | Ghi số chu kỳ, log, GDB |
+| [ ] | Chạy thêm ≥ 5 lượt Original khi máy rảnh (không chạy song song việc khác) để ước lượng tần suất | |
+| [ ] | **Quyết định của chủ dự án:** giữ Original (chấp nhận rủi ro) hay chuyển Patched | Cần ghi vào báo cáo |
 
 ---
 
@@ -228,7 +259,7 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 | Xong | ID | Nội dung | TT | Đã làm | Còn thiếu |
 | :---: | :--- | :--- | :---: | :--- | :--- |
 | [ ] | E2E-11 | Entities cross-OS | 🟡 | SENT/RECEIVED, thấy Domain 0 | Graph, thống kê |
-| [ ] | E2E-12 | QoS MATCH / NO MATCH | ⬜ | XML đã soạn | Chạy 2 cặp QoS |
+| [ ] | E2E-12 | QoS MATCH / NO MATCH | 🟡 | 02/11 **cục bộ Linux PASS 3/3**: RELIABLE↔RELIABLE match 79/79 · Writer BE ↔ Reader RELIABLE **no match** 0 mẫu · BE↔BE match (chứng minh XML được nạp) · `test-artifacts/original-20261102/qos-local/` | Chạy Linux Pub ↔ Windows Sub; xem Monitor hiển thị QoS / incompatible |
 | [ ] | E2E-13 | GUID mapping | ⬜ | Test Linux | Chạy 2 máy |
 | [ ] | E2E-14 | Throughput / Latency | 🟡 | Có số liệu | Đo định lượng |
 
@@ -272,8 +303,8 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 | [ ] | FR-08 | Đồng bộ thời gian | ⬜ | 21–24 | |
 | [ ] | FR-09 | Thực thể DDS | 🟡 | 11 | |
 | [ ] | FR-10 | Ánh xạ Host / App / GUID | ⬜ | 13 | |
-| [ ] | FR-11 | Quan hệ truyền nhận (Graph) | 🟡 | 11 | GRAPH-01 · WebEngine |
-| [ ] | FR-12 | Matching, QoS | 🟡 | 12 | |
+| [ ] | FR-11 | Quan hệ truyền nhận (Graph) | 🟡 | 11 | GRAPH-01 đã có bản sửa 1 dòng, test tự động 6/6 · chờ áp + test GUI |
+| [ ] | FR-12 | Matching, QoS | 🟡 | 12 | QoS match/no-match PASS cục bộ |
 | [ ] | FR-13 | Throughput, Latency | 🟡 | 14 | |
 | [ ] | FR-14 | Cảnh báo | 🟡 | 09, 10, 15–18 | DDS rule chưa test |
 | [ ] | FR-15 | Lịch sử sự kiện | 🟡 | 19, 25 | |
@@ -283,7 +314,7 @@ Graph có ≥ 2 participant (Linux Publisher + Windows Subscriber)
 | Xong | NFR | Nội dung | Ghi chú |
 | :---: | :--- | :--- | :--- |
 | [ ] | NFR-01 | Mở rộng nhiều Slave | Chỉ có 2 máy → test 2–3 Slave (thật + mô phỏng); quy mô lớn dựa trên unit test tải tổng hợp (128 host), ghi rõ là mô phỏng |
-| [ ] | NFR-02 | Ổn định, phục hồi | Agent recovery OK · P0 còn mở |
+| [ ] | NFR-02 | Ổn định, phục hồi | Agent recovery OK · P0 **tái hiện với Original** 02/11 |
 | [ ] | NFR-03 | Kịp thời | Timeout 5000 ms OK · chưa đo độ trễ |
 | [ ] | NFR-04 | Dễ quan sát | NET-01, GRAPH-02 · đánh giá lại với UI web |
 | [ ] | NFR-05 | Tương thích Linux–Windows | HelloWorld + Agent OK |
@@ -342,8 +373,8 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | Xong | Mã | Vấn đề | Ưu tiên | Ghi chú |
 | :---: | :--- | :--- | :---: | :--- |
 | [ ] | UI-WEB | Chuyển UI sang Qt WebEngine | 🔴 | Yêu cầu mới 02/11 · mục 2 |
-| [ ] | GRAPH-01 | `Loading Graph` không đóng | 🔴 | Đã rõ nguyên nhân · chờ chốt WebEngine |
-| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | Chưa stress lại |
+| [ ] | GRAPH-01 | `Loading Graph` không đóng | 🔴 | Đã sửa được trong test (1 dòng `width`) · chờ phê duyệt áp vào code gốc |
+| [ ] | P0-BACKEND | Crash lifecycle với Original | 🔴 | 02/11 **tái hiện lại** SIGSEGV với Original; Patched 2/2 PASS · cần quyết định |
 | [ ] | TIME-01 | NTP Master–Windows | 🔴 | Cần quyền |
 | [ ] | STAT-01 | Độ chính xác Throughput / Latency | 🟠 | |
 | [ ] | GRAPH-02 | Writer/Reader không rõ trong viewport | 🟠 | Có thể liên quan GRAPH-01 |
@@ -375,4 +406,7 @@ Những ý trong đề bài **chưa có ca test riêng** ở mục 6. Cần bổ
 | 26/10/2026 | A/B Backend · Graph Refresh | 5/5 mỗi bản | Ảnh 20, 21 | Thắng |
 | 26/10/2026 | Chẩn đoán GRAPH-01 | 8/9 kẹt · rõ nguyên nhân | `graph01-data.*/monitor.log` | Thắng |
 | 02/11/2026 | Nhận yêu cầu chuyển UI sang WebEngine | Ghi nhận | — | Thắng |
+| 02/11/2026 | GRAPH-01 test tự động + bản sửa | Gốc 3/6 · sửa 6/6 | `test-artifacts/original-20261102/graph01/` | Claude |
+| 02/11/2026 | E2E-12 QoS cục bộ Linux | ✅ 3/3 | `test-artifacts/original-20261102/qos-local/result.json` | Claude |
+| 02/11/2026 | P0 stress Original vs Patched | Original: crash 1/4, treo thoát 1/4 · Patched 2/2 PASS | `test-artifacts/original-20261102/` | Claude |
 | | | | | |
