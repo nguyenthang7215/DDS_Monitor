@@ -1,0 +1,146 @@
+{
+  "passed": 17,
+  "total": 17,
+  "results": [
+    {
+      "name": "page connects to the channel and listens to every feed signal",
+      "ok": true,
+      "ms": 20
+    },
+    {
+      "name": "overview: counters, fleet table and host list",
+      "ok": true,
+      "ms": 80
+    },
+    {
+      "name": "selecting a host from the fleet table opens its workspace",
+      "ok": true,
+      "ms": 100
+    },
+    {
+      "name": "resources: CPU, RAM, disks and CPU history chart",
+      "ok": true,
+      "ms": 120
+    },
+    {
+      "name": "network tab: rows, numeric order and layout report",
+      "ok": true,
+      "ms": 160
+    },
+    {
+      "name": "network list keeps its scroll position across telemetry updates",
+      "ok": true,
+      "ms": 160
+    },
+    {
+      "name": "applications: choose from the host tree, mapped participants",
+      "ok": true,
+      "ms": 160
+    },
+    {
+      "name": "flows: list, selection, inspector and DDS chuyên sâu",
+      "ok": true,
+      "ms": 180
+    },
+    {
+      "name": "flow scope box starts checked on every visit, like the recreated QML page",
+      "ok": true,
+      "ms": 320
+    },
+    {
+      "name": "time sync tab never turns a missing offset into 0",
+      "ok": true,
+      "ms": 144
+    },
+    {
+      "name": "events page: count, filter, search and Load Older",
+      "ok": true,
+      "ms": 180
+    },
+    {
+      "name": "Agent Offline: stale values are N/A and marked unverified",
+      "ok": true,
+      "ms": 200
+    },
+    {
+      "name": "updates arrive without user action (realtime)",
+      "ok": true,
+      "ms": 120
+    },
+    {
+      "name": "telemetry text is escaped (no HTML injection from a Slave)",
+      "ok": true,
+      "ms": 200
+    },
+    {
+      "name": "Content-Security-Policy blocks network access (CON-04)",
+      "ok": true,
+      "ms": 20
+    },
+    {
+      "name": "large fleet: 512 Slaves and 500 events render completely",
+      "ok": true,
+      "ms": 144
+    },
+    {
+      "name": "no JavaScript errors",
+      "ok": true,
+      "ms": 0
+    }
+  ],
+  "user_agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/156.0.0.0 Safari/537.36",
+  "browser": "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+  "performance": {
+    "hosts": 512,
+    "interfaces_per_host": 6,
+    "events": 500,
+    "overview_ms": 40.4,
+    "host_resources_network_ms": 14,
+    "events_ms": 29,
+    "payload_monitoring_core_every_update_bytes": 132933,
+    "payload_web_feed_hosts_update_bytes": 19269,
+    "payload_web_feed_everything_bytes": 22581
+  },
+  "screenshots": [
+    {
+      "scenario": "overview",
+      "file": "overview-web.png",
+      "written": true
+    },
+    {
+      "scenario": "resources",
+      "file": "resources-web.png",
+      "written": true
+    },
+    {
+      "scenario": "network",
+      "file": "network-web.png",
+      "written": true
+    },
+    {
+      "scenario": "apps",
+      "file": "apps-web.png",
+      "written": true
+    },
+    {
+      "scenario": "flows",
+      "file": "flows-web.png",
+      "written": true
+    },
+    {
+      "scenario": "time",
+      "file": "time-web.png",
+      "written": true
+    },
+    {
+      "scenario": "offline",
+      "file": "offline-web.png",
+      "written": true
+    },
+    {
+      "scenario": "events",
+      "file": "events-web.png",
+      "written": true
+    }
+  ]
+}
