@@ -3,12 +3,12 @@
 | Thông tin | Giá trị |
 | :--- | :--- |
 | Code gốc (upstream) | https://github.com/eProsima/DDS-Monitor · nhánh `main` · commit `94bbd6d` (*Document event charts and plot mode dropdown #318*) |
-| Code hiện tại | https://github.com/nguyenthang7215/DDS_Monitor · nhánh `main` · tính đến commit `748c8d7` |
-| Ngày đối chiếu | 02/11/2026 |
+| Code hiện tại | https://github.com/nguyenthang7215/DDS_Monitor · nhánh `feature/webengine-ui` · tính đến commit `3bb9990` + cập nhật tài liệu 03/11 |
+| Ngày đối chiếu | 03/11/2026 |
 | Upstream có commit mới từ lúc tích hợp? | **Không**: `origin/main` vẫn là `94bbd6d` |
 | Tạo lại file này | `git diff 94bbd6d HEAD` (xem mục 6) |
-| Nhánh | `feature/webengine-ui` (UI Task 3 chạy trên Qt WebEngine; cần **Qt ≥ 6.8**) |
-| Lần cập nhật | 02/11/2026 lần 1 (`22e3109`) · lần 2 (`a19a240`): test GRAPH-01, QoS, stress P0 · lần 3 (`748c8d7`): **UI Task 3 chuyển sang Qt WebEngine** |
+| Nhánh | `feature/webengine-ui` (UI Task 3 chạy trên Qt WebEngine; **đã kiểm với Qt 6.8.3**; `-DTASK3_WEB_UI=OFF` build bản QML khi Qt không có WebEngine) |
+| Lần cập nhật | 02/11/2026 lần 1 (`22e3109`) · lần 2 (`a19a240`): test GRAPH-01, QoS, stress P0 · lần 3 (`748c8d7`): **UI Task 3 chuyển sang Qt WebEngine** · lần 4 (03/11, `3bb9990`): `WebFeed`, CSP, chọn Qt tự động, test trang web trên trình duyệt |
 
 ---
 
@@ -16,12 +16,12 @@
 
 | Nhóm | Số file | Ý nghĩa |
 | :--- | :---: | :--- |
-| ✏️ **File gốc bị sửa** | **11** | +232 / −14 dòng (trong đó `.gitignore` +41), chủ yếu ở điểm tích hợp. Chi tiết ở mục 2 và 3 |
-| ➕ File mới: mã nguồn Task 3 (`task3/`) | 64 | Agent, Master, UI QML, test, script, config |
+| ✏️ **File gốc bị sửa** | **11** (không đổi 03/11) | +232 / −14 dòng (trong đó `.gitignore` +41), chủ yếu ở điểm tích hợp. Chi tiết ở mục 2 và 3 |
+| ➕ File mới: mã nguồn Task 3 (`task3/`) | 71 | Agent, Master, UI QML + Web, test, script, config |
 | ➕ File mới: tài liệu (`docs/task3/`, `TASK3_README.md`) | 14 | Requirements, kiến trúc, hướng dẫn chạy/E2E, tiến độ |
-| ➕ File mới: bằng chứng test (`test-artifacts/`) | 140 | Log, JSON, ảnh, patch P0 |
+| ➕ File mới: bằng chứng test (`test-artifacts/`) | 149 | Log, JSON, ảnh, patch P0 |
 | ➕ File mới: checkpoint di chuyển (`.task3-migration-checkpoints/`) | 23 | Bản lưu tài liệu trước khi tích hợp vào repo chính |
-| **Tổng** | **252** | `252 files changed, 38908 insertions(+), 14 deletions(-)` |
+| **Tổng** | **268** | `268 files changed, 40143 insertions(+), 14 deletions(-)` |
 
 > **Lưu ý GRAPH-01:** bản sửa 1 dòng cho `qml/DomainGraphLayout.qml` **chưa áp** vào code; chỉ nằm ở `test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch`. Khi áp, file này sẽ thành file gốc bị sửa thứ 12.
 
@@ -35,9 +35,14 @@
 | :--- | :--- | :--- |
 | Trang web (mới) | `task3/web/index.html`, `style.css`, `app.js` | HTML/CSS/JS thuần, không thư viện ngoài, nạp từ `qrc:/task3/web/` |
 | Vỏ QML (mới) | `task3/WebDashboard.qml` | `WebEngineView` + `WebChannel`; giữ API của `Dashboard.qml` (`selectedHostId`, `chooseHost()`, `openDdsWorkspace`…) |
-| Khởi tạo | `task3/Dashboard.cpp/.h` | `prepareWebEngine()`; biến `TASK3_UI` chọn trang web/QML |
-| Build | `task3/CMakeLists.txt` | Link `Qt6::WebEngineQuick`, `Qt6::WebChannelQuick` (Qt ≥ 6.8) |
+| Khởi tạo | `task3/Dashboard.cpp/.h` | `prepareWebEngine()` (bỏ qua `QTWEBENGINE_REMOTE_DEBUGGING` trừ khi `TASK3_WEB_DEVTOOLS=1`); tạo `task3WebFeed`; biến `TASK3_UI` chọn trang web/QML; `#ifdef TASK3_WEB_UI` |
+| Dữ liệu cho trang (mới 03/11) | `task3/WebFeed.h/.cpp` | Lớp trung gian giữa `MonitoringCore` và `QWebChannel`: mỗi thuộc tính một signal, chỉ phát khi đổi, gộp cập nhật 100 ms, Participant chỉ giữ 6 trường. Payload mỗi cập nhật 133 KB → 19 KB. ⚠️ Chưa compile |
+| Build | `task3/CMakeLists.txt` | Tùy chọn `TASK3_WEB_UI` (ON): link `Qt6::WebEngineQuick`, `Qt6::WebChannelQuick`, thiếu module → báo lỗi rõ; OFF → chỉ trang QML. `WebFeed.cpp` trong `task3_core` |
+| An toàn / CON-04 | `task3/web/index.html` | Content-Security-Policy: `default-src 'none'`, `connect-src 'none'`, chỉ nạp `qrc:`; không `eval` |
+| Script | `task3/scripts/qt_prefix.sh` (mới), `build*.sh`, `run_master*.sh` | Tự chọn Qt có WebEngine + Qt5Compat; kiểm module thiếu trước khi build/chạy; build ghi `qt-prefix`, `web-ui` |
 | Test (mới) | `task3/tests/DashboardPreview.cpp` | Dựng trang QML hoặc Web từ snapshot để so sánh ảnh, bấm thử |
+| Test trình duyệt (mới 03/11) | `task3/tests/web/` (`run_web_tests.py`, `mock_channel.js`, `selftest.js`, `perf.js`) | Chạy `task3/web` thật trong Chrome/Edge headless, không cần Qt: 17/17 PASS |
+| Unit test (mới 03/11) | `task3/tests/CoreTests.cpp` → `webFeedPublishesTrimmedChangesOnly` | ⚠️ Chưa compile |
 | Code gốc bị đụng thêm | `src/main.cpp` (+1 dòng), `qml/main.qml` (1 dòng `source`) | Không đổi màn DDS chuyên sâu |
 | Bản QML cũ | `task3/Dashboard.qml`, `HostWorkspace.qml`, `FlowDetails.qml`, `EventHistoryView.qml` | Giữ lại để so sánh (`TASK3_UI=qml`) |
 
@@ -678,11 +683,11 @@ index c60fc3c..aafa131 100644
 | :--- | ---: | :--- |
 | `task3/AlertStore.cpp` | 434 | SQLite Active/Recovered |
 | `task3/AlertStore.h` | 52 | SQLite Active/Recovered |
-| `task3/CMakeLists.txt` | 51 | Build |
+| `task3/CMakeLists.txt` | 67 | Build |
 | `task3/Collectors.cpp` | 521 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
 | `task3/Collectors.h` | 38 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
-| `task3/Dashboard.cpp` | 178 | Đăng ký model/UI Task 3 |
-| `task3/Dashboard.h` | 8 | Đăng ký model/UI Task 3 |
+| `task3/Dashboard.cpp` | 205 | Đăng ký model/UI Task 3 |
+| `task3/Dashboard.h` | 9 | Đăng ký model/UI Task 3 |
 | `task3/Dashboard.qml` | 462 | Giao diện QML Task 3 (trang chính) |
 | `task3/DdsBridge.cpp` | 232 | Đọc Statistics Backend |
 | `task3/DdsBridge.h` | 23 | Đọc Statistics Backend |
@@ -705,7 +710,9 @@ index c60fc3c..aafa131 100644
 | `task3/Shutdown.h` | 21 | Thoát an toàn |
 | `task3/Telemetry.idl` | 8 | Kiểu DDS TelemetryEnvelopeV1 |
 | `task3/Units.h` | 22 | Đơn vị, chuỗi thời gian |
-| `task3/WebDashboard.qml` | 107 | Vỏ QML: WebEngineView + WebChannel |
+| `task3/WebDashboard.qml` | 108 | Vỏ QML: WebEngineView + WebChannel |
+| `task3/WebFeed.cpp` | 64 | Dữ liệu cho trang web qua QWebChannel (WebFeed) |
+| `task3/WebFeed.h` | 57 | Dữ liệu cho trang web qua QWebChannel (WebFeed) |
 | `task3/agent/CMakeLists.txt` | 15 | Build |
 | `task3/agent_main.cpp` | 83 | Chương trình Agent (Slave) |
 | `task3/config/flow-rules.json` | 4 | Cấu hình mẫu |
@@ -716,16 +723,17 @@ index c60fc3c..aafa131 100644
 | `task3/config/time-sync/slave.conf.example` | 3 | Cấu hình mẫu |
 | `task3/config/windows-agent.json` | 10 | Cấu hình mẫu |
 | `task3/scripts/build-windows.ps1` | 17 | Script build/chạy |
-| `task3/scripts/build.sh` | 9 | Script build/chạy |
+| `task3/scripts/build.sh` | 12 | Script build/chạy |
 | `task3/scripts/build_statistics_backend_patched.sh` | 206 | Script build/chạy |
-| `task3/scripts/build_task3_patched.sh` | 77 | Script build/chạy |
-| `task3/scripts/patched_runtime_common.sh` | 115 | Script build/chạy |
+| `task3/scripts/build_task3_patched.sh` | 90 | Script build/chạy |
+| `task3/scripts/patched_runtime_common.sh` | 136 | Script build/chạy |
+| `task3/scripts/qt_prefix.sh` | 53 | Chọn bộ Qt, kiểm module thiếu (WebEngine, Qt5Compat) |
 | `task3/scripts/run_linux_agent_patched.sh` | 23 | Script build/chạy |
-| `task3/scripts/run_master_original.sh` | 69 | Chạy Master với Statistics Backend 2.5.0 Original |
-| `task3/scripts/run_master_patched.sh` | 24 | Script build/chạy |
+| `task3/scripts/run_master_original.sh` | 80 | Chạy Master với Statistics Backend 2.5.0 Original |
+| `task3/scripts/run_master_patched.sh` | 25 | Script build/chạy |
 | `task3/scripts/windows-time-status.ps1` | 15 | Script build/chạy |
-| `task3/tests/CoreTests.cpp` | 1234 | Kiểm thử |
-| `task3/tests/DashboardPreview.cpp` | 141 | So sánh ảnh / bấm thử trang QML và Web |
+| `task3/tests/CoreTests.cpp` | 1294 | Kiểm thử |
+| `task3/tests/DashboardPreview.cpp` | 145 | So sánh ảnh / bấm thử trang QML và Web |
 | `task3/tests/RuntimeProbe.cpp` | 69 | Kiểm thử |
 | `task3/tests/continuation_integration.py` | 145 | Kiểm thử |
 | `task3/tests/final_fix_ui_regression.py` | 74 | Kiểm thử |
@@ -737,9 +745,13 @@ index c60fc3c..aafa131 100644
 | `task3/tests/qos_match_local.py` | 71 | Test QoS match/no-match HelloWorld (E2E-12) |
 | `task3/tests/runtime_library_verification.py` | 20 | Kiểm thử |
 | `task3/tests/ui_integration.py` | 198 | Kiểm thử |
-| `task3/web/app.js` | 362 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
-| `task3/web/index.html` | 95 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
-| `task3/web/style.css` | 204 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
+| `task3/tests/web/mock_channel.js` | 88 | Test trình duyệt: QWebChannel giả |
+| `task3/tests/web/perf.js` | 51 | Test trình duyệt: đo thời gian render |
+| `task3/tests/web/run_web_tests.py` | 129 | Test trình duyệt: chạy Chrome/Edge headless |
+| `task3/tests/web/selftest.js` | 350 | Test trình duyệt: 17 ca chức năng |
+| `task3/web/app.js` | 369 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
+| `task3/web/index.html` | 97 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
+| `task3/web/style.css` | 206 | Giao diện Task 3 trên WebEngine (HTML/CSS/JS) |
 
 ---
 
@@ -764,7 +776,7 @@ index c60fc3c..aafa131 100644
 
 </details>
 
-<details><summary>test-artifacts/ (140 file)</summary>
+<details><summary>test-artifacts/ (149 file)</summary>
 
 - `test-artifacts/final-fix-20261019/continuation/qml-errors.json`
 - `test-artifacts/final-fix-20261019/continuation/results.json`
@@ -906,6 +918,15 @@ index c60fc3c..aafa131 100644
 - `test-artifacts/webengine-20261102/shots/overview-pair.png`
 - `test-artifacts/webengine-20261102/shots/resources-pair.png`
 - `test-artifacts/webengine-20261102/shots/time-pair.png`
+- `test-artifacts/webengine-20261103/browser/apps-web.png`
+- `test-artifacts/webengine-20261103/browser/events-web.png`
+- `test-artifacts/webengine-20261103/browser/flows-web.png`
+- `test-artifacts/webengine-20261103/browser/network-web.png`
+- `test-artifacts/webengine-20261103/browser/offline-web.png`
+- `test-artifacts/webengine-20261103/browser/overview-web.png`
+- `test-artifacts/webengine-20261103/browser/resources-web.png`
+- `test-artifacts/webengine-20261103/browser/results.json`
+- `test-artifacts/webengine-20261103/browser/time-web.png`
 
 </details>
 
