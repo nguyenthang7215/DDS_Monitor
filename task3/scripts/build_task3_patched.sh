@@ -3,7 +3,9 @@ set -euo pipefail
 
 task3_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 backend_script="$task3_root/task3/scripts/build_statistics_backend_patched.sh"
-qt_prefix="${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}"
+source "$task3_root/task3/scripts/qt_prefix.sh"
+qt_prefix="$(task3_default_qt_prefix)"
+web_ui="${TASK3_WEB_UI:-ON}"
 dds_prefix="${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}"
 backend_prefix="${TASK3_PATCHED_BACKEND_PREFIX:-$task3_root/.task3-deps/fastdds-statistics-backend-2.5.0-patched}"
 jobs="${TASK3_BUILD_JOBS:-4}"
@@ -11,10 +13,12 @@ jobs="${TASK3_BUILD_JOBS:-4}"
 usage() {
     cat <<'EOF'
 Usage: build_task3_patched.sh [--qt-prefix DIR] [--dds-prefix DIR]
-       [--backend-prefix DIR] [--jobs N]
+       [--backend-prefix DIR] [--jobs N] [--qml-ui]
 
 Builds the pinned patched Backend, then clean Task 3 Debug and Release trees,
 and runs CTest in both. Build trees and the install prefix are Git-ignored.
+Without --qt-prefix/TASK3_QT_PREFIX the newest ~/Qt/6.*/gcc_64 with Qt WebEngine
+is used. --qml-ui (or TASK3_WEB_UI=OFF) builds the Qt Quick dashboard instead.
 EOF
 }
 
@@ -24,6 +28,7 @@ while (($#)); do
         --dds-prefix) dds_prefix="$2"; shift 2 ;;
         --backend-prefix) backend_prefix="$2"; shift 2 ;;
         --jobs) jobs="$2"; shift 2 ;;
+        --qml-ui) web_ui=OFF; shift ;;
         --help|-h) usage; exit 0 ;;
         *) printf 'Unknown argument: %s\n' "$1" >&2; usage >&2; exit 2 ;;
     esac
@@ -31,7 +36,11 @@ done
 
 [[ -d "$qt_prefix" && -d "$dds_prefix" ]] || { printf 'Qt or DDS dependency prefix does not exist.\n' >&2; exit 2; }
 [[ "$jobs" =~ ^[1-9][0-9]*$ ]] || { printf 'Invalid --jobs value: %s\n' "$jobs" >&2; exit 2; }
-[[ -f "$qt_prefix/lib/cmake/Qt6/Qt6Config.cmake" ]] || { printf 'Qt6 CMake package missing: %s\n' "$qt_prefix" >&2; exit 2; }
+[[ "$web_ui" == ON || "$web_ui" == OFF ]] || { printf 'TASK3_WEB_UI must be ON or OFF: %s\n' "$web_ui" >&2; exit 2; }
+export TASK3_WEB_UI="$web_ui"
+# Fail before the long Backend build when the Qt kit cannot build or run the Master.
+task3_check_qt_modules "$qt_prefix" || exit 2
+printf 'Qt kit: %s · Task 3 web UI: %s\n' "$qt_prefix" "$web_ui"
 
 export TASK3_QT_PREFIX="$qt_prefix"
 export TASK3_DDS_PREFIX="$dds_prefix"
@@ -47,6 +56,9 @@ mkdir -p "$build_root"
 run_id="$(date -u +%Y%m%dT%H%M%SZ)-$$"
 run_dir="$build_root/$run_id"
 mkdir "$run_dir" || { printf 'Build run directory already exists: %s\n' "$run_dir" >&2; exit 2; }
+# Run wrappers load the same Qt kit and know which dashboard was compiled in.
+printf '%s\n' "$qt_prefix" > "$run_dir/qt-prefix"
+printf '%s\n' "$web_ui" > "$run_dir/web-ui"
 
 for config in Debug Release; do
     build_dir="$run_dir/${config,,}"
@@ -59,6 +71,7 @@ for config in Debug Release; do
         -Dfastdds_DIR="$dds_prefix/share/fastdds/cmake" \
         -Dfastcdr_DIR="$dds_prefix/lib/cmake/fastcdr" \
         -DTASK3_BUILD_TESTS=ON \
+        -DTASK3_WEB_UI="$web_ui" \
         -DBUILD_TESTS=OFF \
         -DCOMPLEX_MOCK=OFF \
         -DSTATIC_MOCK=OFF

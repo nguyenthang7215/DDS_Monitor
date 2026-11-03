@@ -41,7 +41,7 @@ Item {
         return String(f.writer_id || "") + "/" + String(f.reader_id || "")
     }
 
-    // Only the selection state and actions are published to the page; data comes from task3Core.
+    // Only the selection state and actions are published to the page; data comes from task3WebFeed.
     QtObject {
         id: uiState
         property alias eventsPage: dashboard.eventsPage
@@ -76,9 +76,10 @@ Item {
         property int count: 0
         property real contentHeight: 0
     }
+    // "core" is task3::WebFeed: only the fields the page renders, one change signal per property.
     WebChannel {
         id: channel
-        Component.onCompleted: registerObjects({"core": task3Core, "ui": uiState})
+        Component.onCompleted: registerObjects({"core": task3WebFeed, "ui": uiState})
     }
     Rectangle {
         anchors.fill: parent

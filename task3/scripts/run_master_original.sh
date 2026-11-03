@@ -8,7 +8,13 @@ task3_root="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 original_prefix="$(realpath -m "${TASK3_ORIGINAL_BACKEND_PREFIX:-/home/dev/dds-e2e/backend-original-install}")"
 patched_prefix="$(realpath -m "${TASK3_PATCHED_BACKEND_PREFIX:-$task3_root/.task3-deps/fastdds-statistics-backend-2.5.0-patched}")"
 dds_prefix="$(realpath -m "${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}")"
-qt_prefix="$(realpath -m "${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}")"
+source "$task3_root/task3/scripts/qt_prefix.sh"
+latest_file="$task3_root/.task3-deps/task3-builds/LATEST"
+if [[ -z "${TASK3_QT_PREFIX:-}" && -f "$latest_file" && -f "$(<"$latest_file")/qt-prefix" ]]; then
+    qt_prefix="$(realpath -m "$(<"$(<"$latest_file")/qt-prefix")")"
+else
+    qt_prefix="$(realpath -m "$(task3_default_qt_prefix)")"
+fi
 backend_lib="$original_prefix/lib/libfastdds_statistics_backend.so.2.5.0"
 
 die() {
@@ -34,6 +40,11 @@ else
     master_bin="$(<"$latest_file")/${TASK3_BUILD_TYPE:-release}/dds_monitor"
 fi
 [[ -x "$master_bin" ]] || die "executable not found or not executable: $master_bin"
+master_build="$(dirname "$(dirname "$master_bin")")"
+if [[ -z "${TASK3_WEB_UI:-}" && -f "$master_build/web-ui" ]]; then
+    export TASK3_WEB_UI="$(<"$master_build/web-ui")"
+fi
+task3_check_qt_modules "$qt_prefix" || die "Qt kit cannot run the Master: $qt_prefix"
 
 export LD_LIBRARY_PATH="$original_prefix/lib:$dds_prefix/lib:$qt_prefix/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
 resolved="$(ldd "$master_bin" | awk '$1 ~ /^libfastdds_statistics_backend\.so/ {print $3}')"

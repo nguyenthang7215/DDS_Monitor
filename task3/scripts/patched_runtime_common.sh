@@ -7,7 +7,17 @@ task3_expected_patch_sha="83019a4479ec8b05cdab0a2d0e97461d9e3d386bcda865ba5f89fb
 task3_patch_file="$task3_root/test-artifacts/p0-crash-20261016/Fast-DDS-Statistics-Backend-2.5.0-database-queue-lifecycle.patch"
 task3_patched_prefix="$(realpath -m "${TASK3_PATCHED_BACKEND_PREFIX:-$task3_root/.task3-deps/fastdds-statistics-backend-$task3_expected_version-patched}")"
 task3_dds_prefix="$(realpath -m "${TASK3_DDS_PREFIX:-/home/dev/dds-deps/install}")"
-task3_qt_prefix="$(realpath -m "${TASK3_QT_PREFIX:-/home/dev/Qt/6.8.3/gcc_64}")"
+source "$task3_root/task3/scripts/qt_prefix.sh"
+task3_latest_build=""
+if [[ -f "$task3_root/.task3-deps/task3-builds/LATEST" ]]; then
+    task3_latest_build="$(<"$task3_root/.task3-deps/task3-builds/LATEST")"
+fi
+# Prefer the Qt kit the latest build was compiled with; older builds did not record it.
+if [[ -z "${TASK3_QT_PREFIX:-}" && -n "$task3_latest_build" && -f "$task3_latest_build/qt-prefix" ]]; then
+    task3_qt_prefix="$(realpath -m "$(<"$task3_latest_build/qt-prefix")")"
+else
+    task3_qt_prefix="$(realpath -m "$(task3_default_qt_prefix)")"
+fi
 
 task3_die() {
     printf 'Task 3 runtime check failed: %s\n' "$*" >&2
@@ -36,6 +46,17 @@ task3_prepare_environment() {
         task3_die 'LD_PRELOAD names a Statistics Backend; remove it so the pinned library is unambiguous'
     fi
     export LD_LIBRARY_PATH="$task3_patched_prefix/lib:$task3_dds_prefix/lib:$task3_qt_prefix/lib${LD_LIBRARY_PATH:+:$LD_LIBRARY_PATH}"
+}
+
+# The Master (not the Agent) needs Qt5Compat for the original start view and, with the web
+# dashboard, Qt WebEngine at runtime.
+task3_verify_master_qt() {
+    local build_dir="${1:-$task3_latest_build}"
+    local web_ui="${TASK3_WEB_UI:-}"
+    if [[ -z "$web_ui" && -n "$build_dir" && -f "$build_dir/web-ui" ]]; then
+        web_ui="$(<"$build_dir/web-ui")"
+    fi
+    TASK3_WEB_UI="${web_ui:-ON}" task3_check_qt_modules "$task3_qt_prefix" || task3_die "Qt kit cannot run the Master: $task3_qt_prefix"
 }
 
 task3_verify_binary_linkage() {

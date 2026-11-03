@@ -13,10 +13,31 @@
 #include <QSaveFile>
 #include <QCoreApplication>
 #include <QQuickWindow>
+#include <QStringList>
+#ifdef TASK3_WEB_UI
+#include "WebFeed.h"
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
+#endif
 namespace task3 {
 void prepareWebEngine() {
+#ifdef TASK3_WEB_UI
+    // CON-04: the Master opens no listening port. Chromium DevTools would listen when remote debugging
+    // is requested through the environment, so that stays off unless TASK3_WEB_DEVTOOLS=1.
+    if (qEnvironmentVariable("TASK3_WEB_DEVTOOLS") != "1") {
+        if (qEnvironmentVariableIsSet("QTWEBENGINE_REMOTE_DEBUGGING"))
+            qWarning() << "Ignoring QTWEBENGINE_REMOTE_DEBUGGING; set TASK3_WEB_DEVTOOLS=1 to allow it";
+        qunsetenv("QTWEBENGINE_REMOTE_DEBUGGING");
+        if (qEnvironmentVariableIsSet("QTWEBENGINE_CHROMIUM_FLAGS")) {
+            QStringList flags;
+            for (const auto& flag :
+                 qEnvironmentVariable("QTWEBENGINE_CHROMIUM_FLAGS").split(' ', Qt::SkipEmptyParts))
+                if (!flag.startsWith("--remote-debugging"))
+                    flags.append(flag);
+            qputenv("QTWEBENGINE_CHROMIUM_FLAGS", flags.join(' ').toUtf8());
+        }
+    }
     QtWebEngineQuick::initialize();
+#endif
 }
 void installDashboard(Engine& engine) {
     const auto dataDir = qEnvironmentVariable(
@@ -46,11 +67,17 @@ void installDashboard(Engine& engine) {
                          core->stop();
                      });
     engine.rootContext()->setContextProperty("task3Core", core);
+#ifdef TASK3_WEB_UI
+    // The web page reads this trimmed, change-only view; QML pages keep reading task3Core.
+    engine.rootContext()->setContextProperty("task3WebFeed", new WebFeed(core, &engine));
     // TASK3_UI=qml keeps the previous Qt Quick dashboard available for side-by-side comparison.
+    const bool webUi = qEnvironmentVariable("TASK3_UI") != "qml";
+#else
+    const bool webUi = false;
+#endif
     engine.rootContext()->setContextProperty(
         "task3DashboardSource",
-        qEnvironmentVariable("TASK3_UI") == "qml" ? "qrc:/task3/Dashboard.qml"
-                                                   : "qrc:/task3/WebDashboard.qml");
+        webUi ? "qrc:/task3/WebDashboard.qml" : "qrc:/task3/Dashboard.qml");
     engine.rootContext()->setContextProperty(
         "task3StartupTab",
         qBound(0, qEnvironmentVariableIntValue("TASK3_UI_TAB"), 3));

@@ -14,6 +14,7 @@
 #include <QQuickWindow>
 #include <QTimer>
 #include <QtWebEngineQuick/qtwebenginequickglobal.h>
+#include "WebFeed.h"
 
 namespace {
 class FixtureCore : public QObject {
@@ -71,6 +72,8 @@ int main(int argc, char** argv) {
     core.entities = snapshot["entities"].toArray().toVariantList();
     core.flows = snapshot["flows"].toArray().toVariantList();
     core.status = snapshot["status"].toString();
+    // Same trimmed, change-only feed as the Master; declared before the engine so it outlives the page.
+    task3::WebFeed feed(&core);
 
     QQuickStyle::setStyle("eProsimaBrand");
     QQuickStyle::setFallbackStyle("Universal");
@@ -80,6 +83,7 @@ int main(int argc, char** argv) {
     engine.addImportPath(root + "/imports");
     engine.addImportPath(root + "/qml/QtQuick/Controls");
     engine.rootContext()->setContextProperty("task3Core", &core);
+    engine.rootContext()->setContextProperty("task3WebFeed", &feed);
     engine.rootContext()->setContextProperty("task3StartupTab", cli.value("tab").toInt());
     const auto page = cli.value("page") == "qml" ? "qrc:/task3/Dashboard.qml" : "qrc:/task3/WebDashboard.qml";
     engine.loadData(QStringLiteral("import QtQuick\nimport QtQuick.Controls\nApplicationWindow {\n"

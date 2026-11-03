@@ -13,6 +13,7 @@
 #include "RollingSeries.h"
 #include "RuntimeIdentity.h"
 #include "FlowModel.h"
+#include "WebFeed.h"
 #include <QSaveFile>
 #include <QProcess>
 #include <QSqlDatabase>
@@ -25,6 +26,25 @@
 #include <QTimer>
 #include <atomic>
 #include <dds_monitor/statistics/dynamic/DynamicDataChartBox.h>
+// Same property names and changed() signal as MonitoringCore, filled directly by the test.
+class FeedSource : public QObject {
+    Q_OBJECT
+    Q_PROPERTY(QVariantList hosts MEMBER hosts NOTIFY changed)
+    Q_PROPERTY(QVariantList events MEMBER events NOTIFY changed)
+    Q_PROPERTY(QVariantList entities MEMBER entities NOTIFY changed)
+    Q_PROPERTY(QVariantList flows MEMBER flows NOTIFY changed)
+    Q_PROPERTY(bool hasMoreEvents MEMBER hasMoreEvents NOTIFY changed)
+  public:
+    QVariantList hosts, events, entities, flows;
+    bool hasMoreEvents = false;
+    int olderRequests = 0;
+    Q_INVOKABLE void loadOlderEvents() {
+        ++olderRequests;
+        events.append(QVariantMap{{"alert_id", "older"}});
+    }
+  signals:
+    void changed();
+};
 class CoreTests : public QObject {
     Q_OBJECT
   private:
@@ -33,6 +53,46 @@ class CoreTests : public QObject {
         return c.collect();
     }
   private slots:
+    void webFeedPublishesTrimmedChangesOnly() {
+        FeedSource source;
+        source.hosts = {QVariantMap{{"host_id", "a"}, {"online", true}}};
+        source.entities = {QVariantMap{{"kind", "Participant"},
+                                       {"id", "7"},
+                                       {"guid", "01.0f.aa"},
+                                       {"pid", "42"},
+                                       {"host_id", "a"},
+                                       {"application_id", "pub"},
+                                       {"mapping_state", "mapped: explicit GUID binding"},
+                                       {"details", QString(4096, 'x')},
+                                       {"qos", "{}"}},
+                           QVariantMap{{"kind", "Writer"}, {"id", "8"}, {"samples", QVariantList{1, 2, 3}}}};
+        task3::WebFeed feed(&source, nullptr, 20);
+        QCOMPARE(feed.hosts(), source.hosts);
+        // Only Participants, and only the fields the web page renders.
+        QCOMPARE(feed.participants().size(), 1);
+        QCOMPARE(feed.participants()[0].toMap().keys(),
+                 (QStringList{"application_id", "guid", "host_id", "id", "mapping_state", "pid"}));
+        QSignalSpy hosts(&feed, &task3::WebFeed::hostsChanged);
+        QSignalSpy events(&feed, &task3::WebFeed::eventsChanged);
+        QSignalSpy flows(&feed, &task3::WebFeed::flowsChanged);
+        QSignalSpy participants(&feed, &task3::WebFeed::participantsChanged);
+        for (int i = 0; i < 50; ++i)
+            emit source.changed(); // unchanged data must not be re-sent to the page
+        QTest::qWait(80);
+        QCOMPARE(hosts.count() + events.count() + flows.count() + participants.count(), 0);
+        source.hosts = {QVariantMap{{"host_id", "a"}, {"online", false}}};
+        for (int i = 0; i < 50; ++i)
+            emit source.changed();
+        QTRY_COMPARE(hosts.count(), 1);
+        QTest::qWait(80);
+        QCOMPARE(hosts.count(), 1); // the burst is coalesced into one notification
+        QCOMPARE(feed.hosts(), source.hosts);
+        QCOMPARE(events.count() + flows.count() + participants.count(), 0);
+        feed.loadOlderEvents();
+        QCOMPARE(source.olderRequests, 1);
+        QCOMPARE(events.count(), 1);
+        QCOMPARE(feed.events().size(), 1);
+    }
     void legacyDynamicRawSnapshotRegression() {
         DynamicDataChartBox box("PUBLICATION_THROUGHPUT", 5000, 10000);
         auto* mapper = box.add_series("NONE", false, 0, "1", "", 0);

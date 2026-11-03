@@ -4,7 +4,7 @@ add_library(task3_transport STATIC DdsTransport.cpp Protocol.cpp)
 target_compile_features(task3_transport PUBLIC cxx_std_17)
 target_include_directories(task3_transport PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(task3_transport PUBLIC Qt6::Core fastdds fastcdr)
-add_library(task3_core STATIC Registry.cpp AlertStore.cpp MonitoringCore.cpp DdsBridge.cpp FlowModel.cpp)
+add_library(task3_core STATIC Registry.cpp AlertStore.cpp MonitoringCore.cpp DdsBridge.cpp FlowModel.cpp WebFeed.cpp)
 target_compile_features(task3_core PUBLIC cxx_std_17)
 target_include_directories(task3_core PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 target_link_libraries(task3_core PUBLIC task3_transport Qt6::Core Qt6::Network Qt6::Sql Qt6::Concurrent fastdds_statistics_backend)
@@ -21,12 +21,27 @@ if(WIN32)
     add_custom_command(TARGET task3_agent POST_BUILD COMMAND ${CMAKE_COMMAND} -E copy_if_different
         ${CMAKE_CURRENT_SOURCE_DIR}/scripts/windows-time-status.ps1 $<TARGET_FILE_DIR:task3_agent>)
 endif()
-find_package(Qt6 6.8 REQUIRED COMPONENTS WebEngineQuick WebChannelQuick)
+# Task 3 pages run in Qt WebEngine (web/). OFF builds the earlier Qt Quick pages only, for a Qt
+# installation without the WebEngine/WebChannel modules. Verified with Qt 6.8.3.
+option(TASK3_WEB_UI "Render the Task 3 dashboard with Qt WebEngine" ON)
+set(task3_qml_pages Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml)
+set(task3_web_pages WebDashboard.qml web/index.html web/style.css web/app.js)
 target_sources(dds_monitor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Dashboard.cpp)
-target_link_libraries(dds_monitor PRIVATE task3_core Qt6::WebEngineQuick Qt6::WebChannelQuick)
-qt_add_resources(dds_monitor task3_dashboard PREFIX /task3 FILES
-    Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml
-    WebDashboard.qml web/index.html web/style.css web/app.js)
+target_link_libraries(dds_monitor PRIVATE task3_core)
+if(TASK3_WEB_UI)
+    find_package(Qt6 COMPONENTS WebEngineQuick WebChannelQuick)
+    if(NOT Qt6WebEngineQuick_FOUND OR NOT Qt6WebChannelQuick_FOUND)
+        message(FATAL_ERROR "Task 3 web UI needs the Qt WebEngine and Qt WebChannel modules of Qt "
+            "${Qt6_VERSION} (${Qt6_DIR}). Install them with the Qt MaintenanceTool for this Qt version, "
+            "or configure with -DTASK3_WEB_UI=OFF to build the Qt Quick dashboard.")
+    endif()
+    target_compile_definitions(dds_monitor PRIVATE TASK3_WEB_UI)
+    target_link_libraries(dds_monitor PRIVATE Qt6::WebEngineQuick Qt6::WebChannelQuick)
+    qt_add_resources(dds_monitor task3_dashboard PREFIX /task3 FILES ${task3_qml_pages} ${task3_web_pages})
+else()
+    message(STATUS "Task 3 web UI disabled (TASK3_WEB_UI=OFF): Qt Quick dashboard only")
+    qt_add_resources(dds_monitor task3_dashboard PREFIX /task3 FILES ${task3_qml_pages})
+endif()
 if(TASK3_BUILD_TESTS)
 find_package(Qt6 REQUIRED COMPONENTS Test)
 add_executable(task3_tests tests/CoreTests.cpp)
@@ -39,13 +54,14 @@ target_sources(task3_tests PRIVATE ../src/statistics/DataModel.cpp ../src/statis
 target_include_directories(task3_tests PRIVATE ../include)
 target_link_libraries(task3_tests PRIVATE Qt6::Charts)
 add_test(NAME task3_core COMMAND task3_tests)
-# Renders Dashboard.qml or WebDashboard.qml from a recorded snapshot for side-by-side screenshots.
-find_package(Qt6 REQUIRED COMPONENTS QuickControls2)
-add_executable(task3_dashboard_preview tests/DashboardPreview.cpp)
-target_link_libraries(task3_dashboard_preview PRIVATE Qt6::Widgets Qt6::Quick Qt6::QuickControls2
-    Qt6::WebEngineQuick Qt6::WebChannelQuick)
-qt_add_resources(task3_dashboard_preview task3_dashboard_preview PREFIX /task3 FILES
-    Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml
-    WebDashboard.qml web/index.html web/style.css web/app.js)
 set_tests_properties(task3_core PROPERTIES ENVIRONMENT "QT_QPA_PLATFORM=offscreen")
+if(TASK3_WEB_UI)
+    # Renders Dashboard.qml or WebDashboard.qml from a recorded snapshot for side-by-side screenshots.
+    add_executable(task3_dashboard_preview tests/DashboardPreview.cpp WebFeed.cpp)
+    target_include_directories(task3_dashboard_preview PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+    target_link_libraries(task3_dashboard_preview PRIVATE Qt6::Widgets Qt6::Quick Qt6::QuickControls2
+        Qt6::WebEngineQuick Qt6::WebChannelQuick)
+    qt_add_resources(task3_dashboard_preview task3_dashboard_preview PREFIX /task3 FILES
+        ${task3_qml_pages} ${task3_web_pages})
+endif()
 endif()

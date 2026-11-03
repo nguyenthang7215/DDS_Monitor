@@ -1,12 +1,13 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 // Task 3 dashboard for Qt WebEngine. Mirrors Dashboard.qml, HostWorkspace.qml, FlowDetails.qml and
-// EventHistoryView.qml: same texts, states and formatting. Data: `core` (MonitoringCore) and `ui`
-// (selection state owned by WebDashboard.qml) are QObjects published through QWebChannel.
+// EventHistoryView.qml: same texts, states and formatting. Data: `core` (task3::WebFeed, a trimmed
+// view of MonitoringCore) and `ui` (selection state owned by WebDashboard.qml) are QObjects
+// published through QWebChannel.
 "use strict";
 
 let core = null;
 let ui = null;
-const local = { hostSearch: "", eventSearch: "", eventFilter: "Tất cả", appScope: true, leftWidth: 260, appListSize: null, inspectorHeight: 280 };
+const local = { hostSearch: "", eventSearch: "", eventFilter: "Tất cả", appScope: true, detailTab: -1, leftWidth: 260 };
 const html = new Map();
 const $ = id => document.getElementById(id);
 
@@ -170,7 +171,7 @@ function renderApplications(s) {
         `<div class="label12 ellipsis">${fresh(h) ? "Process: " + esc(app.state) + " · Service: " + esc(app.service_state) : "Unknown · Agent " + hostState(h)}</div></div>`).join("") +
         (apps.length ? "" : `<div class="empty">Chưa có ứng dụng được cấu hình</div>`));
     const selected = !!ui.selectedApplicationId;
-    const participants = (core.entities || []).filter(e => e.kind === "Participant" && e.host_id === ui.selectedHostId && e.application_id === ui.selectedApplicationId);
+    const participants = (core.participants || []).filter(e => e.host_id === ui.selectedHostId && e.application_id === ui.selectedApplicationId);
     let body = `<div class="h22 wrap">${esc(ui.selectedApplicationId || "Chọn một ứng dụng")}</div>`;
     if (selected && !fresh(h))
         body += `<div class="warn wrap">Unknown — Agent không phản hồi. Thông tin dưới đây là lần ghi nhận trước, chưa thể xác minh hiện tại.</div>`;
@@ -290,6 +291,12 @@ function render() {
             return;
         }
         renderHostHeader(s);
+        // FlowDetails.qml is recreated on every visit of the tab, so its scope box starts checked.
+        if (ui.detailTab === 2 && local.detailTab !== 2) {
+            local.appScope = true;
+            $("appScope").checked = true;
+        }
+        local.detailTab = ui.detailTab;
         if (ui.detailTab === 0) renderResources(s);
         if (ui.detailTab === 1) renderApplications(s);
         if (ui.detailTab === 2) renderFlows();
@@ -354,7 +361,7 @@ new QWebChannel(qt.webChannelTransport, channel => {
     ui = channel.objects.ui;
     if (ui.fontFamily)
         document.body.style.fontFamily = "\"" + ui.fontFamily + "\", sans-serif";
-    core.changed.connect(render);
+    ["hostsChanged", "eventsChanged", "flowsChanged", "participantsChanged"].forEach(s => core[s].connect(render));
     ["eventsPage", "selectedHostId", "selectedApplicationId", "selectedFlowKey", "detailTab", "resourceTab"]
         .forEach(p => ui[p + "Changed"].connect(render));
     document.body.dataset.ready = "true";

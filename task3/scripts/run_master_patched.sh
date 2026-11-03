@@ -13,6 +13,7 @@ else
     master_bin="$latest_build/release/dds_monitor"
 fi
 task3_verify_binary_linkage "$master_bin" yes
+task3_verify_master_qt "$(dirname "$(dirname "$master_bin")")"
 
 export TASK3_TELEMETRY_DOMAIN="${TASK3_TELEMETRY_DOMAIN:-42}"
 export TASK3_TELEMETRY_TOPIC="${TASK3_TELEMETRY_TOPIC:-Task3/HostTelemetry/v1}"
