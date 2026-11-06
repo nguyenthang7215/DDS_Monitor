@@ -1,6 +1,6 @@
 # Kiến trúc hệ thống sau đợt hoàn thiện
 
-Repository chính thức là `/home/dev/DDS-Monitor`, phát triển từ eProsima DDS Monitor 4.2.0. Task 3 được gắn vào ứng dụng Qt/QML gốc thông qua target `task3/` và trang Dashboard trong cùng Main Window; Engine, Controller và màn hình DDS gốc vẫn được giữ. Không thay toàn bộ ứng dụng bằng một project Qt độc lập.
+Repository chính thức là `/home/dev/DDS-Monitor`, phát triển từ eProsima DDS Monitor 4.2.0. Task 3 được gắn vào ứng dụng Qt/QML gốc thông qua target `task3/` và trang Dashboard trong cùng Main Window (hiển thị bằng Qt WebEngine, xem mục dưới); Engine, Controller và màn hình DDS gốc vẫn được giữ. Không thay toàn bộ ứng dụng bằng một project Qt độc lập.
 
 Source phát triển hiện nằm trong `/home/dev/DDS-Monitor`, được mở rộng từ eProsima DDS Monitor. Một Main Window có ba tab trên cùng: Giám sát hệ thống, DDS chuyên sâu, Cảnh báo & lịch sử. Engine, Controller, Statistics Backend, topology, QoS và biểu đồ gốc vẫn được tái sử dụng.
 
@@ -8,11 +8,15 @@ Source phát triển hiện nằm trong `/home/dev/DDS-Monitor`, được mở r
 
 1. Agent chạy trong tiến trình riêng, lấy tài nguyên và trạng thái tiến trình/dịch vụ của hệ điều hành.
 2. Agent gửi snapshot JSON schema 1 qua Topic DDS riêng; Domain mặc định là 42.
-3. Callback DDS đưa bản tin vào hàng đợi có giới hạn. Một tác vụ Qt lấy tối đa 32 snapshot mỗi lượt và cập nhật Registry/MonitoringCore trên luồng giao diện.
+3. Callback DDS đưa bản tin vào hàng đợi có giới hạn. Một tác vụ Qt lấy tối đa 32 snapshot mỗi lượt và cập nhật Registry/MonitoringCore trên luồng giao diện (Qt event loop).
 4. DdsBridge truy vấn Statistics Backend bằng QtConcurrent, tối đa một job đang chạy. Registry ánh xạ Participant trước rồi chuyển liên kết cho Writer/Reader.
 5. FlowModel dựng quan hệ máy/ứng dụng/Writer/Topic/Reader. Chỉ vẽ mũi tên khi có ConnectionList còn mới và GUID đối tác tương ứng.
 6. AlertStore giữ cache sự kiện trên luồng giao diện; một worker QThread riêng sở hữu duy nhất kết nối SQLite, thực hiện transaction và thử lại khi khóa. Không lưu checkpoint replay.
 7. Đồng bộ đồng hồ chạy độc lập bằng dịch vụ hệ điều hành. Ứng dụng chỉ đọc trạng thái.
+
+## Giao diện Task 3 bằng Qt WebEngine
+
+Hai tab Task 3 (Giám sát hệ thống, Cảnh báo & lịch sử) là trang HTML/CSS/JS trong `task3/web/`, nạp từ tài nguyên `qrc:/task3/web/` vào `WebEngineView` của `WebDashboard.qml`. Logic vẫn nằm ở C++ (`MonitoringCore`, `Registry`, `DdsBridge`, `AlertStore`). Dữ liệu sang trang qua `QWebChannel` bằng `task3::WebFeed`: mỗi thuộc tính một signal, chỉ phát khi đổi, gộp cập nhật trong 100 ms, chỉ giữ các trường trang hiển thị. Trang có Content-Security-Policy `default-src 'none'`, không mở cổng HTTP, không dùng CDN; cổng DevTools từ xa bị bỏ qua trừ khi đặt `TASK3_WEB_DEVTOOLS=1`. Tab DDS chuyên sâu giữ QML gốc. `TASK3_UI=qml` hoặc `-DTASK3_WEB_UI=OFF` quay lại giao diện QML của Task 3 khi Qt không có WebEngine. WebEngine cần Qt 6.8.3 (WebEngine, WebChannel) và Qt5Compat cho màn DDS gốc.
 
 ## Định danh và luồng dữ liệu
 

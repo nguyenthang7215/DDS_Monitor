@@ -35,6 +35,9 @@ Nhiều tiến trình khớp được giữ trong instances[], không chọn m�
 | TASK3_MAX_SAMPLES | 256 mẫu hiển thị, giới hạn 16–10000 |
 | TASK3_SNAPSHOT_PATH / TASK3_SCREENSHOT_PATH | Không đặt; xuất JSON/chụp giao diện để chẩn đoán |
 | TASK3_EXIT_AFTER_MS | Không đặt; thoát Qt bình thường sau thời gian chỉ định |
+| TASK3_UI | Mặc định giao diện Qt WebEngine; `qml` dùng trang QML của Task 3 |
+| TASK3_WEB_DEVTOOLS | Không đặt; `1` cho phép `QTWEBENGINE_REMOTE_DEBUGGING` (cổng DevTools), mặc định bị bỏ qua |
+| TASK3_UI_WIDTH / TASK3_UI_HEIGHT | Kích thước cửa sổ khi chụp giao diện hoặc kiểm thử |
 | TASK3_UI_TAB | 0; trang Task 3 ban đầu, từ 0 đến 3 |
 | TASK3_UI_EXERCISE | Không đặt; chỉ bật trong kiểm thử để tự chuyển trang và resize |
 | TASK3_WINDOWS_TIME_SCRIPT | Agent Windows: đường dẫn script CIM, mặc định cạnh executable |

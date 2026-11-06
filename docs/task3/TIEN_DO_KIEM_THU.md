@@ -5,7 +5,7 @@
 | Cập nhật | 06/11/2026 (đã build và chạy Master với UI WebEngine) |
 | Phạm vi | **PoC** trên 2 thiết bị: Linux chỉ làm Master, Windows làm Slave |
 | Source | `main` `3c14b15` · UI WebEngine trên nhánh **`feature/webengine-ui`** (`a10ef23`, chưa merge) |
-| Linux Master | `172.20.10.2/28` · Xubuntu 22.04 · Qt 6.7.2 (QML) · **Qt 6.8.3** (bắt buộc cho WebEngine) |
+| Linux Master | `172.20.10.2/28` · Xubuntu 22.04 · **Qt 6.8.3** (WebEngine, WebChannel, Qt5Compat); Qt 6.7.2 không còn dùng |
 | Windows Slave | `172.20.10.3/28` · `windows-slave-a` |
 | Backend vận hành | Fast DDS Statistics Backend **2.5.0 Patched** (chốt 02/11/2026) |
 | Mục tiêu thiết kế | Nhiều Slave (Linux và Windows); **kiểm thử trên hệ thống thật là hướng phát triển** (mục 6) |
@@ -71,7 +71,7 @@
 | 3 | 🟡 Chạy Master thật (`run_master_patched.sh`) với UI web | 🔴 | 06/11 với Agent Linux cục bộ: Online · Fresh, CPU/RAM/ổ đĩa, tắt Agent → Offline · Stale (N/A), tab Cảnh báo hiển thị 52 bản ghi từ SQLite. **Còn:** Agent Windows trên UI mới (W-10) |
 | 4 | 🟡 Trên app thật: Refresh Graph ≥ 10 lần, dừng/chạy lại Subscriber | 🔴 | `ss -ltnp`: **không có cổng TCP listen** (06/11, CON-04). **Còn:** Graph cần HelloWorld Pub/Sub trên Domain 0 với `FASTDDS_STATISTICS` (Agent chỉ dùng Domain 42 nên không tạo Graph) |
 | 5 | 🟡 Chụp lại ảnh giao diện trên UI WebEngine | 🟠 | Hình 5.10 đã thay bằng ảnh Cảnh báo & lịch sử (06/11). **Còn:** Hình 5.9 (Host Windows Online) |
-| 6 | Sửa NET-01 (trùng bộ đếm interface Windows) | 🟠 | Lỗi thật duy nhất của Agent đã biết |
+| 6 | 🟡 NET-01 (trùng bộ đếm interface Windows) | 🟠 | 06/11: code đã sửa (bỏ dòng `FilterInterface`, tên interface lấy từ `Alias`), `task3_tests` 49/49 PASS trên Linux. **Còn:** build Agent Windows, chạy `--once`, so với `Get-NetAdapterStatistics` |
 | 7 | Merge `feature/webengine-ui` vào `main` | 🟠 | Sau khi 2–4 PASS |
 | 8 | (Tùy chọn) Chạy HelloWorld Pub + Sub cùng trên Windows; chạy thêm Agent `windows-slave-b` | ⚪ | Minh họa trao đổi trong một máy và 2 Slave, ghi rõ là mô phỏng |
 | 9 | (Tùy chọn) FR-10: ứng dụng mẫu có manifest định danh | ⚪ | Chuyển 1 FR từ NOT RUN sang PASS |
@@ -167,7 +167,7 @@ ss -ltnp | grep dds_monitor                     # không được có cổng HTT
 | GRAPH-01 | `Loading Graph` không đóng | ✅ (test QML) | Nguyên nhân: `hostsList` rộng 0 làm ListView hủy delegate trên Qt 6.7.2. **Hết trên Qt 6.8.3** (6/6). Bản sửa 1 dòng `width: entity_box_width_` (`test-artifacts/original-20261102/graph01/graph01-hostslist-width.patch`) giữ làm phòng ngừa, không bắt buộc. Xác nhận trên GUI thật ở K-14 (chưa chạy) |
 | GRAPH-02 | Writer/Reader không rõ trong viewport | ⬜ | Chưa xác minh trên Qt 6.8.3 |
 | UI-WEB | UI WebEngine | ✅ | 06/11 đã chạy trong app đầy đủ với Agent Linux cục bộ; còn Agent Windows |
-| NET-01 | Interface Windows trùng bộ đếm RX/TX (19, 25–29, 47–50) | ⬜ | Lỗi ở collector, chưa tìm nguyên nhân |
+| NET-01 | Interface Windows trùng bộ đếm RX/TX (19, 25–29, 47–50) | 🟡 | Nguyên nhân: `GetIfTable2` có cả dòng lớp driver lọc (WFP, QoS, Npcap...) lặp bộ đếm card thật. Đã sửa trong `Collectors.cpp`; tên interface dùng `Alias`, trùng thì thêm ` (#index)`. Chờ kiểm trên Windows |
 
 Chạy lại test GRAPH: `QT_QPA_PLATFORM=offscreen qmltestrunner -input task3/tests/qml/graph -import imports` (tại thư mục gốc repo).
 
@@ -246,4 +246,5 @@ Thông số cần chốt trước khi nghiệm thu thật: số Slave mục tiê
 | 06/11/2026 | Chuyển cách trình bày sang PoC; cập nhật Chương 5, 6 báo cáo | md đã sửa, docx chưa dựng lại | `A_TONGKET/BaoCao/` | Claude |
 | 06/11/2026 | Cài Qt5Compat (build từ mã nguồn), sửa CMake WebEngine, build Debug + Release | ✅ CTest PASS · `task3_tests` 48/48 | `.task3-deps/task3-builds/20261106T020424Z-27772/` | Claude |
 | 06/11/2026 | K-13, K-15: chạy Master thật với UI WebEngine + Agent Linux cục bộ | ✅ Online · Fresh, Offline · Stale, cảnh báo, 52 bản ghi lịch sử; không có cổng TCP | Ảnh chụp màn hình | Thắng, Claude |
+| 06/11/2026 | NET-01: bỏ `FilterInterface`, đặt tên interface bằng `Alias`; thống nhất Qt 6.8.3 | ✅ Linux: `task3_tests` 49/49 · ⬜ Windows chưa kiểm | `task3/Collectors.cpp`, `task3/tests/CoreTests.cpp` | Codex, Claude |
 | | | | | |

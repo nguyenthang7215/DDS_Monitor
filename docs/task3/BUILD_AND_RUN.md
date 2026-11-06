@@ -1,6 +1,12 @@
 # Build và chạy Task 3 trên Linux
 
-Repository chính thức: `/home/dev/DDS-Monitor`. Tất cả lệnh dưới đây chạy từ repo này; không cần source tree trong Downloads. Build đã xác minh ngày 16-10-2026 dùng Backend library SHA-256 `167f5afa4fd7c6b9991f84fdf40b7a99564c264515e10c1507da656e565b9003`.
+Repository chính thức: `/home/dev/DDS-Monitor`. Tất cả lệnh dưới đây chạy từ repo này; không cần source tree trong Downloads. Backend library SHA-256 được ghi trong `share/task3-patched-backend/MANIFEST` của prefix vá. Build Debug và Release với Qt 6.8.3 (WebEngine) và CTest đã PASS ngày 06/11/2026.
+
+## Yêu cầu Qt
+
+Giao diện Task 3 dùng Qt WebEngine, nên Master cần Qt 6.8.3 gcc_64 có các module WebEngine, WebChannel và Qt5Compat (màn DDS gốc `MainStartView.qml` import `Qt5Compat.GraphicalEffects`). `task3/scripts/qt_prefix.sh` tự chọn bộ Qt đủ module (hoặc dùng `TASK3_QT_PREFIX`) và báo module thiếu trước khi build/chạy. `-DTASK3_WEB_UI=OFF` (hoặc `TASK3_WEB_UI=OFF` khi gọi script) build bản QML, không cần WebEngine.
+
+Nếu MaintenanceTool không cài được Qt5Compat (ví dụ khác tài khoản đã cài), build module từ mã nguồn chính thức: `git clone --depth 1 --branch v6.8.3 https://code.qt.io/qt/qt5compat.git`, rồi `~/Qt/6.8.3/gcc_64/bin/qt-cmake -S qt5compat -B build -DCMAKE_BUILD_TYPE=Release`, `cmake --build build` và `DESTDIR=<thư mục tạm> cmake --install build`, sau đó chép các file mới vào `~/Qt/6.8.3/gcc_64`. Cần gói `libxkbcommon-dev`.
 
 ## Build với Statistics Backend đã vá
 

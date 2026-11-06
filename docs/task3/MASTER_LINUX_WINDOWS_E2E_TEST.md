@@ -1,8 +1,36 @@
-# Kế hoạch kiểm thử chấp nhận E2E — Master Linux, Slave Windows
+# Kế hoạch kiểm thử E2E — Master Linux, Slave Windows (PoC)
 
-**Phạm vi:** kiểm thử hệ thống thật trên hai máy, đối chiếu FR-01–FR-15 trong `docs/task3/TASK3_REQUIREMENTS.md`. Hướng dẫn được viết theo source tại commit `6c804319c08430f3056f3cf243cc0747ca0f050f` (short SHA `6c80431`). Đây là kế hoạch để người vận hành thực hiện; chưa có kết quả kiểm thử Windows hoặc Linux–Windows trong tài liệu này.
+**Phạm vi:** kiểm thử Task 3 trên **hai thiết bị thật**: Linux là Master (chạy DDS Monitor, giao diện Qt WebEngine), Windows là Slave (chạy Agent). Đối chiếu FR-01–FR-15 trong `docs/task3/TASK3_REQUIREMENTS.md`. Tài liệu viết theo source hiện tại của nhánh `feature/webengine-ui` trên Qt 6.8.3 và Backend Patched; ghi SHA thực tế vào bảng thông tin phiên ở mục 1.1. Không có máy Linux làm Slave và không có thêm máy vật lý; các nội dung này nằm ngoài phạm vi (xem mục 0.3).
 
-**Nguyên tắc:** telemetry Agent và DDS Statistics là hai luồng riêng. Agent gửi heartbeat/metrics trên `Task3/HostTelemetry/v1`; Statistics Module của từng ứng dụng DDS công bố thống kê cho Statistics Backend. Agent Online, ping thành công, hoặc phát hiện Participant không chứng minh Writer–Reader đang trao đổi dữ liệu. Mỗi bước phải ghi bằng chứng và trạng thái thực tế. Không tắt toàn bộ firewall, không dừng dịch vụ Windows quan trọng, không tự đổi cấu hình giờ/NTP.
+**Nguyên tắc:** telemetry Agent và DDS Statistics là hai luồng riêng. Agent gửi heartbeat và số liệu máy trên Topic `Task3/HostTelemetry/v1` (Domain 42). Statistics Module của từng ứng dụng DDS công bố thống kê cho Statistics Backend trên Master (Domain của ứng dụng, mặc định 0). Agent Online, ping thành công hoặc phát hiện Participant không chứng minh ứng dụng đang gửi và nhận dữ liệu; mỗi ca phải có bằng chứng riêng.
+
+## 0. Cách dùng tài liệu này
+
+### 0.1 Ghi kết quả và ghi lỗi
+
+- Mỗi ca ghi một trong bốn kết quả: `PASS`, `FAIL`, `BLOCKED` (thiếu điều kiện hoặc quyền), `NOT RUN`. Ca chưa chạy không được tính là PASS.
+- **Gặp lỗi thì ghi ngay vào sổ lỗi ở mục 7.6**, không đợi hết phiên: mã `BUG-nn`, ca đang chạy, hiện tượng, các bước tái hiện, đường dẫn ảnh hoặc log, mức độ. Trong bảng kết quả của ca chỉ ghi `FAIL` và mã `BUG-nn`.
+- Mức độ lỗi: P0 crash hoặc mất dữ liệu; P1 sai chức năng chính; P2 sai hiển thị hoặc thiếu so với yêu cầu nhưng dùng được; P3 cosmetic.
+- Lưu bằng chứng theo ID ca vào `02-acceptance` (mục 1.1). Ảnh chụp phải là giao diện thật, không phải chụp headless.
+
+### 0.2 Thứ tự chạy khuyến nghị
+
+| Giai đoạn | Ca | Việc chính | Máy |
+|---|---|---|---|
+| A. Chuẩn bị | E2E-01, 02, 05 | Baseline, mạng, build Master, Qt5Compat, CTest | Linux |
+| B. Windows | E2E-03, 04 | Build Agent, `--once`, kiểm tra NET-01 | Windows |
+| C. Giám sát máy | E2E-06, 07, 08, 09, 10, 17, 21, 29 | Host Online, CPU, RAM, ổ đĩa, mạng, process, Offline/Recovery | Cả hai |
+| D. DDS | E2E-11, 12, 27, 13, 14 | HelloWorld hai máy, QoS, Graph Refresh, GUID, Throughput/Latency | Cả hai |
+| E. Cảnh báo và lịch sử | E2E-15, 16, 18, 19, 25 | Debounce, Not verified, DDS No Data, SQLite, restart Master | Cả hai |
+| F. Giao diện và cổng mạng | E2E-20, 28 | Ba tab, giữ lựa chọn, không có cổng TCP | Linux |
+| G. Thời gian (chỉ đọc) | E2E-22 | Baseline Chrony và W32Time | Cả hai |
+| H. Cần quyền quản trị | E2E-23, 24, 26 | Cấu hình NTP, mất NTP, reboot Windows | Cả hai |
+
+Giai đoạn H chỉ chạy khi có phê duyệt; nếu không, ghi `BLOCKED` và giữ làm hướng phát triển.
+
+### 0.3 Ngoài phạm vi hai máy
+
+Slave Linux thật, nhiều Slave vật lý, chạy dài hạn, DDS Security. Với nhiều Slave, có thể chạy thêm một Agent Windows với `host_id` khác (ví dụ `windows-slave-b`) để quan sát hai Slave trên một màn hình; kết quả này chỉ là mô phỏng vì cùng một phần cứng.
 
 ## 1. Checklist và thông tin phiên kiểm thử
 
@@ -10,8 +38,9 @@
 
 - [ ] Master chạy Linux 64-bit; Slave là máy Windows 10/11 64-bit trên cùng LAN có định tuyến/multicast phù hợp. Windows 11 được ưu tiên cho bộ MSVC v143 tương thích.
 - [ ] Ghi địa chỉ IP tĩnh hoặc DHCP reservation của hai máy; xác nhận cùng subnet/VLAN. Không dùng địa chỉ ví dụ trong file cấu hình Chrony.
-- [ ] Đồng bộ source Windows với đúng commit. Không checkout branch mới nhất thay cho commit chỉ định.
+- [ ] Đồng bộ source Windows với đúng commit đã chốt cho phiên test (cùng SHA với Linux). Không thay đổi code giữa phiên.
 - [ ] Linux đã build được Master với script `task3/scripts/build_task3_patched.sh`; prefix Statistics Backend vá tồn tại và runtime wrapper xác nhận đúng thư viện.
+- [ ] Linux dùng Qt 6.8.3 gcc_64 có WebEngine, WebChannel và Qt5Compat: `ls ~/Qt/6.8.3/gcc_64/qml/Qt5Compat/GraphicalEffects` phải liệt kê file. Thiếu Qt5Compat thì Master không khởi động (cách build module từ mã nguồn nằm trong `docs/task3/BUILD_AND_RUN.md`).
 - [ ] Windows đã cài Qt 6, Fast DDS/Fast CDR và toolchain cùng kiến trúc/compiler; CMake tìm được các package CMake.
 - [ ] Tạo hai thư mục evidence riêng trên mỗi máy: `01-preflight` cho source/toolchain/config/approval/build; `02-acceptance` cho log/screenshot/result theo Test ID. Không trộn môi trường chuẩn bị với kết quả nghiệm thu.
 - [ ] Chuẩn bị một ứng dụng DDS Publisher/Subscriber Windows thật, hoặc ứng dụng nghiệp vụ mục tiêu, có thể bật Fast DDS Statistics. Repository hiện không cung cấp binary Publisher/Subscriber Windows.
@@ -23,11 +52,11 @@
 | Trường | Ghi thực tế |
 |---|---|
 | Ngày, người thực hiện | ______________________________ |
-| Commit source | `6c80431` / thực tế: __________________ |
+| Nhánh và commit source (hai máy cùng SHA) | `feature/webengine-ui` / SHA thực tế: __________________ |
 | Linux distro/kernel, IP | ______________________________ |
 | Windows edition/build, IP | ______________________________ |
 | Master/Agent Fast DDS, Fast CDR | ______________________________ |
-| Qt, MSVC, CMake | ______________________________ |
+| Qt Linux (6.8.3), Qt Windows, MSVC, CMake | ______________________________ |
 | DDS telemetry Domain/Topic | `42` / `Task3/HostTelemetry/v1` hoặc cấu hình thực tế: __________ |
 | DDS application Domain | __________ (độc lập telemetry Domain) |
 | Host ID Windows | `windows-slave-a` hoặc duy nhất: __________ |
@@ -36,7 +65,7 @@
 
 ### 1.2 Nền tảng/phần mềm và nguồn tải chính thức
 
-Windows Agent build script yêu cầu Developer PowerShell/MSVC, Qt 6 (Core, Network, Concurrent), Fast DDS major version 3, Fast CDR và CMake tối thiểu 3.22. Sample HelloWorld v3.6.1 có CMake tối thiểu 3.28; nếu build cả Agent lẫn sample trên cùng máy, cần CMake ≥3.28. CMake của Agent không ghim minor version Qt/Fast DDS. Để giảm sai khác wire/runtime, dùng Fast DDS 3.6.1 và Fast CDR 2.3.5 x64/MSVC tương thích. Linux workflow hiện dùng Qt 6.7.2 và Fast DDS 3.6.1. Chọn Qt 6.7.2 MSVC 2022 x64 nếu installer chính thức cung cấp; nếu dùng Qt khác, ghi version và coi Windows build/runtime là cần xác minh mới.
+Windows Agent build script yêu cầu Developer PowerShell/MSVC, Qt 6 (Core, Network, Concurrent), Fast DDS major version 3, Fast CDR và CMake tối thiểu 3.22. Sample HelloWorld v3.6.1 có CMake tối thiểu 3.28; nếu build cả Agent lẫn sample trên cùng máy, cần CMake ≥3.28. CMake của Agent không ghim minor version Qt/Fast DDS. Để giảm sai khác wire/runtime, dùng Fast DDS 3.6.1 và Fast CDR 2.3.5 x64/MSVC tương thích. Linux workflow hiện dùng Qt 6.8.3 và Fast DDS 3.6.1. Chọn một bản Qt 6 MSVC 2022 x64 (ví dụ 6.8.3) nếu installer chính thức cung cấp; nếu dùng Qt khác, ghi version và coi Windows build/runtime là cần xác minh mới.
 
 - Visual Studio Community / MSVC: [visualstudio.microsoft.com/downloads](https://visualstudio.microsoft.com/downloads/) — cài workload **Desktop development with C++**, MSVC x64/x86 build tools và Windows SDK.
 - CMake: [cmake.org/download](https://cmake.org/download/) — cài bản Windows x64; kiểm tra `cmake --version` đạt tối thiểu 3.22.
@@ -173,7 +202,7 @@ Mở **Developer PowerShell for VS 2022** (x64), không phải PowerShell thư�
 git clone https://github.com/nguyenthang7215/DDS_Monitor.git C:\src\DDS-Monitor
 Set-Location C:\src\DDS-Monitor
 git fetch --all --tags
-git checkout 6c804319c08430f3056f3cf243cc0747ca0f050f
+git checkout <SHA đã chốt cho phiên test, cùng SHA với Linux>
 git rev-parse HEAD
 git status --short
 ```
@@ -196,7 +225,7 @@ Get-Command cl
 Trong File Explorer/Qt Maintenance Tool xác nhận Qt x64/MSVC kit có `Qt6CoreConfig.cmake`, `Qt6NetworkConfig.cmake`, `Qt6ConcurrentConfig.cmake`; ghi lại QtPrefix (thường có dạng `C:\Qt\6.x.y\msvc2022_64`). Xác nhận DdsPrefix trỏ đến prefix chứa Fast DDS/Fast CDR CMake package và DLL tương ứng. Không đoán thư mục từ ví dụ; tìm package/DLL trong chính nơi đã cài:
 
 ```powershell
-$QtPrefix = 'C:\Qt\6.7.2\msvc2022_64' # thay bằng prefix thực tế đã xác nhận
+$QtPrefix = 'C:\Qt\6.x.y\msvc2022_64' # thay bằng prefix thực tế đã xác nhận
 $DdsPrefix = 'C:\Program Files\eProsima\Fast-DDS' # thay bằng prefix thực tế đã xác nhận
 Test-Path (Join-Path $QtPrefix 'lib\cmake\Qt6\Qt6Config.cmake')
 Get-ChildItem (Join-Path $QtPrefix 'lib\cmake') -Recurse -Include Qt6CoreConfig.cmake,Qt6NetworkConfig.cmake,Qt6ConcurrentConfig.cmake -ErrorAction SilentlyContinue | Select-Object -ExpandProperty FullName
@@ -280,6 +309,7 @@ cd /home/dev/DDS-Monitor
 export TASK3_TELEMETRY_DOMAIN=42
 export TASK3_TELEMETRY_TOPIC='Task3/HostTelemetry/v1'
 export TASK3_TIMEOUT_MS=5000
+export TASK3_EXPECTED_HOSTS=windows-slave-a   # Host khai báo trước hiển thị Unknown tới khi có bản tin đầu (FR-02)
 export TASK3_DATA_DIR="$PWD/.task3-runtime/e2e-master"
 export TASK3_FLOW_RULES="$PWD/task3/config/flow-rules.json"
 mkdir -p "$TASK3_DATA_DIR" "$HOME/DDS-Monitor-Evidence"
@@ -297,6 +327,16 @@ grep -E 'fastdds_statistics_backend|libfastdds\.so|libfastcdr\.so' "/proc/$pid/m
 ```
 
 Đường dẫn `libfastdds_statistics_backend.so.2.5.0` phải ở `.task3-deps/fastdds-statistics-backend-2.5.0-patched/`; Fast DDS phải là prefix 3.6.1 được wrapper cấu hình. Không tiếp tục nghiệm thu DDS Statistics nếu không khớp.
+
+Kiểm tra giao diện WebEngine và Domain 0 khi Master đang chạy:
+
+```bash
+pid="$(pgrep -x dds_monitor | head -1)"
+pgrep -af QtWebEngineProcess | head -3        # phải có tiến trình con của WebEngine
+ss -ltnp | grep dds_monitor || echo 'không có cổng TCP listen'
+```
+
+Cửa sổ phải mở với ba tab **Giám sát hệ thống**, **DDS chuyên sâu**, **Cảnh báo & lịch sử**; chưa có Agent thì tab đầu hiển thị "Chưa có Slave" và các thẻ tổng quan bằng 0. Domain 0 của ứng dụng được tự khởi tạo (`TASK3_AUTO_DOMAIN` mặc định); chỉ cần **Initialize Monitor** khi ứng dụng DDS dùng Domain khác. Bản QML cũ của Task 3 chỉ dùng để so sánh: `TASK3_UI=qml`.
 
 ## 4. Cấu hình và chạy Windows Agent
 
@@ -381,7 +421,7 @@ Giá trị ban đầu của từng dòng là `NOT VERIFIED`; người thực hi�
 
 | Gate | Điều kiện cụ thể để đánh dấu READY | Trạng thái hiện tại |
 |---|---|---|
-| Source và toolchain Windows | `git rev-parse HEAD` đúng `6c804319c08430f3056f3cf243cc0747ca0f050f`; MSVC x64, Qt6 Core/Network/Concurrent, CMake ≥3.22; Fast DDS 3.6.1/Fast CDR tương thích; CMake ≥3.28 nếu build HelloWorld; CMake package/DLL đã tìm thấy và ghi phiên bản | NOT VERIFIED |
+| Source và toolchain Windows | `git rev-parse HEAD` trùng SHA đã ghi ở bảng thông tin phiên; MSVC x64, Qt6 Core/Network/Concurrent, CMake ≥3.22; Fast DDS 3.6.1/Fast CDR tương thích; CMake ≥3.28 nếu build HelloWorld; CMake package/DLL đã tìm thấy và ghi phiên bản | NOT VERIFIED |
 | Windows Agent | Script build kết thúc không exception; binary `task3_agent.exe` tìm được; `--once` trả exit code 0; Agent chạy liên tục và module Fast DDS/Fast CDR/Qt nạp từ prefix dự kiến; config local đúng schema. Không dùng `--help` làm tiêu chí bắt buộc | NOT VERIFIED |
 | Linux Master/Backend | workflow patched build/CTest đạt; wrapper/runtime maps xác nhận Backend vá đúng prefix; Master mở được cùng application Domain cần thử | NOT VERIFIED |
 | DDS sample và LAN | HelloWorld v3.6.1 build trên hai máy; cùng application Domain/topic/profile; sample logs và UI chứng minh discovery/matching/receive; locator/firewall đã được kiểm tra mà không tắt firewall | NOT VERIFIED |
@@ -405,6 +445,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Lệnh:** xem lệnh ở mục 2 và 3; Windows dùng `git rev-parse HEAD` và `Get-NetIPConfiguration`.
 - **Kết quả mong đợi:** cả hai source đúng SHA; hai máy có địa chỉ trong mạng dự kiến; telemetry domain/topic trùng nhau.
 - **Kiểm chứng/evidence:** transcript hai máy, `git rev-parse`, cấu hình Agent đã che thông tin cá nhân.
+- **Tương thích phiên bản (NFR-05):** ghi phiên bản Fast DDS và Fast CDR đang nạp trên cả hai máy (Linux: `ldd` của `dds_monitor`; Windows: module đã nạp của `task3_agent.exe`, xem mục 4). Hai bên phải cùng dòng Fast DDS 3.6.x và Fast CDR 2.3.5; khác phiên bản thì ghi FAIL cho NFR-05.
 - **PASS/FAIL:** PASS nếu các điều kiện trên đúng; FAIL nếu SHA/cấu hình/mạng không nhất quán.
 - **Nếu FAIL:** dừng; sửa đúng source/route/config qua quy trình quản trị, không suy ra DDS từ ping.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
@@ -461,6 +502,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Lệnh:** `bash task3/scripts/build_task3_patched.sh --jobs 4`; CTest và `grep` ở mục 3.
 - **Kết quả mong đợi:** Debug/Release build và CTest exit 0; Master map Backend 2.5.0 từ `.task3-deps/...-patched` và Fast DDS prefix đã ghim.
 - **Kiểm chứng/evidence:** build/CTest logs, manifest, `ldd`, maps và Master log.
+- **Kiểm tra bổ sung (Qt 6.8.3, WebEngine):** `cat "$(<.task3-deps/task3-builds/LATEST)/qt-prefix"` phải là Qt 6.8.3; `cat "$(<.task3-deps/task3-builds/LATEST)/web-ui"` phải là `ON`; `ctest` Debug và Release đều gồm `task3_core` (trong đó có `webFeedPublishesTrimmedChangesOnly` và `interfaceNames`); cửa sổ Master mở được và có tiến trình `QtWebEngineProcess`.
 - **PASS/FAIL:** PASS chỉ cho Linux build/unit/dependency; không phải PASS cho Windows/cross-machine.
 - **Nếu FAIL:** giữ log, kiểm tra script/manifest/prefix; không dùng binary cũ hoặc backend `/tmp`.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
@@ -471,7 +513,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Mục đích:** chứng minh DDS telemetry từ Agent Windows tới Master Linux.
 - **Điều kiện chuẩn bị:** E2E-01–05; Master đang chạy; Agent config domain/topic giống Master.
 - **Máy thực hiện:** [LINUX MASTER] và [WINDOWS SLAVE].
-- **Các bước:** (1) khởi động Master; (2) khởi động Agent liên tục; (3) đợi vài chu kỳ 1 s; (4) tìm `windows-slave-a` trong danh sách Host; (5) chọn Host và quan sát Online/Last Seen cập nhật; (6) ghi thời gian đầu/cuối.
+- **Các bước:** (1) khởi động Master (với `TASK3_EXPECTED_HOSTS` ở mục 3.2) và chụp Host `windows-slave-a` ở trạng thái **Unknown** khi chưa chạy Agent (FR-02, chưa có dữ liệu ban đầu); (2) khởi động Agent liên tục; (3) đợi vài chu kỳ 1 s; (4) tìm `windows-slave-a` trong danh sách Host; (5) chọn Host và quan sát Online/Last Seen cập nhật; (6) ghi thời gian đầu/cuối.
 - **Lệnh:** trên Windows chạy Agent mục 4; trên Linux theo dõi Master log và UI.
 - **Kết quả mong đợi:** đúng Host ID; Online khi telemetry mới đến; Last Seen tiến triển; không tạo Host khác do đổi Host ID.
 - **Kiểm chứng/evidence:** screenshot Host list/detail, `agent.log`, Master log, đồng hồ thời điểm thu evidence.
@@ -503,6 +545,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Lệnh:** `Get-CimInstance Win32_OperatingSystem | Select-Object TotalVisibleMemorySize,FreePhysicalMemory`; `Get-Volume -DriveLetter C | Select-Object Size,SizeRemaining`; `Get-NetAdapterStatistics -Name '<Interface>' | Select-Object ReceivedBytes,SentBytes`; chạy lệnh interface hai lần cách 10 s.
 - **Kết quả mong đợi:** RAM Used/Total/Percentage nhất quán; Disk Total/Used/Free theo `C:`; RX/TX byte/s hợp lý theo delta và interface; UI ghi đúng tổng/interface, freshness và đơn vị. Ngưỡng đối chiếu định lượng đề xuất nằm ở mục 4.1, không phải SLA Requirements.
 - **Kiểm chứng/evidence:** lệnh outputs, config `disk_paths`, screenshot.
+- **Kiểm tra NET-01 (bộ đếm interface Windows):** (1) chạy `task3_agent.exe --config .\windows-agent.local.json --once` và mở `metrics.interfaces[]`; (2) tên interface phải là tên dễ đọc (Alias, ví dụ `Ethernet`, `Wi-Fi`), không phải số index thuần; (3) không có hai dòng khác tên nhưng cùng bộ đếm `rx_bytes`/`tx_bytes` (các lớp driver lọc như WFP, QoS Packet Scheduler, Npcap không được xuất hiện); (4) `network_rx_bytes` và `network_tx_bytes` khớp tổng `ReceivedBytes`/`SentBytes` của các adapter thật trong `Get-NetAdapterStatistics`. Nếu còn dòng trùng, ghi `BUG-nn` kèm JSON và output `Get-NetAdapterStatistics`.
 - **PASS/FAIL:** PASS khi số liệu xấp xỉ cùng mốc thời gian/đơn vị; FAIL nếu disk path sai, RX/TX đảo/không cập nhật hoặc unavailable hiển thị như 0 hiện hành.
 - **Nếu FAIL:** kiểm tra interface index/counters, NIC ảo/loopback, permissions và sample period; không giả định tổng là traffic vật lý.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
@@ -517,6 +560,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Lệnh:** `Get-Process -Name '<name-without-.exe>' -ErrorAction SilentlyContinue`; `Get-Service -Name '<ServiceName>'`; chỉ `Stop-Process`/`Start-Service` cho ứng dụng/service do người kiểm thử sở hữu và được phép.
 - **Kết quả mong đợi:** trạng thái khớp OS; thiếu quyền/không truy vấn được thể hiện Unknown; không dùng danh sách process suy đoán mapping.
 - **Kiểm chứng/evidence:** config JSON, OS query, Host/Application detail.
+- **Dịch vụ Windows (FR-07):** thêm vào `windows-agent.local.json` một ứng dụng có trường `service` (ví dụ dịch vụ không quan trọng đã được phép dừng; không dùng dịch vụ hệ thống). Kiểm tra tab **Ứng dụng** hiển thị trạng thái dịch vụ khớp `Get-Service`; dừng rồi chạy lại dịch vụ đó và xác nhận cảnh báo `service_stopped` Active rồi Recovered. Nếu không có dịch vụ nào được phép dừng thì chỉ kiểm trạng thái Running và ghi phần dừng/chạy lại là `BLOCKED`.
 - **PASS/FAIL:** PASS nếu đối tượng được theo dõi chính xác và trạng thái nguồn phù hợp; FAIL nếu service/process khác bị gán nhầm.
 - **Nếu FAIL:** xác minh Service Name, quyền, trường `argument_token` (không hỗ trợ trên Windows) và application id.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
@@ -570,6 +614,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
   ```
 
   Linux đặt biến trỏ tới bản copy tương tự ngoài source repository: `export FASTDDS_DEFAULT_PROFILES_FILE=/tmp/<qos-test-dir>/hello_world_profile.test.xml`. XML profile syntax/profile names phải lấy từ sample v3.6.1 và [Fast DDS XML configuration docs](https://fast-dds.docs.eprosima.com/en/v3.6.1/fastdds/xml_configuration/xml_configuration.html), không chép XML tự đoán. Để bỏ profile: `Remove-Item Env:FASTDDS_DEFAULT_PROFILES_FILE` (PowerShell) / `unset FASTDDS_DEFAULT_PROFILES_FILE` (Bash), rồi khởi chạy tiến trình mới.
+- **Luồng trong cùng một máy (FR-11):** sau các bước trên, chạy cả Publisher và Subscriber HelloWorld trên cùng máy Windows (cùng `FASTDDS_STATISTICS`), vào Host `windows-slave-a`, tab **Luồng DDS**: phải thấy luồng nội bộ trong một Host. Chỉ ghi PASS khi cả hai Participant thuộc cùng Host; nếu hiển thị Unmapped thì ghi rõ là Unmapped, không tự gán.
 - **Kết quả mong đợi:** cùng tên Topic không tự xác nhận match; match cần connection GUID/backend evidence; data flow cần bằng chứng receive/counter; no-match không được gọi là truyền thành công.
 - **Kiểm chứng/evidence:** GUID Writer/Reader, topic/type/QoS, connection status/timestamp, application receive counter/log.
 - **PASS/FAIL:** PASS nếu mặc định tương thích tạo match+receive, mismatch giữ discovery nhưng bỏ match/receive và khôi phục profile phục hồi hoạt động; FAIL nếu UI suy luận traffic từ entity/topic name hoặc hiển thị match sai. Nếu sample XML profile không cho cấu hình endpoint QoS riêng/không xác nhận đã nạp, ca mismatch là BLOCKED và cần app test hỗ trợ QoS, không tự nhận PASS.
@@ -593,6 +638,21 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
   ```
 
   `build-runtime-probe` là tên build directory do người kiểm thử chọn cho full-project CMake, không phải output đã xác minh. Repository không có lệnh standalone `build-windows.ps1` để build fixture; full-project configure/build phụ thuộc toàn bộ CMake packages của root, phải xác minh khả dụng trước. Không dùng JSON viết tay làm bằng chứng mapping runtime.
+- **Phương án Linux cục bộ (khi chưa build `task3_probe` trên Windows):** chạy Agent Linux và ứng dụng mẫu ngay trên máy Master; kết quả ghi rõ là "Linux cục bộ", không thay cho mapping trên Windows. Dùng `task3/config/runtime-agent.json` (`identity_required`, `argument_token` `pub`/`sub`) sao chép ra ngoài repo và đổi `identity_directory` thành đường dẫn tuyệt đối:
+
+  ```bash
+  B="$(<.task3-deps/task3-builds/LATEST)/release"
+  mkdir -p /tmp/e2e-identities
+  sed 's#"runtime/identities"#"/tmp/e2e-identities"#' task3/config/runtime-agent.json > /tmp/e2e-runtime-agent.json
+  # Terminal 1: Master (đã chạy). Terminal 2:
+  TASK3_AGENT_CONFIG=/tmp/e2e-runtime-agent.json bash task3/scripts/run_linux_agent_patched.sh
+  # Terminal 3 và 4 (đã kiểm: probe chạy được với biến môi trường này):
+  export LD_LIBRARY_PATH="$PWD/.task3-deps/fastdds-statistics-backend-2.5.0-patched/lib:/home/dev/dds-deps/install/lib:$HOME/Qt/6.8.3/gcc_64/lib"
+  "$B/task3/task3_probe" --app sub --mode reader --identity-dir /tmp/e2e-identities --participants 2
+  "$B/task3/task3_probe" --app pub --mode writer --identity-dir /tmp/e2e-identities --participants 2
+  ```
+
+  Trên Master, mở Host `instrumented-linux`, tab **Ứng dụng** và **Luồng DDS**: `pub` và `sub` phải có 2 Participant được ánh xạ. Dừng `pub` 15 s rồi chạy lại: GUID mới được ánh xạ lại; ứng dụng không có manifest (ví dụ HelloWorld) phải ở trạng thái Unmapped.
 - **Kết quả mong đợi:** mapping đúng ứng dụng/run khi metadata hiện hành; app thiếu metadata là Unmapped; stale/conflict không bị map.
 - **Kiểm chứng/evidence:** manifest đã lọc trường nhạy cảm, PID/instance/GUID, UI mapping, logs thời gian.
 - **PASS/FAIL:** PASS riêng cho nhánh Unmapped nếu HelloWorld được phát hiện nhưng không bị gán sai; mapped case chỉ PASS với manifest được app Windows cập nhật và GUID so khớp. Không có app instrumented = BLOCKED cho mapped case và FR-10 chưa đủ E2E evidence.
@@ -714,18 +774,18 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Nếu FAIL:** giữ bản sao read-only DB/evidence, dừng thao tác ghi, không xóa/rebuild database.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
 
-### E2E-20 — Ba tab, chọn Host/Application/Flow và giữ trạng thái
+### E2E-20 — Ba tab, chọn Host/Application/Flow và giữ trạng thái (giao diện WebEngine)
 
 - **FR liên quan:** FR-01, FR-09–FR-15; NFR-04.
-- **Mục đích:** xác nhận ba workspace, selection, điều hướng và thông tin đọc được trên cửa sổ thật.
-- **Điều kiện chuẩn bị:** Master, Agent và DDS app đang chạy; màn hình 1280×800 hoặc 1600×900.
+- **Mục đích:** xác nhận giao diện WebEngine có đúng ba tab, giữ lựa chọn khi điều hướng và đọc được trên cửa sổ thật.
+- **Điều kiện chuẩn bị:** Master (UI WebEngine), Agent Windows và HelloWorld đang chạy; thử ở hai kích thước cửa sổ 1280×800 và 1600×900.
 - **Máy thực hiện:** [LINUX MASTER].
-- **Các bước:** (1) mở Giám sát hệ thống; (2) chọn Windows Host; (3) chọn Application; (4) chuyển qua DDS chuyên sâu rồi quay lại; (5) chọn DDS Flow; (6) mở Cảnh báo & lịch sử; (7) quay lại các tab; (8) resize cửa sổ; (9) chụp mỗi tab và màn chi tiết.
-- **Lệnh:** không cần lệnh; chụp screenshot và lưu evidence. Không dùng screenshot headless thay cho UI thật.
-- **Kết quả mong đợi:** đúng ba tab; selection Host/Application còn phù hợp sau điều hướng; không tràn chữ/cột; trạng thái severity có cả chữ và màu; charts có timestamp; không thấy nhãn Task 3 không cần thiết.
-- **Kiểm chứng/evidence:** ảnh ba tab và Host/Application/Flow details ở hai kích thước; QML stdout/stderr.
-- **PASS/FAIL:** PASS nếu điều hướng/selection hoạt động và không có lỗi QML nghiêm trọng; FAIL nếu tab tái tạo workspace mất lựa chọn, nội dung không đọc được hoặc crash.
-- **Nếu FAIL:** ghi viewport, tab sequence và screenshot; không sửa backend trong test.
+- **Các bước:** (1) tab **Giám sát hệ thống**: ô **Tìm tên máy / Host ID**, nút **Tất cả Slave · N**, danh sách Slave kèm ứng dụng; (2) chọn Host Windows, xem các tab **Tài nguyên**, **Ứng dụng**, **Luồng DDS**, **Đồng bộ giờ** và hai tab con **Ổ đĩa / phân vùng**, **Mạng / interface**; (3) chọn một ứng dụng rồi một luồng ở **Luồng DDS**, đọc **Chi tiết luồng DDS**; (4) bấm **Mở DDS chuyên sâu**, rồi quay lại tab **Giám sát hệ thống**: Host, ứng dụng và tab con đã chọn phải còn; (5) tab **Cảnh báo & lịch sử**: lọc **Tất cả / Active / Recovered**, tìm kiếm, **Tải lịch sử cũ hơn**; (6) nút **Cảnh báo DDS gốc** mở màn QML gốc; (7) cuộn danh sách Network khi dữ liệu cập nhật: vị trí cuộn không nhảy; (8) thay đổi kích thước cửa sổ; (9) chụp từng tab và màn chi tiết ở hai kích thước.
+- **Lệnh:** không cần lệnh; chụp screenshot trên cửa sổ thật. Theo dõi terminal Master: không được có dòng lỗi `qml:`, `js:` hoặc `Content-Security-Policy`.
+- **Kết quả mong đợi:** đúng ba tab; lựa chọn Host/Application còn sau khi chuyển tab; không tràn chữ hoặc cột; trạng thái có cả màu và nhãn chữ (Online · Fresh, Offline · Stale, Unknown, Active, Recovered); biểu đồ CPU có tiêu đề và đúng 120 mẫu gần nhất; dữ liệu quá hạn hiển thị N/A hoặc Stale, không hiển thị 0.
+- **Kiểm chứng/evidence:** ảnh ba tab và chi tiết Host/Application/Flow ở hai kích thước; log Master.
+- **PASS/FAIL:** PASS nếu điều hướng và lựa chọn hoạt động, không có lỗi trong log Master. FAIL nếu mất lựa chọn, nội dung không đọc được, trang trắng hoặc crash.
+- **Nếu FAIL:** ghi kích thước cửa sổ, chuỗi tab đã bấm và ảnh vào sổ lỗi; không sửa code trong phiên test.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
 
 ### E2E-21 — Fresh/Stale/N/A và Time Sync Unknown
@@ -822,6 +882,48 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 - **Nếu FAIL:** thu logs, dừng test và xử lý deployment qua IT; không tự cài service.
 - **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
 
+### E2E-27 — Domain Graph: Refresh nhiều lần và Subscriber restart (GRAPH-01, GRAPH-02)
+
+- **FR liên quan:** FR-09, FR-11, FR-12.
+- **Mục đích:** xác nhận hộp thoại `Loading Graph` luôn đóng khi Graph có từ hai host và Writer/Reader hiển thị được. Lỗi này từng xảy ra trên Qt 6.7.2 (`hostsList` rộng 0); Qt 6.8.3 chỉ mới được xác nhận bằng kiểm thử QML tự động.
+- **Điều kiện chuẩn bị:** E2E-11 PASS; Master chạy Qt 6.8.3; HelloWorld Publisher (Linux) và Subscriber (Windows) đang trao đổi với `FASTDDS_STATISTICS` bật.
+- **Máy thực hiện:** [LINUX MASTER] và [WINDOWS SLAVE].
+- **Các bước:** (1) mở tab **DDS chuyên sâu**, chọn **Domain 0 View**; (2) bấm **Refresh** 10 lần, mỗi lần chờ tới khi Graph hiện đủ và ghi `Loading Graph` có đóng không (chờ tối đa 30 s); (3) mở rộng cây Host, Participant và endpoint: phải thấy Writer và Reader của `hello_world_topic` ở cả hai host; (4) dừng Subscriber Windows 10 s, chạy lại, rồi **Refresh** thêm 3 lần; (5) lặp bước 4 cho Publisher Linux.
+- **Lệnh:** Subscriber/Publisher theo mục 1.2; kiểm thử QML tự động tham chiếu: `QT_QPA_PLATFORM=offscreen ~/Qt/6.8.3/gcc_64/bin/qmltestrunner -input task3/tests/qml/graph -import imports` (tại thư mục gốc repo, Qt 6.8.3).
+- **Kết quả mong đợi:** `Loading Graph` đóng ở cả 10 lần và sau mỗi lần restart; Graph hiện Topic, Writer, Reader và đường nối khi match; không crash.
+- **Kiểm chứng/evidence:** video hoặc ảnh từng lần Refresh, log Master, ảnh Graph có từ hai host.
+- **PASS/FAIL:** PASS nếu cả 10 lần Refresh và các lần restart đều đóng hộp thoại. FAIL nếu `Loading Graph` xoay quá 30 s dù Backend có dữ liệu (GRAPH-01) hoặc thiếu Writer/Reader dù Explorer có đủ thực thể (GRAPH-02).
+- **Nếu FAIL:** ghi vào sổ lỗi với số lần Refresh, ảnh, log Master và bản Qt đang chạy (`ldd` trên `dds_monitor | grep Qt6Core`); không áp bản sửa mà chưa ghi lại.
+- **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
+
+### E2E-28 — Không có cổng TCP và không có nguồn web ngoài (CON-04)
+
+- **FR liên quan:** ràng buộc CON-04 (không xây Web Server).
+- **Mục đích:** chứng minh giao diện WebEngine nạp trang cục bộ, không mở cổng HTTP và không bật cổng DevTools.
+- **Điều kiện chuẩn bị:** Master đang chạy với UI WebEngine, đã có Agent và HelloWorld để Master mở đủ socket.
+- **Máy thực hiện:** [LINUX MASTER].
+- **Các bước:** (1) `ss -ltnp | grep -E 'dds_monitor|QtWebEngine'`; (2) `ss -lunp | grep dds_monitor` (UDP của Fast DDS được phép); (3) kiểm tra biến môi trường tiến trình: `tr '\0' '\n' < /proc/$(pgrep -x dds_monitor | head -1)/environ | grep -i -E 'QTWEBENGINE|TASK3_WEB'` không được có `QTWEBENGINE_REMOTE_DEBUGGING` (chỉ được bật khi `TASK3_WEB_DEVTOOLS=1`); (4) chạy kiểm thử CSP của trang web nếu có Chrome hoặc Edge: `python3 task3/tests/web/run_web_tests.py --output "$ACCEPTANCE_EVIDENCE/web-tests"`.
+- **Lệnh:** như các bước trên.
+- **Kết quả mong đợi:** không có socket TCP ở trạng thái listen của `dds_monitor` hoặc `QtWebEngineProcess`; chỉ có UDP RTPS (ví dụ cổng 7400); không có biến `QTWEBENGINE_REMOTE_DEBUGGING`; kiểm thử trang web 17/17 PASS (gồm kiểm tra CSP chặn ảnh, `fetch` và `eval` ra ngoài).
+- **Kiểm chứng/evidence:** output `ss`, output biến môi trường, `results.json` của kiểm thử web.
+- **PASS/FAIL:** PASS nếu cả bốn kiểm tra đạt. FAIL nếu có cổng TCP listen hoặc cổng debug.
+- **Nếu FAIL:** ghi cổng và tiến trình vào sổ lỗi mức P1.
+- **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
+
+### E2E-29 — Hai Slave cùng lúc (mô phỏng) và chọn từng Slave
+
+- **FR liên quan:** FR-01, FR-02; NFR-01, NFR-05.
+- **Mục đích:** xác nhận Master quản lý nhiều Slave bằng định danh, chọn từng Slave và Offline độc lập. Chỉ có một máy Windows nên đây là mô phỏng: hai Agent dùng chung phần cứng nhưng `host_id` khác nhau.
+- **Điều kiện chuẩn bị:** E2E-06 PASS; Master đang chạy.
+- **Máy thực hiện:** [WINDOWS SLAVE] và [LINUX MASTER].
+- **Các bước:** (1) trên Windows sao chép `windows-agent.local.json` thành `windows-agent-b.local.json`, đổi `host_id` thành `windows-slave-b` (các trường khác giữ nguyên); (2) chạy Agent thứ hai trong PowerShell khác với `--config .\windows-agent-b.local.json`; (3) tùy chọn: chạy thêm Agent Linux trên máy Master bằng `bash task3/scripts/run_linux_agent_patched.sh` để có Host thứ ba (`linux-slave-a`); (4) trên Master xem nút **Tất cả Slave · N** và thẻ TỔNG SLAVE / ONLINE; (5) chọn lần lượt từng Slave, kiểm tra thông tin đúng Host; (6) dừng riêng Agent `windows-slave-b`: chỉ Slave này sang Offline · Stale, các Slave khác vẫn Online; (7) chạy lại Agent `b` và xác nhận Online.
+- **Lệnh:** như các bước trên; không đổi `host_id` của Agent đang chạy.
+- **Kết quả mong đợi:** N và các thẻ tổng quan đúng số Slave đang chạy; mỗi Slave có định danh riêng và chi tiết riêng; Offline của một Slave không ảnh hưởng Slave khác; tìm theo tên hoặc Host ID hoạt động.
+- **Kiểm chứng/evidence:** ảnh danh sách Slave trước và sau khi dừng Agent `b`, log Master.
+- **PASS/FAIL:** PASS nếu cả hai (hoặc ba) Slave hiển thị, chọn và Offline độc lập. FAIL nếu Host bị gộp, đổi chỗ hoặc Offline lan sang Slave khác. Kết quả chỉ chứng minh quản lý nhiều Slave bằng định danh, không chứng minh mở rộng quy mô lớn hay nhiều máy vật lý.
+- **Nếu FAIL:** ghi vào sổ lỗi cùng `host_id` của từng Agent và ảnh.
+- **Kết quả thực tế:** `NOT RUN / PASS / FAIL / BLOCKED` — ______; ghi chú ______.
+
 ## 6. Troubleshooting nhanh
 
 | Triệu chứng | Kiểm tra trước | Hướng xử lý an toàn |
@@ -835,6 +937,10 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 | Match nhưng không có throughput/latency | Statistics Module/topic chưa bật, Backend prefix/runtime, writer không gửi, statistic stale | Bật đúng statistic trong app, tạo traffic test an toàn; phân biệt No Data với stale. |
 | Mapping hiện Unmapped | app chưa ghi runtime manifest; `application_id`, PID/instance/GUID, manifest hết hạn | Dùng instrumented app và xác minh identity; không map chỉ theo executable/topic. |
 | Event DB lỗi | status bar/log, writable `TASK3_DATA_DIR`, SQLite path | Không xóa DB; dừng sạch, sao lưu file và WAL, kiểm tra quyền/dung lượng. |
+| Master không khởi động, log nhắc `Qt5Compat` | `ls ~/Qt/6.8.3/gcc_64/qml/Qt5Compat/GraphicalEffects` | Cài hoặc build module Qt5Compat cho đúng Qt 6.8.3 (xem `BUILD_AND_RUN.md`). |
+| Cửa sổ Master trắng ở tab Giám sát hệ thống | `pgrep -af QtWebEngineProcess`; log Master; `web-ui` trong thư mục build là `ON` | Build lại với `TASK3_WEB_UI=ON`; thử `TASK3_UI=qml` để phân biệt lỗi trang web với lỗi dữ liệu. |
+| Graph trống dù Agent đang chạy | Agent chỉ gửi telemetry trên Domain 42, Graph vẽ Domain của ứng dụng (0) | Chạy HelloWorld với `FASTDDS_STATISTICS`, rồi **Refresh** (E2E-11, E2E-27). |
+| HelloWorld Linux báo thiếu `libfoonathan_memory` | `LD_LIBRARY_PATH` | `export LD_LIBRARY_PATH=/home/dev/dds-deps/install/lib:$LD_LIBRARY_PATH` |
 | Time Sync Running nhưng UI Unknown | W32Time service chỉ chứng minh service; source/offset độc lập | Đọc `w32tm /query`; chỉ admin cấu hình source. Không ép UI thành Synced. |
 | NTP source không phải Master | domain policy/AD hierarchy, W32Time configuration, Chrony `allow`/route | BLOCKED chờ admin; không thay policy/cấu hình hệ thống ngoài phê duyệt. |
 
@@ -870,6 +976,9 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 | E2E-24 | NOT RUN | | |
 | E2E-25 | NOT RUN | | |
 | E2E-26 | NOT RUN | | |
+| E2E-27 | NOT RUN | | |
+| E2E-28 | NOT RUN | | |
+| E2E-29 | NOT RUN | | |
 
 ### 7.2 Đối chiếu FR-01–FR-15
 
@@ -877,7 +986,7 @@ Chỉ đánh dấu `PASS` khi có test/evidence nêu trong bảng; Linux unit/in
 
 | FR | Nội dung nghiệm thu | Test case/evidence tối thiểu | Kết quả |
 |---|---|---|---|
-| FR-01 | Host list theo ID và chọn xem detail | E2E-06, E2E-20: Host Windows thật, screenshot | NOT RUN |
+| FR-01 | Host list theo ID và chọn xem detail | E2E-06, E2E-20, E2E-29: Host Windows thật, hai Slave, screenshot | NOT RUN |
 | FR-02 | Unknown ban đầu, Online, timeout Offline, Last Seen, Recovery | E2E-06, E2E-10, E2E-17, E2E-21 | NOT RUN |
 | FR-03 | CPU theo khoảng lấy mẫu | E2E-07: Windows counter + Master UI/time | NOT RUN |
 | FR-04 | RAM Used/Total/Percentage | E2E-08: CIM + Master UI | NOT RUN |
@@ -887,11 +996,36 @@ Chỉ đánh dấu `PASS` khi có test/evidence nêu trong bảng; Linux unit/in
 | FR-08 | Dịch vụ OS, source và offset; liên máy khi được cấu hình | E2E-21–E2E-24; E2E-23 mới là test sync thật | NOT RUN |
 | FR-09 | Domain/Participant/Topic/Writer/Reader | E2E-11: app DDS Windows thật + Backend Linux | NOT RUN |
 | FR-10 | Host/Application/run mapping; Unmapped khi thiếu evidence | E2E-13: app instrumented + no-metadata case | NOT RUN |
-| FR-11 | Writer→Topic→Reader giữa hai máy | E2E-12: GUID/route evidence | NOT RUN |
+| FR-11 | Writer→Topic→Reader giữa hai máy và trong cùng máy | E2E-12 (gồm luồng cùng máy), E2E-27: GUID/route evidence, Graph Refresh | NOT RUN |
 | FR-12 | Matching, sending/receiving, QoS/status/freshness | E2E-12, E2E-18: app receive counter + metadata | NOT RUN |
 | FR-13 | Throughput/Latency, unit, window, timestamp, dynamic chart | E2E-14: publisher sample thật; đo tốc độ/counter | NOT RUN |
 | FR-14 | Host/process/service/DDS alert, debounce, Unknown, recovery | E2E-15–E2E-18 | NOT RUN |
 | FR-15 | Event object/condition/start/recovery, SQLite, paging | E2E-19/25: real Windows-triggered event + SQLite persistence; >500 UI paging có thể dùng 501-row isolated fixture, nhưng không thay event lifecycle evidence | NOT RUN |
+
+### 7.2b Đối chiếu NFR-01–NFR-05
+
+Các NFR trong `TASK3_REQUIREMENTS.md` là định tính; ngưỡng số dưới đây là **đề xuất**, người nghiệm thu chốt trước khi đo (mục 4.1).
+
+| NFR | Nội dung nghiệm thu | Test case/evidence tối thiểu | Kết quả |
+|---|---|---|---|
+| NFR-01 | Nhiều Slave quản lý bằng định danh, Offline độc lập | E2E-29 (hai Agent trên cùng máy, mô phỏng); kiểm thử tải tổng hợp 128 host trong `task3_tests` chỉ là bằng chứng phụ | NOT RUN |
+| NFR-02 | Giám sát tiếp tục khi một nguồn gián đoạn và nhận lại khi phục hồi | E2E-10, E2E-16, E2E-17, E2E-25 (Agent và Master dừng rồi chạy lại, không crash, không Active trùng) | NOT RUN |
+| NFR-03 | Cập nhật theo chu kỳ, phát hiện mất phản hồi theo timeout, đánh dấu quá hạn | E2E-06 (Last Seen theo `interval_ms`), E2E-10 (đo thời gian từ khi dừng Agent đến khi Offline, đề xuất trong khoảng `TASK3_TIMEOUT_MS` đến `TASK3_TIMEOUT_MS` + 3 s), E2E-21 (Stale) | NOT RUN |
+| NFR-04 | Hiển thị máy, ứng dụng, đơn vị, thời điểm cập nhật; màu kèm nhãn chữ | E2E-20, E2E-21 | NOT RUN |
+| NFR-05 | Dữ liệu từ Slave Linux và Windows theo cấu trúc chung; tương thích phiên bản Fast DDS | E2E-01 (phiên bản hai máy), E2E-03, E2E-06 (Windows), E2E-29 tùy chọn (Agent Linux chạy trên máy Master) | NOT RUN |
+
+### 7.2c Giới hạn bằng chứng của môi trường hai máy
+
+Kể cả khi mọi ca PASS, các điểm sau chỉ được kết luận ở mức dưới đây, không được ghi rộng hơn:
+
+| Điểm | Mức kết luận được phép |
+|---|---|
+| NFR-01 | Quản lý hai hoặc ba Slave bằng định danh, mô phỏng trên một máy Windows; không chứng minh quy mô lớn |
+| NFR-05 (Slave Linux) | Chỉ có Agent Linux chạy cục bộ trên máy Master; chưa kiểm trên máy Linux riêng |
+| FR-08 | Phần đọc trạng thái (E2E-21, 22) chạy được không cần quyền; đồng bộ NTP thật (E2E-23, 24) cần quyền quản trị, nếu thiếu thì `BLOCKED` và FR-08 chưa đạt |
+| FR-10 | Mapping dương chỉ đạt với ứng dụng có manifest (`task3_probe`); HelloWorld chỉ chứng minh nhánh Unmapped |
+| FR-13 | Chứng minh có số liệu thật, đúng đơn vị và thời điểm; không chứng minh độ chính xác tuyệt đối khi chưa có phép đo độc lập |
+| Chạy dài hạn | Chưa có ca; ghi vào hướng phát triển |
 
 ### 7.3 Cleanup và rollback sau phiên test
 
@@ -927,11 +1061,27 @@ Chỉ hoàn tác các mục được người kiểm thử tạo trong phiên n�
 
 Khi một ca bị `BLOCKED`, ghi chính xác điều kiện còn thiếu và chủ thể cần cung cấp. Giới hạn đã xác minh từ source commit: chưa có Windows build/runtime acceptance; repo không kèm Windows publisher/subscriber (có thể build Fast DDS HelloWorld chính thức như mục 1.2); chưa có Windows RuntimeIdentity app; Windows Agent không có service installer/auto-start; Windows Time parser cố ý không khẳng định `clock_synced` hoặc `master_source_verified`; Requirements không định lượng SLA offset/throughput/latency. Ghi rõ các giới hạn này hoặc hoàn thiện bằng chứng trước kết luận hệ thống.
 
+### 7.5b Kết luận theo phạm vi PoC hai máy
+
+Ngoài ba mức ở mục 7.5, báo cáo PoC ghi: số ca `PASS/FAIL/BLOCKED/NOT RUN`, FR và NFR nào đạt trong giới hạn của mục 7.2c, các mục `BLOCKED` kèm điều kiện còn thiếu (quyền NTP, quyền reboot, ứng dụng instrumented trên Windows) và danh sách lỗi mở ở mục 7.6. Mục `BLOCKED` chuyển sang hướng phát triển, không tính là đạt.
+
+### 7.6 Sổ lỗi
+
+Ghi lỗi ngay khi gặp (mục 0.1). Mỗi dòng một lỗi; cập nhật cột Trạng thái khi đã sửa và chạy lại ca. Ba dòng đầu là các điểm đã sửa trên Linux nhưng chưa được xác nhận trên máy thật.
+
+| Mã | Ca | Hiện tượng | Bước tái hiện | Bằng chứng (ảnh/log) | Mức | Trạng thái | Ghi chú |
+|---|---|---|---|---|---|---|---|
+| BUG-01 | E2E-08 | NET-01: Agent Windows từng cộng đôi bộ đếm interface (lớp driver lọc) | `task3_agent.exe --config ... --once`, so với `Get-NetAdapterStatistics` | | P2 | Đã sửa trong `Collectors.cpp`, chờ xác nhận trên Windows | Kiểm tra tên Alias và không còn dòng trùng |
+| BUG-02 | E2E-27 | GRAPH-01: `Loading Graph` không đóng trên Qt 6.7.2 | Refresh Graph khi có từ hai host | | P1 | Không tái hiện trong test QML trên Qt 6.8.3, chờ xác nhận trên Master thật | |
+| BUG-03 | E2E-27 | GRAPH-02: Writer/Reader không rõ trong viewport | Mở rộng cây Host trong Domain 0 View | | P2 | Chưa xác minh trên Qt 6.8.3 | |
+| BUG-04 | | | | | | | |
+| BUG-05 | | | | | | | |
+
 ## 8. Nguồn repository đã đối chiếu
 
 - `docs/task3/TASK3_REQUIREMENTS.md` — FR-01–FR-15 và NFR.
 - `docs/task3/BUILD_AND_RUN.md`, `docs/task3/CONFIGURATION.md`.
 - `task3/scripts/build-windows.ps1`, `task3/agent/CMakeLists.txt`, `task3/scripts/build_task3_patched.sh`, `task3/scripts/run_master_patched.sh`, `task3/scripts/patched_runtime_common.sh`.
-- `task3/agent_main.cpp`, `task3/Collectors.cpp`, `task3/DdsTransport.cpp`, `task3/Protocol.cpp`, `task3/RuntimeIdentity.cpp`, `task3/MonitoringCore.cpp`, `task3/AlertStore.cpp`, `task3/Dashboard.qml`, `task3/HostWorkspace.qml`, `task3/FlowDetails.qml`, `task3/EventHistoryView.qml`.
+- `task3/agent_main.cpp`, `task3/Collectors.cpp`, `task3/DdsTransport.cpp`, `task3/Protocol.cpp`, `task3/RuntimeIdentity.cpp`, `task3/MonitoringCore.cpp`, `task3/AlertStore.cpp`, `task3/WebDashboard.qml`, `task3/WebFeed.cpp`, `task3/web/index.html`, `task3/web/app.js`.
 - Tests already present (not executed while preparing this guide): `task3/tests/CoreTests.cpp`, `local_integration.py`, `continuation_integration.py`, `ui_integration.py`, `runtime_library_verification.py`.
 - NTP examples: `task3/config/time-sync/master.conf.example`, `task3/config/time-sync/slave.conf.example`; Windows read-only probe: `task3/scripts/windows-time-status.ps1`.
