@@ -5,9 +5,11 @@
 #include <QElapsedTimer>
 #include <QStringList>
 #include <QMap>
+#include <QSet>
 #include <QFuture>
 #include <functional>
 namespace task3 {
+QString uniqueInterfaceName(const QString& alias, quint32 index, QSet<QString>& usedNames);
 class Collectors {
   public:
     using TimeStatusProvider = std::function<QJsonObject()>;

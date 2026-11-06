@@ -53,6 +53,15 @@ class CoreTests : public QObject {
         return c.collect();
     }
   private slots:
+    void interfaceNames() {
+        QSet<QString> used;
+        QCOMPARE(task3::uniqueInterfaceName("Ethernet", 19, used), QString("Ethernet"));
+        QCOMPARE(task3::uniqueInterfaceName("", 25, used), QString("25"));
+        QCOMPARE(task3::uniqueInterfaceName("Ethernet", 26, used), QString("Ethernet (#26)"));
+        const QString unicode = QString::fromUtf8("Mạng không dây 日本語");
+        QCOMPARE(task3::uniqueInterfaceName(unicode, 27, used), unicode);
+        QCOMPARE(used.size(), 4);
+    }
     void webFeedPublishesTrimmedChangesOnly() {
         FeedSource source;
         source.hosts = {QVariantMap{{"host_id", "a"}, {"online", true}}};

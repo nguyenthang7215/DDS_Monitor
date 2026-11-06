@@ -34,6 +34,17 @@
 #include <cerrno>
 #endif
 namespace task3 {
+QString uniqueInterfaceName(const QString& alias, quint32 index, QSet<QString>& usedNames) {
+    const QString base = alias.isEmpty() ? QString::number(index) : alias;
+    QString name = base;
+    const QString suffix = QString(" (#%1)").arg(index);
+    // Also handle aliases that already contain a generated suffix.
+    while (usedNames.contains(name))
+        name += suffix;
+    usedNames.insert(name);
+    return name;
+}
+
 static QByteArray read(const QString& path) {
     QFile f(path);
     return f.open(QIODevice::ReadOnly) ? f.readAll() : QByteArray();
@@ -401,12 +412,26 @@ QJsonObject Collectors::collect() {
     }
     PMIB_IF_TABLE2 table = nullptr;
     if (GetIfTable2(&table) == NO_ERROR) {
-        for (ULONG i = 0; i < table->NumEntries; ++i) {
+        QSet<QString> usedNames;
+        QList<ULONG> rows;
+        for (ULONG i = 0; i < table->NumEntries; ++i)
+            rows.append(i);
+        // GetIfTable2 order can change; index order keeps duplicate aliases stable for rates.
+        std::sort(rows.begin(), rows.end(), [table](ULONG a, ULONG b) {
+            return table->Table[a].InterfaceIndex < table->Table[b].InterfaceIndex;
+        });
+        for (ULONG i : rows) {
             if (table->Table[i].Type == IF_TYPE_SOFTWARE_LOOPBACK)
+                continue;
+            // Filter-driver layers (WFP, QoS Packet Scheduler, Npcap, Native MAC Layer...) get their own
+            // row that repeats the counters of the adapter they sit on; counting them double-counts.
+            if (table->Table[i].InterfaceAndOperStatusFlags.FilterInterface)
                 continue;
             rx += table->Table[i].InOctets;
             tx += table->Table[i].OutOctets;
-            interfaces[QString::number(table->Table[i].InterfaceIndex)] =
+            const QString name = uniqueInterfaceName(QString::fromWCharArray(table->Table[i].Alias),
+                                                     table->Table[i].InterfaceIndex, usedNames);
+            interfaces[name] =
                 qMakePair(quint64(table->Table[i].InOctets), quint64(table->Table[i].OutOctets));
         }
         FreeMibTable(table);
