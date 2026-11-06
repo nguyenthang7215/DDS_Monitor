@@ -950,35 +950,35 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 
 | Test ID | Kết quả thực tế | Evidence path/ID | Ghi chú/issue |
 |---|---|---|---|
-| E2E-01 | NOT RUN | | |
-| E2E-02 | NOT RUN | | |
-| E2E-03 | NOT RUN | | |
-| E2E-04 | NOT RUN | | |
-| E2E-05 | NOT RUN | | |
-| E2E-06 | NOT RUN | | |
-| E2E-07 | NOT RUN | | |
-| E2E-08 | NOT RUN | | |
-| E2E-09 | NOT RUN | | |
-| E2E-10 | NOT RUN | | |
-| E2E-11 | NOT RUN | | |
-| E2E-12 | NOT RUN | | |
-| E2E-13 | NOT RUN | | |
-| E2E-14 | NOT RUN | | |
-| E2E-15 | NOT RUN | | |
-| E2E-16 | NOT RUN | | |
-| E2E-17 | NOT RUN | | |
-| E2E-18 | NOT RUN | | |
-| E2E-19 | NOT RUN | | |
-| E2E-20 | NOT RUN | | |
-| E2E-21 | NOT RUN | | |
-| E2E-22 | NOT RUN | | |
-| E2E-23 | NOT RUN | | |
-| E2E-24 | NOT RUN | | |
-| E2E-25 | NOT RUN | | |
-| E2E-26 | NOT RUN | | |
-| E2E-27 | NOT RUN | | |
-| E2E-28 | NOT RUN | | |
-| E2E-29 | NOT RUN | | |
+| E2E-01 | PASS | E2E-12-result.txt | Fast DDS 3.6.1 / Fast CDR 2.3.5 trên cả hai máy |
+| E2E-02 | PASS | E2E-02-linux.txt | Mạng LAN hai máy, ping đạt |
+| E2E-03 | PASS | kênh W-*, Windows tự build | Agent Windows build bằng MSVC trên máy thật |
+| E2E-04 | PASS | E2E-08-*, E2E-07-08-master-values.txt | `--once` của Agent Windows được kiểm qua E2E-08 (so Get-NetAdapterStatistics) |
+| E2E-05 | PASS | E2E-05-result.txt, E2E-05-task3_tests.txt | Build Debug/Release, CTest 49/49, Backend Patched được nạp |
+| E2E-06 | PASS | E2E-06-*.png, e06/ | Unknown→Online, Last Seen |
+| E2E-07 | PASS | E2E-07-* | CPU theo Windows counter |
+| E2E-08 | PASS | E2E-08-* | RAM/Disk/Network khớp CIM/Get-NetAdapterStatistics; BUG-01 đã xác nhận sửa |
+| E2E-09 | PASS | E2E-09-result.txt, E2E-09-svc-result.txt | Process và dịch vụ (Print Spooler): `service_stopped` Active 16:06:36,9 → Recovered 16:06:45,9 |
+| E2E-10 | PASS | E2E-10-* | Offline 6.1/6.1/5.0–5.6 s (timeout 5 s); BUG-L01, BUG-L02 |
+| E2E-11 | PASS | E2E-11-*, E2E-12-result.txt | Graph Domain 0 hai host, Explorer |
+| E2E-12 | PASS | E2E-12-* | Match khi tương thích, no-match khi Partition khác, khôi phục |
+| E2E-13 | PASS | E2E-13-29-result.txt | Mapped (manifest) và Unmapped, GUID mới sau restart |
+| E2E-14 | PASS | E2E-12-result.txt, E2E-14-* | Latency 63 s do lệch đồng hồ; 5,2 ms sau đồng bộ giờ (≈ nửa RTT 11,2 ms) |
+| E2E-15 | PASS | E2E-15-result.txt | Debounce, Active/Recovered |
+| E2E-16 | PASS | E2E-16-result.txt | Agent dừng: Unknown/Offline, không hiển thị dữ liệu cũ như hiện tại |
+| E2E-17 | PASS | E2E-10-result.txt, E2E-25-result.txt | Phục hồi sau dừng Agent/Master |
+| E2E-18 | PASS | E2E-18-result.txt | dds_no_data Active→Recovered |
+| E2E-19 | PASS | E2E-19-result.txt | Fixture 501 dòng, Tải lịch sử cũ hơn |
+| E2E-20 | PASS | E2E-20-result.txt, e20/ | 1280×800 và 1600×900 |
+| E2E-21 | PASS | E2E-21-22-result.txt | Unknown, không báo Synced giả (Agent không admin) |
+| E2E-22 | PASS | E2E-21-22-result.txt | Baseline chỉ đọc; `w32tm /source` cần admin |
+| E2E-23 | PASS | E2E-23-linux-chrony.txt | Windows Stratum 4, ref 172.20.10.2 |
+| E2E-24 | PASS | E2E-24-linux.txt | Mất nguồn: resync lỗi, Master vẫn Online; có lại: 5/5 mẫu, lệch tối đa 21,5 ms |
+| E2E-25 | PASS | E2E-25-result.txt | Master restart giữ lịch sử, DB integrity ok |
+| E2E-26 | PASS | E2E-26-linux.txt, W-0031 | Offline 16:13:03, Online lại 16:16:11 sau khi chạy Agent tay; W32Time tự đồng bộ ~1 phút sau boot (lệch ≈0,41 s lúc đó); Agent không tự chạy sau boot (chưa có service installer) |
+| E2E-27 | PASS | E2E-12-result.txt, e27/ | Refresh Graph ×10 không treo; BUG-02 không tái hiện |
+| E2E-28 | PASS | E2E-05-result.txt, web-tests/ | Không có cổng TCP; kiểm thử web 17/17 |
+| E2E-29 | PASS | E2E-13-29-result.txt | Hai Slave độc lập (một Agent Linux cục bộ mô phỏng) |
 
 ### 7.2 Đối chiếu FR-01–FR-15
 
@@ -986,21 +986,21 @@ Chỉ đánh dấu `PASS` khi có test/evidence nêu trong bảng; Linux unit/in
 
 | FR | Nội dung nghiệm thu | Test case/evidence tối thiểu | Kết quả |
 |---|---|---|---|
-| FR-01 | Host list theo ID và chọn xem detail | E2E-06, E2E-20, E2E-29: Host Windows thật, hai Slave, screenshot | NOT RUN |
-| FR-02 | Unknown ban đầu, Online, timeout Offline, Last Seen, Recovery | E2E-06, E2E-10, E2E-17, E2E-21 | NOT RUN |
-| FR-03 | CPU theo khoảng lấy mẫu | E2E-07: Windows counter + Master UI/time | NOT RUN |
-| FR-04 | RAM Used/Total/Percentage | E2E-08: CIM + Master UI | NOT RUN |
-| FR-05 | Disk total/used/free từng volume được cấu hình | E2E-08: `Get-Volume` + UI | NOT RUN |
-| FR-06 | Network RX/TX/interface/rate và N/A hợp lệ | E2E-08, E2E-21: counter delta + UI | NOT RUN |
-| FR-07 | Process/service trong danh sách cấu hình | E2E-04, E2E-09, E2E-15 | NOT RUN |
-| FR-08 | Dịch vụ OS, source và offset; liên máy khi được cấu hình | E2E-21–E2E-24; E2E-23 mới là test sync thật | NOT RUN |
-| FR-09 | Domain/Participant/Topic/Writer/Reader | E2E-11: app DDS Windows thật + Backend Linux | NOT RUN |
-| FR-10 | Host/Application/run mapping; Unmapped khi thiếu evidence | E2E-13: app instrumented + no-metadata case | NOT RUN |
-| FR-11 | Writer→Topic→Reader giữa hai máy và trong cùng máy | E2E-12 (gồm luồng cùng máy), E2E-27: GUID/route evidence, Graph Refresh | NOT RUN |
-| FR-12 | Matching, sending/receiving, QoS/status/freshness | E2E-12, E2E-18: app receive counter + metadata | NOT RUN |
-| FR-13 | Throughput/Latency, unit, window, timestamp, dynamic chart | E2E-14: publisher sample thật; đo tốc độ/counter | NOT RUN |
-| FR-14 | Host/process/service/DDS alert, debounce, Unknown, recovery | E2E-15–E2E-18 | NOT RUN |
-| FR-15 | Event object/condition/start/recovery, SQLite, paging | E2E-19/25: real Windows-triggered event + SQLite persistence; >500 UI paging có thể dùng 501-row isolated fixture, nhưng không thay event lifecycle evidence | NOT RUN |
+| FR-01 | Host list theo ID và chọn xem detail | E2E-06, E2E-20, E2E-29: Host Windows thật, hai Slave, screenshot | PASS |
+| FR-02 | Unknown ban đầu, Online, timeout Offline, Last Seen, Recovery | E2E-06, E2E-10, E2E-17, E2E-21 | PASS |
+| FR-03 | CPU theo khoảng lấy mẫu | E2E-07: Windows counter + Master UI/time | PASS |
+| FR-04 | RAM Used/Total/Percentage | E2E-08: CIM + Master UI | PASS |
+| FR-05 | Disk total/used/free từng volume được cấu hình | E2E-08: `Get-Volume` + UI | PASS |
+| FR-06 | Network RX/TX/interface/rate và N/A hợp lệ | E2E-08, E2E-21: counter delta + UI | PASS |
+| FR-07 | Process/service trong danh sách cấu hình | E2E-04, E2E-09, E2E-15 | PASS |
+| FR-08 | Dịch vụ OS, source và offset; liên máy khi được cấu hình | E2E-21–E2E-24; E2E-23 mới là test sync thật | PASS |
+| FR-09 | Domain/Participant/Topic/Writer/Reader | E2E-11: app DDS Windows thật + Backend Linux | PASS |
+| FR-10 | Host/Application/run mapping; Unmapped khi thiếu evidence | E2E-13: app instrumented + no-metadata case | PASS |
+| FR-11 | Writer→Topic→Reader giữa hai máy và trong cùng máy | E2E-12 (gồm luồng cùng máy), E2E-27: GUID/route evidence, Graph Refresh | PASS |
+| FR-12 | Matching, sending/receiving, QoS/status/freshness | E2E-12, E2E-18: app receive counter + metadata | PASS |
+| FR-13 | Throughput/Latency, unit, window, timestamp, dynamic chart | E2E-14: publisher sample thật; đo tốc độ/counter | PASS |
+| FR-14 | Host/process/service/DDS alert, debounce, Unknown, recovery | E2E-15–E2E-18 | PASS |
+| FR-15 | Event object/condition/start/recovery, SQLite, paging | E2E-19/25: real Windows-triggered event + SQLite persistence; >500 UI paging có thể dùng 501-row isolated fixture, nhưng không thay event lifecycle evidence | PASS |
 
 ### 7.2b Đối chiếu NFR-01–NFR-05
 
@@ -1008,11 +1008,11 @@ Các NFR trong `TASK3_REQUIREMENTS.md` là định tính; ngưỡng số dưới
 
 | NFR | Nội dung nghiệm thu | Test case/evidence tối thiểu | Kết quả |
 |---|---|---|---|
-| NFR-01 | Nhiều Slave quản lý bằng định danh, Offline độc lập | E2E-29 (hai Agent trên cùng máy, mô phỏng); kiểm thử tải tổng hợp 128 host trong `task3_tests` chỉ là bằng chứng phụ | NOT RUN |
-| NFR-02 | Giám sát tiếp tục khi một nguồn gián đoạn và nhận lại khi phục hồi | E2E-10, E2E-16, E2E-17, E2E-25 (Agent và Master dừng rồi chạy lại, không crash, không Active trùng) | NOT RUN |
-| NFR-03 | Cập nhật theo chu kỳ, phát hiện mất phản hồi theo timeout, đánh dấu quá hạn | E2E-06 (Last Seen theo `interval_ms`), E2E-10 (đo thời gian từ khi dừng Agent đến khi Offline, đề xuất trong khoảng `TASK3_TIMEOUT_MS` đến `TASK3_TIMEOUT_MS` + 3 s), E2E-21 (Stale) | NOT RUN |
-| NFR-04 | Hiển thị máy, ứng dụng, đơn vị, thời điểm cập nhật; màu kèm nhãn chữ | E2E-20, E2E-21 | NOT RUN |
-| NFR-05 | Dữ liệu từ Slave Linux và Windows theo cấu trúc chung; tương thích phiên bản Fast DDS | E2E-01 (phiên bản hai máy), E2E-03, E2E-06 (Windows), E2E-29 tùy chọn (Agent Linux chạy trên máy Master) | NOT RUN |
+| NFR-01 | Nhiều Slave quản lý bằng định danh, Offline độc lập | E2E-29 (hai Agent trên cùng máy, mô phỏng); kiểm thử tải tổng hợp 128 host trong `task3_tests` chỉ là bằng chứng phụ | PASS (trong phạm vi PoC, mục 7.2c) |
+| NFR-02 | Giám sát tiếp tục khi một nguồn gián đoạn và nhận lại khi phục hồi | E2E-10, E2E-16, E2E-17, E2E-25 (Agent và Master dừng rồi chạy lại, không crash, không Active trùng) | PASS (trong phạm vi PoC, mục 7.2c) |
+| NFR-03 | Cập nhật theo chu kỳ, phát hiện mất phản hồi theo timeout, đánh dấu quá hạn | E2E-06 (Last Seen theo `interval_ms`), E2E-10 (đo thời gian từ khi dừng Agent đến khi Offline, đề xuất trong khoảng `TASK3_TIMEOUT_MS` đến `TASK3_TIMEOUT_MS` + 3 s), E2E-21 (Stale) | PASS (trong phạm vi PoC, mục 7.2c) |
+| NFR-04 | Hiển thị máy, ứng dụng, đơn vị, thời điểm cập nhật; màu kèm nhãn chữ | E2E-20, E2E-21 | PASS (trong phạm vi PoC, mục 7.2c) |
+| NFR-05 | Dữ liệu từ Slave Linux và Windows theo cấu trúc chung; tương thích phiên bản Fast DDS | E2E-01 (phiên bản hai máy), E2E-03, E2E-06 (Windows), E2E-29 tùy chọn (Agent Linux chạy trên máy Master) | PASS (trong phạm vi PoC, mục 7.2c) |
 
 ### 7.2c Giới hạn bằng chứng của môi trường hai máy
 
@@ -1034,7 +1034,7 @@ Chỉ hoàn tác các mục được người kiểm thử tạo trong phiên n�
 | Hạng mục | Cách cleanup/rollback | Bằng chứng đã hoàn tác |
 |---|---|---|
 | QoS/XML profile | Giữ profile test trong `$QosTestDir` ngoài repo; sau test bỏ `FASTDDS_DEFAULT_PROFILES_FILE`, khởi chạy lại Publisher/Subscriber với cấu hình gốc; chỉ xóa đúng thư mục test sau khi process đã dừng và evidence đã lưu; không ghi đè `hello_world_profile.xml` nguồn | Env var đã bỏ; default profile tương thích; sample lại báo match và SENT/RECEIVED; source profile hash không đổi |
-| NTP/Chrony/W32Time | Chỉ admin hoàn tác từ bản sao cấu hình/policy đã lưu trước E2E-23; phục hồi source/policy cũ rồi kiểm tra `chronyc tracking`, `w32tm /query /configuration`, `/source`, `/status`; không tự chạy một lệnh `w32tm /config` ngược chung cho máy domain-joined | Source trước/sau, service state và approval/change record; không đổi đồng hồ thủ công |
+| NTP/Chrony/W32Time | Chỉ admin hoàn tác từ bản sao cấu hình/policy đã lưu trước E2E-23; phục hồi source/policy cũ rồi kiểm tra `chronyc tracking`, `w32tm /query /configuration`, `/source`, `/status`; không tự chạy một lệnh `w32tm /config` ngược chung cho máy domain-joined | Source trước/sau, service state và approval/change record; không đổi đồng hồ thủ công; **đã hoàn tác 06/11/2026**: Linux xóa dòng `allow 172.20.10.0/28`, giữ nguồn upstream (không restore bản `.bak` vì bản đó trỏ tới Windows), `chronyc tracking` Stratum 3, lệch 0,9 ms; Windows Type NoSync, Source Local CMOS Clock (baseline: Free-running System Clock), `NtpServer` rỗng (không có `reg export` trước khối B nên chưa khôi phục chính xác 100%), `E2E-rollback-NTP-results.txt` |
 | Firewall test rule | Gỡ đúng rule do E2E-24 tạo: `Remove-NetFirewallRule -DisplayName 'DDSMon-E2E-NTP-Block'`; kiểm tra `Get-NetFirewallRule -DisplayName 'DDSMon-E2E-NTP-Block' -ErrorAction SilentlyContinue` không trả rule. Khôi phục policy ban đầu theo IT nếu có thay đổi khác | Output kiểm tra rule đã mất; firewall profile vẫn enabled; telemetry/NTP baseline sau rollback |
 | Environment variables | Variables được đặt trong terminal/process test. PowerShell: `Remove-Item Env:FASTDDS_DEFAULT_PROFILES_FILE,Env:FASTDDS_STATISTICS,Env:TASK3_DATA_DIR,Env:TASK3_TIMEOUT_MS -ErrorAction SilentlyContinue`; Bash: `unset FASTDDS_DEFAULT_PROFILES_FILE FASTDDS_STATISTICS TASK3_DATA_DIR TASK3_TIMEOUT_MS TASK3_FLOW_RULES`. Đóng terminal/process cũ để không truyền setting sang tiến trình kế tiếp; nếu trước test có giá trị cũ thì khôi phục giá trị đã ghi thay vì unset | `Get-ChildItem Env:FASTDDS*` / `Get-ChildItem Env:TASK3*` hoặc `env | rg '^(FASTDDS|TASK3)_'` không còn giá trị test ngoài dự kiến |
 | SQLite fixture 501 dòng | Dừng Master sạch trước. Chỉ xóa thư mục do `mktemp` tạo trong E2E-19 sau khi evidence đã lưu; không đụng `TASK3_DATA_DIR` thật hoặc DB người dùng. Bash an toàn: `case "$E2E_DATA_DIR" in "$HOME"/DDS-Monitor-history-e2e.*) rm -ri -- "$E2E_DATA_DIR" ;; *) echo 'Refusing: path is not the fixture directory';; esac` | Xác nhận đường dẫn canonical/name đúng fixture, Master đã dừng và chỉ fixture bị xóa; DB thật vẫn còn nguyên |
@@ -1071,11 +1071,14 @@ Ghi lỗi ngay khi gặp (mục 0.1). Mỗi dòng một lỗi; cập nhật cộ
 
 | Mã | Ca | Hiện tượng | Bước tái hiện | Bằng chứng (ảnh/log) | Mức | Trạng thái | Ghi chú |
 |---|---|---|---|---|---|---|---|
-| BUG-01 | E2E-08 | NET-01: Agent Windows từng cộng đôi bộ đếm interface (lớp driver lọc) | `task3_agent.exe --config ... --once`, so với `Get-NetAdapterStatistics` | | P2 | Đã sửa trong `Collectors.cpp`, chờ xác nhận trên Windows | Kiểm tra tên Alias và không còn dòng trùng |
-| BUG-02 | E2E-27 | GRAPH-01: `Loading Graph` không đóng trên Qt 6.7.2 | Refresh Graph khi có từ hai host | | P1 | Không tái hiện trong test QML trên Qt 6.8.3, chờ xác nhận trên Master thật | |
-| BUG-03 | E2E-27 | GRAPH-02: Writer/Reader không rõ trong viewport | Mở rộng cây Host trong Domain 0 View | | P2 | Chưa xác minh trên Qt 6.8.3 | |
-| BUG-04 | | | | | | | |
-| BUG-05 | | | | | | | |
+| BUG-01 | E2E-08 | NET-01: Agent Windows từng cộng đôi bộ đếm interface (lớp driver lọc) | `task3_agent.exe --config ... --once`, so với `Get-NetAdapterStatistics` | | P2 | Đã sửa trong `Collectors.cpp`; xác nhận trên Windows: 22 interface theo Alias, tổng khớp `Get-NetAdapterStatistics` | Kiểm tra tên Alias và không còn dòng trùng |
+| BUG-02 | E2E-27 | GRAPH-01: `Loading Graph` không đóng trên Qt 6.7.2 | Refresh Graph khi có từ hai host | | P1 | Đóng: không tái hiện, Refresh ×10 với hai host trên Master thật (E2E-27) | |
+| BUG-03 | E2E-27 | GRAPH-02: Writer/Reader không rõ trong viewport | Mở rộng cây Host trong Domain 0 View | | P2 | Còn mở: chưa xác minh riêng trên Qt 6.8.3 | |
+| BUG-L01 | E2E-09/10 | `agent_timeout` thoáng qua (1–3,8 s) khi Agent vẫn chạy, khoảng 11 lần | Chạy Agent Windows liên tục, quan sát Cảnh báo | E2E-10-result.txt | P3 | Mở, chưa rõ nguyên nhân | Telemetry ngắt >5 s rồi tự có lại |
+| BUG-L02 | E2E-10 | Sau Linux suspend/resume, Master không nhận lại Agent | Suspend Master rồi resume | E2E-10-result.txt | P2 | Mở, giới hạn đã biết | Fast DDS trong Master không tham gia lại multicast; khởi động lại Master |
+| BUG-L03 | E2E-21/22 | `task3_agent --once` luôn in `time_sync` ở trạng thái `unknown` / `Time status query pending` | Chạy `--once` trên Windows | W-0027, E2E-23-agent-once-after-24B.json | P3 | Mở, giới hạn đã biết | Truy vấn bất đồng bộ chưa xong khi `--once` thoát; time_sync thật lấy từ Agent chạy liên tục. Agent không admin không đọc được source/offset |
+| BUG-L04 | E2E-09 | `process_stopped` của `spoolsv.exe` Active không tự Recovered sau khi dịch vụ chạy lại | Dừng/bật Spooler, Agent không admin | E2E-09-svc-result.txt | P3 | Giới hạn đã biết | Agent không admin không đếm được `spoolsv.exe` (process_count 0, Unknown); Master giữ Active kèm nhãn "Not verified" thay vì báo Recovered khi thiếu bằng chứng (đúng thiết kế); dịch vụ vẫn Recovered đúng |
+| BUG-L05 | E2E-26 | Agent không tự chạy sau khi Windows reboot | Reboot Windows | E2E-26-linux.txt | P2 | Giới hạn đã biết | Chưa có service installer / auto-start; hướng phát triển. Quan sát: lệch NTP ≈0,41 s ngay sau boot, W32Time tự đồng bộ không cần `/resync` |
 
 ## 8. Nguồn repository đã đối chiếu
 

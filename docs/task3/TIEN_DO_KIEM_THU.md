@@ -44,14 +44,14 @@
 | Ổn định Backend (P0) | ✅ | Chốt **Patched**: 0/7 lượt crash (Original 5/9) | Crash `writer_not_alive` của Original (không chặn) |
 | GRAPH-01 (Loading Graph) | ✅ | Không còn lỗi trên Qt 6.8.3 (test QML 6/6) | Xác nhận trên giao diện thật |
 | **Giao diện Qt WebEngine** | 🟡 ~95 % | UI web xong; build + CTest PASS (Debug, Release); chạy Master thật với Agent Linux cục bộ: Online/Offline, tài nguyên, cảnh báo, lịch sử; không có cổng TCP | Agent Windows trên UI mới, Refresh Graph trên app thật, chụp ảnh, merge |
-| Đồng bộ thời gian NTP (FR-08) | ⬜ | Template Chrony/W32Time, collector chỉ đọc | Cần quyền quản trị (🚧) |
+| Đồng bộ thời gian NTP (FR-08) | ✅ | 06/11: Chrony trên Master, Windows Stratum 4 (ref 172.20.10.2); mất nguồn → resync lỗi, Master vẫn Online; có lại → 5/5 mẫu, lệch tối đa 21,5 ms. Agent không admin: Master hiển thị Unknown, không báo Synced giả | `--once` luôn `unknown` (BUG-L03) |
 | Tài liệu / báo cáo | 🟡 | Chương 5, 6 viết lại theo PoC (06/11) | Mục 8 |
 
 ### 1.2. Theo yêu cầu (khớp Bảng 5.9 của báo cáo)
 
 | Nhóm | PASS | NOT RUN |
 | :--- | :---: | :--- |
-| Chức năng (15 FR) | **13** | FR-08 (đồng bộ thời gian), FR-10 (ánh xạ GUID) |
+| Chức năng (15 FR) | **15** | — |
 | Phi chức năng (5 NFR) | **5** | — (NFR-01 là mô phỏng: tải 128 host, UI 512 Slave) |
 
 ### 1.3. Tóm tắt một dòng
@@ -151,7 +151,7 @@ ss -ltnp | grep dds_monitor                     # không được có cổng HTT
 | [x] | K-11 | Domain Graph QML (GRAPH-01) | ✅ | Qt 6.7.2: 3/6 · **Qt 6.8.3: 6/6** · `task3/tests/qml/graph/` |
 | [x] | K-12 | Trang web Task 3 trong Chrome headless | ✅ | 17/17 · `test-artifacts/webengine-20261103/browser/` |
 | [x] | K-13 | UI WebEngine trong app đầy đủ với Agent thật (UI-EQ-06 → 09) | ✅ | 06/11 với Agent Linux cục bộ: Online/Offline, tài nguyên, cảnh báo, lịch sử 52 bản ghi. Còn Agent Windows (W-10) |
-| [ ] | K-14 | Refresh Graph ≥ 10 lần và Subscriber restart trên app thật (Qt 6.8.3) | ⬜ | Cần HelloWorld Pub/Sub trên Domain 0 với `FASTDDS_STATISTICS` |
+| [x] | K-14 | Refresh Graph ≥ 10 lần và Subscriber restart trên app thật (Qt 6.8.3) | ✅ | 06/11 (E2E-27): Refresh ×10 hai host không treo; Reader biến mất/xuất hiện lại khi dừng/chạy Subscriber |
 | [x] | K-15 | `ss -ltnp`: không có cổng HTTP | ✅ | 06/11: không có cổng TCP listen |
 | [ ] | K-16 | HelloWorld Pub + Sub cùng trên Windows (trao đổi trong một máy) | ⬜ | Tùy chọn (REQ-03) |
 | [ ] | K-17 | Hai Agent `windows-slave-a`, `windows-slave-b` trên một màn hình | ⬜ | Tùy chọn, ghi rõ là mô phỏng |
@@ -247,4 +247,5 @@ Thông số cần chốt trước khi nghiệm thu thật: số Slave mục tiê
 | 06/11/2026 | Cài Qt5Compat (build từ mã nguồn), sửa CMake WebEngine, build Debug + Release | ✅ CTest PASS · `task3_tests` 48/48 | `.task3-deps/task3-builds/20261106T020424Z-27772/` | Claude |
 | 06/11/2026 | K-13, K-15: chạy Master thật với UI WebEngine + Agent Linux cục bộ | ✅ Online · Fresh, Offline · Stale, cảnh báo, 52 bản ghi lịch sử; không có cổng TCP | Ảnh chụp màn hình | Thắng, Claude |
 | 06/11/2026 | NET-01: bỏ `FilterInterface`, đặt tên interface bằng `Alias`; thống nhất Qt 6.8.3 | ✅ Linux: `task3_tests` 49/49 · ⬜ Windows chưa kiểm | `task3/Collectors.cpp`, `task3/tests/CoreTests.cpp` | Codex, Claude |
+| 06/11/2026 | E2E hai máy (Linux Master, Windows Slave): 29/29 ca PASS, gồm E2E-26 (reboot Windows) | ✅ PASS (E2E-09 dịch vụ Spooler đã kiểm) | `~/DDS-Monitor-Evidence/20261106-linux/02-acceptance/`, bảng 7.1 của `MASTER_LINUX_WINDOWS_E2E_TEST.md` | Thắng, Claude |
 | | | | | |
