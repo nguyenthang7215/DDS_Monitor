@@ -8,7 +8,7 @@
 | Upstream có commit mới từ lúc tích hợp? | **Không**: `origin/main` vẫn là `94bbd6d` |
 | Tạo lại file này | `git diff 94bbd6d HEAD` (xem mục 6) |
 | Nhánh | `feature/webengine-ui` (UI Task 3 chạy trên Qt WebEngine; **đã kiểm với Qt 6.8.3**; `-DTASK3_WEB_UI=OFF` build bản QML khi Qt không có WebEngine) |
-| Lần cập nhật | 02/11/2026 lần 1 (`22e3109`) · lần 2 (`a19a240`): test GRAPH-01, QoS, stress P0 · lần 3 (`748c8d7`): **UI Task 3 chuyển sang Qt WebEngine** · lần 4 (03/11, `3bb9990`): `WebFeed`, CSP, chọn Qt tự động, test trang web trên trình duyệt |
+| Lần cập nhật | 06/11: sửa CMake WebEngine (`9d31a67`), NET-01 trong `Collectors.cpp` · 02/11/2026 lần 1 (`22e3109`) · lần 2 (`a19a240`): test GRAPH-01, QoS, stress P0 · lần 3 (`748c8d7`): **UI Task 3 chuyển sang Qt WebEngine** · lần 4 (03/11, `3bb9990`): `WebFeed`, CSP, chọn Qt tự động, test trang web trên trình duyệt |
 
 ---
 
@@ -36,8 +36,8 @@
 | Trang web (mới) | `task3/web/index.html`, `style.css`, `app.js` | HTML/CSS/JS thuần, không thư viện ngoài, nạp từ `qrc:/task3/web/` |
 | Vỏ QML (mới) | `task3/WebDashboard.qml` | `WebEngineView` + `WebChannel`; giữ API của `Dashboard.qml` (`selectedHostId`, `chooseHost()`, `openDdsWorkspace`…) |
 | Khởi tạo | `task3/Dashboard.cpp/.h` | `prepareWebEngine()` (bỏ qua `QTWEBENGINE_REMOTE_DEBUGGING` trừ khi `TASK3_WEB_DEVTOOLS=1`); tạo `task3WebFeed`; biến `TASK3_UI` chọn trang web/QML; `#ifdef TASK3_WEB_UI` |
-| Dữ liệu cho trang (mới 03/11) | `task3/WebFeed.h/.cpp` | Lớp trung gian giữa `MonitoringCore` và `QWebChannel`: mỗi thuộc tính một signal, chỉ phát khi đổi, gộp cập nhật 100 ms, Participant chỉ giữ 6 trường. Payload mỗi cập nhật 133 KB → 19 KB. ⚠️ Chưa compile |
-| Build | `task3/CMakeLists.txt` | Tùy chọn `TASK3_WEB_UI` (ON): link `Qt6::WebEngineQuick`, `Qt6::WebChannelQuick`, thiếu module → báo lỗi rõ; OFF → chỉ trang QML. `WebFeed.cpp` trong `task3_core` |
+| Dữ liệu cho trang (mới 03/11) | `task3/WebFeed.h/.cpp` | Lớp trung gian giữa `MonitoringCore` và `QWebChannel`: mỗi thuộc tính một signal, chỉ phát khi đổi, gộp cập nhật 100 ms, Participant chỉ giữ 6 trường. Payload mỗi cập nhật 133 KB → 19 KB. 06/11: đã compile, test `webFeedPublishesTrimmedChangesOnly` PASS |
+| Build | `task3/CMakeLists.txt` | Tùy chọn `TASK3_WEB_UI` (khai báo và `find_package` ở `CMakeLists.txt` gốc, ON): link `Qt6::WebEngineQuick`, `Qt6::WebChannelQuick`, thiếu module → báo lỗi rõ; OFF → chỉ trang QML. `WebFeed.cpp` trong `task3_core` |
 | An toàn / CON-04 | `task3/web/index.html` | Content-Security-Policy: `default-src 'none'`, `connect-src 'none'`, chỉ nạp `qrc:`; không `eval` |
 | Script | `task3/scripts/qt_prefix.sh` (mới), `build*.sh`, `run_master*.sh` | Tự chọn Qt có WebEngine + Qt5Compat; kiểm module thiếu trước khi build/chạy; build ghi `qt-prefix`, `web-ui` |
 | Test (mới) | `task3/tests/DashboardPreview.cpp` | Dựng trang QML hoặc Web từ snapshot để so sánh ảnh, bấm thử |
@@ -51,7 +51,7 @@
 | # | File | +/− | Thay đổi | Lý do | Rủi ro / ghi chú |
 | :---: | :--- | :---: | :--- | :--- | :--- |
 | 1 | `src/main.cpp` | +5 | Gọi `task3::prepareWebEngine()` (trước `QApplication`), `task3::installShutdownHandler()` và `task3::installDashboard(engine)` | **Điểm cắm** module Task 3; Qt WebEngine phải khởi tạo trước `QApplication` | Thấp |
-| 2 | `CMakeLists.txt` | +6 | `add_subdirectory(task3)` và tùy chọn `TASK3_BUILD_TESTS` | Build module Task 3 cùng DDS Monitor | Thấp |
+| 2 | `CMakeLists.txt` | +12 | `add_subdirectory(task3)`, tùy chọn `TASK3_BUILD_TESTS` và `TASK3_WEB_UI` kèm `find_package(Qt6 WebEngineQuick WebChannelQuick)` | Build module Task 3 cùng DDS Monitor. `find_package` đặt ở thư mục gốc vì target `Qt6::WebEngineQuick` chỉ nhìn thấy trong thư mục gọi nó, còn `dds_monitor` (và target autogen) được tạo ở gốc | Thấp |
 | 3 | `qml/main.qml` | +132/−9 | Thêm thanh chọn 3 workspace (*Giám sát hệ thống · DDS chuyên sâu · Cảnh báo & lịch sử*), `Loader` nạp trang Task 3 (`WebDashboard.qml` mặc định, `Dashboard.qml` khi `TASK3_UI=qml`), ẩn/hiện màn gốc theo tab, hàm `task3Exercise()` phục vụ test UI tự động | Gộp UI Task 3 và UI gốc vào **một cửa sổ** | Trung bình: đây là file UI chính. Màn DDS gốc vẫn giữ nguyên, chỉ bọc thêm |
 | 4 | `src/backend/SyncBackendConnection.cpp` | ±3 | `DDS_MONITOR_APP` → `FASTDDS_MONITOR_APP` (3 chỗ) | Header Statistics Backend 2.5.0 chỉ có tên `FASTDDS_MONITOR_APP`, không đổi thì **không build được** | Thấp: chỉ đổi tên hằng |
 | 5 | `src/Engine.cpp` | +7 | Với chart kiểu `NONE` (raw), đọc lại cả cửa sổ hiển thị thay vì chỉ đọc từ lần trước | Sửa lỗi Dynamic Chart **bỏ sót mẫu đến muộn** | Trung bình: nhánh aggregate/cumulative chưa sửa |
@@ -683,8 +683,8 @@ index c60fc3c..aafa131 100644
 | :--- | ---: | :--- |
 | `task3/AlertStore.cpp` | 434 | SQLite Active/Recovered |
 | `task3/AlertStore.h` | 52 | SQLite Active/Recovered |
-| `task3/CMakeLists.txt` | 67 | Build |
-| `task3/Collectors.cpp` | 521 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
+| `task3/CMakeLists.txt` | 65 | Build |
+| `task3/Collectors.cpp` | 525 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
 | `task3/Collectors.h` | 38 | Thu CPU/RAM/Disk/Network/Process/Service/Time (Linux + Windows) |
 | `task3/Dashboard.cpp` | 205 | Đăng ký model/UI Task 3 |
 | `task3/Dashboard.h` | 9 | Đăng ký model/UI Task 3 |

@@ -223,9 +223,9 @@ Thông số cần chốt trước khi nghiệm thu thật: số Slave mục tiê
 | [x] | Báo cáo Chương 5, 6: bỏ HMAC, đổi sang Patched, thêm WebEngine, trình bày theo PoC | 06/11 |
 | [x] | Báo cáo: kết quả chẩn đoán GRAPH-01 | 06/11 |
 | [ ] | Báo cáo: dựng lại docx, xuất lại Hình 5.5, sửa Hình 5.4, thay Hình 5.9/5.10 | Mục 2.2 |
-| [ ] | `TASK3_README.md`: thêm `run_master_original.sh` | |
-| [ ] | `docs/task3/KNOWN_ISSUES.md` mục 1: Windows Agent đã build/chạy; trạng thái GRAPH-01, P0 | Hiện còn mô tả cũ |
-| [ ] | `docs/task3/TASK3_REQUIREMENTS.md` và `THAY_DOI_SO_VOI_UPSTREAM.md`: rà lại cho khớp cách trình bày PoC | |
+| [x] | `TASK3_README.md`: `run_master_original.sh`, WebEngine, PoC | 06/11 |
+| [x] | `docs/task3/KNOWN_ISSUES.md`: trạng thái PoC, mục 1, P0, GRAPH-01, NET-01 | 06/11 |
+| [x] | `THAY_DOI_SO_VOI_UPSTREAM.md`: CMake gốc, WebFeed đã compile | 06/11. `TASK3_REQUIREMENTS.md` giữ nguyên (đề bài) |
 
 ---
 

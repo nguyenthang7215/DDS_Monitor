@@ -1,8 +1,10 @@
 # Vấn đề còn mở và giới hạn bằng chứng
 
-Trạng thái tích hợp hiện tại: **MAIN_PROJECT_READY_FOR_MANUAL_LINUX_TESTING** trong `/home/dev/DDS-Monitor`, dùng wrapper và Backend persistent đã vá. Build/Regression mới của repo chính nằm trong `test-artifacts/main-project-20261016/`. Điều này không đóng các giới hạn kỹ thuật/liên nền tảng liệt kê dưới đây.
+Trạng thái hiện tại (06/11/2026): Task 3 ở mức **PoC trên 2 thiết bị** (Linux Master, Windows Slave), giao diện Task 3 chạy bằng Qt WebEngine trên Qt 6.8.3, vận hành bằng Backend Patched. Kết quả kiểm thử và việc còn lại nằm trong `TIEN_DO_KIEM_THU.md`. Các giới hạn kỹ thuật/liên nền tảng dưới đây thuộc phần kiểm thử trên hệ thống thật (hướng phát triển).
 
-1. Windows Agent đã build Release và chạy trên Windows thật (23/10/2026): telemetry, Online/Offline, Process, cảnh báo Active/Recovered đã kiểm tra (E2E-03, 06, 09, 10). Windows Service, NTP và một số collector (interface mạng trùng bộ đếm, NET-01) chưa nghiệm thu; xem `TIEN_DO_KIEM_THU.md`.
+Đã xử lý: P0-BACKEND (chốt dùng Backend Patched, 0/7 lượt stress crash); GRAPH-01 (nguyên nhân `hostsList` rộng 0 trên Qt 6.7.2, test QML 6/6 trên Qt 6.8.3, chưa xác nhận trên giao diện thật); NET-01 (bỏ các dòng `FilterInterface` của `GetIfTable2`, chưa kiểm trên Windows).
+
+1. Windows Agent đã build Release và chạy trên Windows thật (23/10/2026): telemetry, Online/Offline, Process, cảnh báo Active/Recovered đã kiểm tra. Windows Service và NTP chưa nghiệm thu. Lỗi bộ đếm interface mạng trùng (NET-01) đã được sửa trong `Collectors.cpp` nhưng chưa kiểm lại trên Windows; xem `TIEN_DO_KIEM_THU.md`.
 2. Windows Time chưa có bằng chứng đủ để kết luận clock synchronized. Hiện chỉ thu service/source/performance counter có cấu trúc, giữ Unknown và offset null nếu nguồn không khả dụng. Cần hoàn thiện/xác minh nguồn trạng thái native trên Windows thật.
 3. Chưa đồng bộ NTP giữa Master–Slave vật lý, chưa đo offset/hội tụ hoặc hiệu chuẩn latency liên máy. Không có thay đổi NTP/service/firewall trong phiên.
 4. Ánh xạ tự động chỉ đạt khi có instrumentation manifest đúng PID/instance/GUID; ứng dụng bên thứ ba không cung cấp dữ liệu vẫn Unmapped. GUID cấu hình tĩnh cần cập nhật thủ công. Thư mục manifest phải chỉ cho thành phần tin cậy ghi; đây chưa phải chứng thực tiến trình chống giả mạo bởi tài khoản cục bộ.
