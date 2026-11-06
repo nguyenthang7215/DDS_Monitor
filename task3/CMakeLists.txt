@@ -23,13 +23,11 @@ if(WIN32)
 endif()
 # Task 3 pages run in Qt WebEngine (web/). OFF builds the earlier Qt Quick pages only, for a Qt
 # installation without the WebEngine/WebChannel modules. Verified with Qt 6.8.3.
-option(TASK3_WEB_UI "Render the Task 3 dashboard with Qt WebEngine" ON)
 set(task3_qml_pages Dashboard.qml HostWorkspace.qml FlowDetails.qml EventHistoryView.qml)
 set(task3_web_pages WebDashboard.qml web/index.html web/style.css web/app.js)
 target_sources(dds_monitor PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/Dashboard.cpp)
 target_link_libraries(dds_monitor PRIVATE task3_core)
 if(TASK3_WEB_UI)
-    find_package(Qt6 COMPONENTS WebEngineQuick WebChannelQuick)
     if(NOT Qt6WebEngineQuick_FOUND OR NOT Qt6WebChannelQuick_FOUND)
         message(FATAL_ERROR "Task 3 web UI needs the Qt WebEngine and Qt WebChannel modules of Qt "
             "${Qt6_VERSION} (${Qt6_DIR}). Install them with the Qt MaintenanceTool for this Qt version, "

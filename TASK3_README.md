@@ -8,6 +8,6 @@ Tại thư mục gốc repo, build bằng `bash task3/scripts/build_task3_patche
 
 Giao diện có ba tab trong một Main Window. Telemetry đi qua Topic DDS riêng, không cần TASK3_KEY/HMAC. Session/sequence và tối đa 256 session nghỉ gần nhất mỗi máy chỉ giữ trong bộ nhớ; SQLite giữ Event History, không lưu replay checkpoint.
 
-Race Backend từng gây crash đã được vá và kiểm chứng trên prefix riêng; ngày 02/11/2026 Backend Original crash 5/9 lượt stress, Patched 7/7 PASS nên dự án chốt dùng Patched (xem [tiến độ](docs/task3/TIEN_DO_KIEM_THU.md) mục 5.2). Bằng chứng kiểm thử nằm trong `test-artifacts/`. Windows, NTP/liên máy vật lý, Dynamic Chart aggregate/cumulative và kiểm thử dài hạn vẫn chưa được nghiệm thu đầy đủ.
+Race Backend từng gây crash đã được vá và kiểm chứng trên prefix riêng; ngày 02/11/2026 Backend Original crash 5/9 lượt stress, Patched 7/7 PASS nên dự án chốt dùng Patched (xem [tiến độ](docs/task3/TIEN_DO_KIEM_THU.md) mục 5). Bằng chứng kiểm thử nằm trong `test-artifacts/`. Windows, NTP/liên máy vật lý, Dynamic Chart aggregate/cumulative và kiểm thử dài hạn vẫn chưa được nghiệm thu đầy đủ.
 
 Giấy phép GPL-3.0-or-later của DDS Monitor được giữ nguyên. Source Task 3 dùng SPDX tương ứng; Fast DDS/Statistics Backend là các dependency được liên kết riêng với giấy phép của chúng. Khi phân phối phải bảo toàn source/giấy phép theo nghĩa vụ áp dụng.

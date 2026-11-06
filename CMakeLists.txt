@@ -90,6 +90,12 @@ list(APPEND CMAKE_PREFIX_PATH ${QT_PATH})
 
 # Prefer Qt6 but keep a clear error if not provided
 find_package(Qt6 COMPONENTS Core Gui Qml Quick Charts QuickControls2 Widgets REQUIRED)
+# The Qt6::WebEngineQuick / Qt6::WebChannelQuick imported targets are directory scoped, so they are
+# found here, in the directory that creates dds_monitor, and not in task3/.
+option(TASK3_WEB_UI "Render the Task 3 dashboard with Qt WebEngine" ON)
+if(TASK3_WEB_UI)
+    find_package(Qt6 COMPONENTS WebEngineQuick WebChannelQuick)
+endif()
 find_package(fastcdr REQUIRED)
 find_package(fastdds REQUIRED)
 find_package(fastdds_statistics_backend REQUIRED)
