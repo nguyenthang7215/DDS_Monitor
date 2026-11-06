@@ -978,7 +978,7 @@ Với mỗi ca, ghi kết quả ở trường cuối cùng. `BLOCKED` có nghĩa
 | E2E-26 | PASS | E2E-26-linux.txt, W-0031 | Offline 16:13:03, Online lại 16:16:11 sau khi chạy Agent tay; W32Time tự đồng bộ ~1 phút sau boot (lệch ≈0,41 s lúc đó); Agent không tự chạy sau boot (chưa có service installer) |
 | E2E-27 | PASS | E2E-12-result.txt, e27/ | Refresh Graph ×10 không treo; BUG-02 không tái hiện |
 | E2E-28 | PASS | E2E-05-result.txt, web-tests/ | Không có cổng TCP; kiểm thử web 17/17 |
-| E2E-29 | PASS | E2E-13-29-result.txt | Hai Slave độc lập (một Agent Linux cục bộ mô phỏng) |
+| E2E-29 | PASS | E2E-13-29-result.txt | Hai Slave độc lập: `windows-slave-a` thật và `instrumented-linux` (Agent Linux cục bộ, mô phỏng); không dùng `windows-slave-b` |
 
 ### 7.2 Đối chiếu FR-01–FR-15
 
@@ -1079,6 +1079,7 @@ Ghi lỗi ngay khi gặp (mục 0.1). Mỗi dòng một lỗi; cập nhật cộ
 | BUG-L03 | E2E-21/22 | `task3_agent --once` luôn in `time_sync` ở trạng thái `unknown` / `Time status query pending` | Chạy `--once` trên Windows | W-0027, E2E-23-agent-once-after-24B.json | P3 | Mở, giới hạn đã biết | Truy vấn bất đồng bộ chưa xong khi `--once` thoát; time_sync thật lấy từ Agent chạy liên tục. Agent không admin không đọc được source/offset |
 | BUG-L04 | E2E-09 | `process_stopped` của `spoolsv.exe` Active không tự Recovered sau khi dịch vụ chạy lại | Dừng/bật Spooler, Agent không admin | E2E-09-svc-result.txt | P3 | Giới hạn đã biết | Agent không admin không đếm được `spoolsv.exe` (process_count 0, Unknown); Master giữ Active kèm nhãn "Not verified" thay vì báo Recovered khi thiếu bằng chứng (đúng thiết kế); dịch vụ vẫn Recovered đúng |
 | BUG-L05 | E2E-26 | Agent không tự chạy sau khi Windows reboot | Reboot Windows | E2E-26-linux.txt | P2 | Giới hạn đã biết | Chưa có service installer / auto-start; hướng phát triển. Quan sát: lệch NTP ≈0,41 s ngay sau boot, W32Time tự đồng bộ không cần `/resync` |
+| BUG-W01 | E2E-21/22 | `time_sync` luôn Unknown/Unavailable khi Agent chạy không admin (`w32tm /query /source` bị từ chối, lớp CIM `Invalid class`) | Chạy Agent không admin, mở tab Đồng bộ giờ | W-0027, W-0034 | P2 | Giới hạn đã biết | Master không báo Synced giả; chưa kiểm khi Agent chạy admin |
 
 ## 8. Nguồn repository đã đối chiếu
 
